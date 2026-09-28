@@ -161,6 +161,21 @@ dialog::backdrop{background:rgba(10,14,12,.45)}
 .fab{display:none}
 .foot{margin-top:24px;font-size:12.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 
+/* Conversa */
+.chat{display:flex;flex-direction:column;padding:0;overflow:hidden}
+.chat-log{display:flex;flex-direction:column;gap:10px;padding:16px;min-height:300px;max-height:calc(100dvh - 330px);overflow-y:auto;background:var(--surface-2)}
+.msg{max-width:min(85%,520px);padding:9px 12px;border-radius:14px;font-size:15px;line-height:1.4;overflow-wrap:anywhere;white-space:pre-line}
+.msg-me{align-self:flex-end;background:var(--accent);color:var(--accent-ink);border-bottom-right-radius:4px}
+.msg-bot{align-self:flex-start;background:var(--surface);border:1px solid var(--line);border-bottom-left-radius:4px}
+.msg-bot b{font-weight:700}
+.msg-acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;white-space:normal}
+.msg-time{display:block;font-size:11px;opacity:.65;margin-top:3px;text-align:right}
+.chat-quick{display:flex;gap:6px;padding:10px 12px 0;overflow-x:auto;background:var(--surface)}
+.chat-quick button{border:1px solid var(--line-strong);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;white-space:nowrap;color:var(--ink-2)}
+.chat-in{display:flex;gap:8px;padding:10px 12px 12px;background:var(--surface)}
+.chat-in input{flex:1;min-width:0;border:1px solid var(--line-strong);background:var(--ground);border-radius:999px;padding:11px 16px;font-size:16px}
+.chat-in button{border-radius:999px}
+
 @media (max-width:900px){
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .g-2{grid-template-columns:minmax(0,1fr)}
@@ -190,23 +205,37 @@ dialog::backdrop{background:rgba(10,14,12,.45)}
 </header>
 
 <main class="wrap">
-  <div id="demoBanner" class="banner" hidden>
-    <div class="grow"><strong>Dados de exemplo.</strong> Você está vendo um mês fictício para entender o painel. Assim que você fizer o primeiro lançamento, o exemplo some e ficam só os seus números.</div>
-    <button class="btn btn-sm btn-primary" id="demoStart">Fazer meu primeiro lançamento</button>
-  </div>
   <div id="storeBanner" class="banner" hidden>
     <div class="grow"><strong>Salvando só neste navegador.</strong> Faça backup em “Ajustes” de vez em quando para não perder nada.</div>
   </div>
 
   <nav class="tabs" role="tablist">
-    <button class="tab" role="tab" data-tab="painel" aria-selected="true">Painel</button>
+    <button class="tab" role="tab" data-tab="conversa" aria-selected="true">Conversa</button>
+    <button class="tab" role="tab" data-tab="painel" aria-selected="false">Painel</button>
     <button class="tab" role="tab" data-tab="lancamentos" aria-selected="false">Lançamentos</button>
     <button class="tab" role="tab" data-tab="orcamentos" aria-selected="false">Orçamentos</button>
     <button class="tab" role="tab" data-tab="ajustes" aria-selected="false">Ajustes</button>
   </nav>
 
+  <!-- CONVERSA -->
+  <section id="tab-conversa">
+    <div class="card chat">
+      <div class="chat-log" id="chatLog" aria-live="polite"></div>
+      <div class="chat-quick">
+        <button type="button" data-say="resumo">Resumo do mês</button>
+        <button type="button" data-say="contas a pagar">Contas a pagar</button>
+        <button type="button" data-say="desfazer">Desfazer último</button>
+        <button type="button" data-say="ajuda">Como escrever</button>
+      </div>
+      <form class="chat-in" id="chatForm" autocomplete="off">
+        <input id="chatText" placeholder="Ex.: gastei 45 no mercado" aria-label="Mensagem" enterkeyhint="send">
+        <button class="btn btn-primary" type="submit">Enviar</button>
+      </form>
+    </div>
+  </section>
+
   <!-- PAINEL -->
-  <section id="tab-painel">
+  <section id="tab-painel" hidden>
     <div class="kpis">
       <div class="kpi"><div class="kpi-label"><i class="dot" style="background:var(--inc)"></i>Entradas</div><div class="kpi-value num" id="kIn">—</div><div class="kpi-sub" id="kInSub">&nbsp;</div></div>
       <div class="kpi"><div class="kpi-label"><i class="dot" style="background:var(--exp)"></i>Saídas</div><div class="kpi-value num" id="kOut">—</div><div class="kpi-sub" id="kOutSub">&nbsp;</div></div>
@@ -364,7 +393,7 @@ dialog::backdrop{background:rgba(10,14,12,.45)}
 
 /* ---------- Constantes ---------- */
 const CATS = {
-  despesa: ["Moradia","Mercado","Alimentação fora","Transporte","Contas da casa","Saúde","Educação","Lazer","Cartão de crédito","Trabalho","Impostos e taxas","Compras","Outros gastos"],
+  despesa: ["Parcelas e consórcios","Moradia","Mercado","Alimentação fora","Transporte","Contas da casa","Saúde","Educação","Lazer","Cartão de crédito","Trabalho","Impostos e taxas","Compras","Outros gastos"],
   receita: ["Comissões","Salário","Extras","Rendimentos","Outras entradas"]
 };
 const ALL_CATS = [...CATS.despesa, ...CATS.receita];
@@ -402,9 +431,8 @@ const state = {
   months: {},          // "2026-09" -> [itens]
   budgets: {},         // categoria -> valor
   cur: monthKey(todayISO()),
-  tab: "painel",
+  tab: "conversa",
   filtro: { tipo: "todos", cat: "", busca: "" },
-  demo: false,
   ready: false
 };
 
@@ -466,33 +494,7 @@ const store = {
 };
 function setSync(t) { $("#syncState").textContent = t; }
 
-/* ---------- Dados de exemplo (só exibição) ---------- */
-function demoData() {
-  const k = state.cur, k1 = addMonths(k,-1);
-  const it = (key, d, tipo, cat, desc, valor, pago = true) => ({ id: uid(), data: `${key}-${pad(Math.min(d, daysIn(key)))}`, tipo, cat, desc, valor, pago });
-  const months = {};
-  const base = [
-    [5,"receita","Comissões","Comissão carta imobiliária",4200],[20,"receita","Comissões","Comissão carta veicular",1850],
-    [5,"despesa","Moradia","Aluguel",1600],[8,"despesa","Contas da casa","Luz + água",310],[10,"despesa","Contas da casa","Internet e celular",180],
-    [6,"despesa","Mercado","Mercado do mês",980],[14,"despesa","Mercado","Reposição mercado",260],[9,"despesa","Transporte","Combustível",420],
-    [22,"despesa","Transporte","Combustível",380],[12,"despesa","Alimentação fora","Almoços com clientes",310],[18,"despesa","Lazer","Cinema e jantar",220],
-    [15,"despesa","Trabalho","Impulsionamento Instagram",250],[25,"despesa","Cartão de crédito","Fatura do cartão",890],[16,"despesa","Saúde","Farmácia",95]
-  ];
-  for (let i = 5; i >= 0; i--) {
-    const key = addMonths(k, -i); const f = [0.82,1.1,0.93,1.25,0.88,1][5-i];
-    months[key] = base.map(([d,t,c,desc,v]) => it(key, d, t, c, desc, Math.round(v * (t === "receita" ? f : (0.9 + ((d*7+i)%5)/20)))));
-  }
-  months[k].forEach(x => { if (["Cartão de crédito","Contas da casa"].includes(x.cat)) x.pago = false; });
-  const budgets = {"Mercado":1300,"Transporte":750,"Alimentação fora":300,"Lazer":350,"Trabalho":300};
-  void k1;
-  return { months, budgets };
-}
-function view() {
-  const hasReal = Object.values(state.months).some(a => a && a.length);
-  state.demo = state.ready && !hasReal;
-  if (state.demo) { const d = demoData(); return { months: d.months, budgets: Object.keys(state.budgets).length ? state.budgets : d.budgets }; }
-  return { months: state.months, budgets: state.budgets };
-}
+function view() { return { months: state.months, budgets: state.budgets }; }
 
 /* ---------- Cálculos ---------- */
 function sums(items) {
@@ -508,8 +510,7 @@ const itemsOf = (v, key) => (v.months[key] || []);
 function render() {
   const ml = monthName(state.cur); $("#monthLabel").textContent = ml.charAt(0).toUpperCase() + ml.slice(1);
   const v = view();
-  $("#demoBanner").hidden = !state.demo;
-  $("#storeBanner").hidden = !(state.ready && store.mode === "local" && !state.demo);
+  $("#storeBanner").hidden = !(state.ready && store.mode === "local");
   $("#storeInfo").textContent = store.mode === "cloud"
     ? "Seus lançamentos ficam salvos na nuvem, na sua conta Claude. Só você vê. Abrindo este mesmo link no celular ou no computador, os números são os mesmos."
     : "Neste modo os lançamentos ficam salvos só neste navegador, neste aparelho. Se limpar os dados do navegador, eles somem. Baixe o backup (JSON) com frequência.";
@@ -555,7 +556,7 @@ function itemHTML(x, o = {}) {
     status = late ? `<span class="chip chip-bad">! Atrasada</span>` : `<span class="chip chip-warn">◷ A pagar</span>`;
   }
   const parc = x.parcela ? `<span class="chip chip-muted">${esc(x.parcela)}</span>` : "";
-  const acts = state.demo ? "" : `<div class="item-acts">${o.pay ? `<button class="icon-btn" data-pay="${x.id}" data-k="${monthKey(x.data)}">✓ Paguei</button>` : ""}<button class="icon-btn" data-edit="${x.id}" data-k="${monthKey(x.data)}">Editar</button></div>`;
+  const acts = `<div class="item-acts">${o.pay ? `<button class="icon-btn" data-pay="${x.id}" data-k="${monthKey(x.data)}">✓ Paguei</button>` : ""}<button class="icon-btn" data-edit="${x.id}" data-k="${monthKey(x.data)}">Editar</button></div>`;
   return `<div class="item">
     <div class="item-ic ${inc ? "ic-inc" : "ic-exp"}" aria-hidden="true">${inc ? "+" : "−"}</div>
     <div class="item-main"><div class="item-t">${esc(x.desc || x.cat)}</div><div class="item-s">${dd}/${mm} · ${esc(x.cat)} ${parc} ${status}</div></div>
@@ -849,8 +850,10 @@ document.addEventListener("click", async e => {
 function setTab(t) {
   state.tab = t;
   $$(".tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === t)));
-  ["painel","lancamentos","orcamentos","ajustes"].forEach(x => { $("#tab-" + x).hidden = x !== t; });
+  ["conversa","painel","lancamentos","orcamentos","ajustes"].forEach(x => { $("#tab-" + x).hidden = x !== t; });
   if (t === "orcamentos") $("#budgetGrid").dataset.built = "";
+  $("#addFab").hidden = t === "conversa";
+  if (t === "conversa") setTimeout(() => { const l = $("#chatLog"); l.scrollTop = l.scrollHeight; }, 0);
   try { sessionStorage.setItem("mg-tab", t); } catch {}
   render();
 }
@@ -859,7 +862,6 @@ $("#prevMonth").addEventListener("click", () => { state.cur = addMonths(state.cu
 $("#nextMonth").addEventListener("click", () => { state.cur = addMonths(state.cur, 1); render(); });
 $("#addTop").addEventListener("click", () => openForm());
 $("#addFab").addEventListener("click", () => openForm());
-$("#demoStart").addEventListener("click", () => openForm());
 
 $$("[data-ft]").forEach(b => b.addEventListener("click", () => {
   state.filtro.tipo = b.dataset.ft;
@@ -929,6 +931,160 @@ $("#impFile").addEventListener("change", async e => {
 });
 
 let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (state.tab === "painel") render(); }, 150); });
+
+
+/* ---------- Conversa ---------- */
+const KW = [
+  ["despesa","Parcelas e consórcios",/cons[oó]rcio|parcela|financiamento|empr[eé]stimo|presta[cç][aã]o/],
+  ["despesa","Cartão de crédito",/cart[aã]o|fatura/],
+  ["despesa","Moradia",/aluguel|condom[ií]nio|iptu/],
+  ["despesa","Contas da casa",/\bluz\b|energia|[aá]gua|internet|celular|telefone|\bg[aá]s\b|netflix|spotify|streaming|\btv\b/],
+  ["despesa","Mercado",/mercado|feira|a[cç]ougue|padaria|hortifruti|sacol[aã]o/],
+  ["despesa","Alimentação fora",/restaurante|lanche|almo[cç]o|janta|ifood|pizza|hamb[uú]rguer|caf[eé]|\bbar\b|delivery|marmita|sorvete/],
+  ["despesa","Transporte",/uber|\b99\b|t[aá]xi|combust[ií]vel|gasolina|etanol|[aá]lcool|diesel|posto|estacionamento|ped[aá]gio|[oô]nibus|metr[oô]|mec[aâ]nic|oficina|ipva|pneu|lavagem|lava.jato/],
+  ["despesa","Saúde",/farm[aá]cia|rem[eé]dio|m[eé]dic|consulta|exame|dentista|plano de sa[uú]de|academia|psic[oó]log/],
+  ["despesa","Educação",/curso|escola|faculdade|livro|mensalidade/],
+  ["despesa","Trabalho",/an[uú]ncio|impulsion|tr[aá]fego|instagram|meta ads|google ads|panfleto|cart[aã]o de visita|crm|cliente/],
+  ["despesa","Impostos e taxas",/imposto|\bdas\b|\bmei\b|taxa|tarifa|inss|darf|multa/],
+  ["despesa","Lazer",/cinema|viagem|show|passeio|lazer|festa|churrasco|cerveja|ingresso/],
+  ["despesa","Compras",/roupa|sapato|t[eê]nis|loja|shopping|presente|amazon|shopee|mercado livre|magalu/],
+  ["receita","Comissões",/comiss/],
+  ["receita","Salário",/sal[aá]rio|pr[oó].?labore/],
+  ["receita","Rendimentos",/rendimento|juros|dividendo|\bcdb\b|poupan[cç]a/],
+  ["receita","Extras",/vendi|freela|b[oô]nus|pr[eê]mio|extra|bico/]
+];
+const RX_REC = /\b(recebi|ganhei|entrou|entrada|caiu|recebido|receber|vendi)\b|comiss|sal[aá]rio|rendimento/;
+const RX_DES = /\b(gastei|paguei|comprei|pagar|gasto|sa[ií]da|conta|boleto|fatura|vence|devo)\b/;
+const norm = t => t.toLowerCase().normalize("NFC");
+const isoOf = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
+function parseMsg(raw) {
+  let t = " " + norm(raw).replace(/\s+/g, " ") + " ";
+  const pendente = /\b(vence|vencimento|a pagar|pagar|boleto|pendente|devo|a receber)\b/.test(t) && !/\b(paguei|recebi)\b/.test(t);
+  const cut = re => { const m = t.match(re); if (m) t = t.replace(m[0], " "); return m; };
+  const now = new Date(); let date = null, rep = 1, m;
+  // repetição
+  if ((m = cut(/\b(?:por|durante|em)\s+(\d{1,2})\s+(?:meses|vezes|parcelas)\b/))) rep = +m[1];
+  else if ((m = cut(/\b(\d{1,2})\s*(?:x|vezes|parcelas)\b/))) rep = +m[1];
+  else if (cut(/\btodo m[eê]s\b|\bmensal\b/)) rep = 12;
+  rep = Math.max(1, Math.min(rep, 60));
+  // data
+  if ((m = cut(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/))) {
+    let y = m[3] ? +m[3] : now.getFullYear(); if (y < 100) y += 2000;
+    date = new Date(y, +m[2]-1, +m[1]);
+  } else if ((m = cut(/\b(?:vence(?:u|ndo)?|vencimento|pra|para|no|dia)?\s*(?:dia|no dia)\s+(\d{1,2})\b/))) {
+    date = new Date(now.getFullYear(), now.getMonth(), Math.min(+m[1], daysIn(isoOf(now).slice(0,7))));
+  } else if (cut(/\banteontem\b/)) date = new Date(now.getFullYear(), now.getMonth(), now.getDate()-2);
+  else if (cut(/\bontem\b/)) date = new Date(now.getFullYear(), now.getMonth(), now.getDate()-1);
+  else if (cut(/\bamanh[aã]\b/)) date = new Date(now.getFullYear(), now.getMonth(), now.getDate()+1);
+  else { cut(/\bhoje\b/); date = now; }
+  if (isNaN(date)) date = now;
+  // valor
+  m = t.match(/(?:r\$\s*)?(\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?|\d+(?:[.,]\d{1,2})?)(\s*(?:mil|k)\b)?(\s*(?:reais|real|conto|pila)\b)?/);
+  if (!m) return null;
+  let valor = parseMoney(m[1]); if (m[2]) valor *= 1000;
+  valor = Math.round(valor * 100) / 100;
+  t = t.replace(m[0], " ");
+  // tipo e categoria
+  let tipo = /^\s*(gastei|paguei|comprei)\b/.test(t) ? "despesa" : RX_REC.test(t) ? "receita" : "despesa";
+  let cat = null;
+  for (const [tp, c, re] of KW) if (tp === tipo && re.test(t)) { cat = c; break; }
+  if (!cat && tipo === "despesa") { const hit = KW.find(([tp, , re]) => tp === "receita" && re.test(t)); if (hit && !RX_DES.test(t)) { tipo = "receita"; cat = hit[1]; } }
+  if (!cat) cat = tipo === "receita" ? "Outras entradas" : "Outros gastos";
+  const data = isoOf(date);
+  const pago = !(pendente || data > todayISO());
+  // descrição
+  let desc = t.replace(/\b(gastei|paguei|comprei|recebi|ganhei|entrou|caiu|recebido|venceu|vence|vencimento|a pagar|a receber|pendente|devo|reais|real|conto|pila|r\$)\b/g, " ").replace(/[.,;:!?]+/g, " ").replace(/\s+/g, " ").trim();
+  const STOP = /^(de|do|da|dos|das|no|na|nos|nas|com|em|o|a|os|as|um|uma|pra|para|pro|foi|mais|e|que|meu|minha|hoje|pagar)$/;
+  let w = desc.split(" ").filter(Boolean);
+  while (w.length && STOP.test(w[0])) w.shift();
+  while (w.length && STOP.test(w[w.length-1])) w.pop();
+  desc = w.join(" ");
+  if (!desc) desc = cat;
+  desc = desc.charAt(0).toUpperCase() + desc.slice(1);
+  return { tipo, valor, cat, data, pago, rep, desc: desc.slice(0, 80) };
+}
+
+const chat = { log: [], lastAdded: [] };
+const hhmm = () => { const d = new Date(); return pad(d.getHours()) + ":" + pad(d.getMinutes()); };
+const dataTxt = iso => { const t = todayISO(); if (iso === t) return "hoje"; const [y,mo,d] = iso.split("-"); return `${d}/${mo}` + (y !== t.slice(0,4) ? "/" + y : ""); };
+function say(who, html, acts) {
+  chat.log.push({ who, html, acts: acts || "", time: hhmm() });
+  if (chat.log.length > 80) chat.log.shift();
+  drawChat();
+}
+function drawChat() {
+  const l = $("#chatLog");
+  l.innerHTML = chat.log.map(m => `<div class="msg msg-${m.who}">${m.html}${m.acts ? `<div class="msg-acts">${m.acts}</div>` : ""}<span class="msg-time">${m.time}</span></div>`).join("");
+  l.scrollTop = l.scrollHeight;
+  try { sessionStorage.setItem("mg-chat", JSON.stringify(chat.log.slice(-40))); } catch {}
+}
+const HELP = `Escreva do jeito que você falaria. Exemplos:
+• <b>gastei 45,90 no mercado</b>
+• <b>uber 32 ontem</b>
+• <b>recebi 4200 de comissão</b>
+• <b>conta de luz 310 vence dia 10</b>
+• <b>parcela do consórcio 850 por 24 meses</b>
+• <b>quanto gastei com mercado?</b>
+Eu entendo valor, data (hoje, ontem, dia 10, 15/10), se é entrada ou saída e a categoria. Se eu errar algo, toque em <b>Editar</b>.`;
+
+async function handle(text) {
+  const t = norm(text).trim();
+  if (!t) return;
+  say("me", esc(text));
+  if (/^(oi|ol[aá]|ajuda|help|\?|como escrev)/.test(t)) return say("bot", HELP);
+  if (/^(desfazer|desfaz|apagar [uú]ltimo|cancela)/.test(t)) {
+    if (!chat.lastAdded.length) return say("bot", "Não tenho nenhum lançamento recente desta conversa para desfazer.");
+    const ids = new Set(chat.lastAdded.pop()); const touched = new Set();
+    for (const k of Object.keys(state.months)) { const b = state.months[k].length; state.months[k] = state.months[k].filter(x => !ids.has(x.id)); if (state.months[k].length !== b) touched.add(k); }
+    render(); say("bot", "Pronto, desfiz o último lançamento.");
+    for (const k of touched) await store.writeMonth(k);
+    return;
+  }
+  const mk = monthKey(todayISO()), items = state.months[mk] || [], s = sums(items);
+  if (/^(resumo|saldo|como (estou|t[oô]|est[aã]o)|balan[cç]o)/.test(t)) {
+    const b = state.budgets; const over = Object.keys(b).filter(c => items.filter(x => x.cat === c && x.tipo === "despesa").reduce((a, x) => a + x.valor, 0) > b[c]);
+    return say("bot", `<b>${esc(monthName(mk))}</b>
+Entradas: <b>${fmt(s.inc)}</b>
+Saídas: <b>${fmt(s.exp)}</b>
+Sobra: <b>${fmt(s.bal)}</b>
+A pagar: <b>${fmt(s.due)}</b>${s.dueN ? ` (${s.dueN})` : ""}` + (over.length ? `\nPassou do limite em: <b>${esc(over.join(", "))}</b>` : ""));
+  }
+  if (/^(contas|a pagar|o que falta|pend[eê]nc)/.test(t)) {
+    const due = items.filter(x => x.tipo === "despesa" && !x.pago).sort((a,b) => a.data.localeCompare(b.data));
+    if (!due.length) return say("bot", "Nenhuma conta pendente neste mês. ✓");
+    return say("bot", "<b>Contas a pagar</b>\n" + due.map(x => `${dataTxt(x.data)} · ${esc(x.desc)} · <b>${fmt(x.valor)}</b>${x.data < todayISO() ? " (atrasada)" : ""}`).join("\n"),
+      due.slice(0, 4).map(x => `<button class="btn btn-sm" data-pay="${x.id}" data-k="${monthKey(x.data)}">✓ Paguei ${esc(x.desc.slice(0, 18))}</button>`).join(""));
+  }
+  if (/^quanto (eu )?(gastei|paguei|recebi|entrou)/.test(t)) {
+    const rec = /recebi|entrou/.test(t);
+    const hit = KW.find(([tp, , re]) => tp === (rec ? "receita" : "despesa") && re.test(t));
+    const list = items.filter(x => x.tipo === (rec ? "receita" : "despesa") && (!hit || x.cat === hit[1]));
+    const tot = list.reduce((a, x) => a + x.valor, 0);
+    return say("bot", `${rec ? "Entrou" : "Você gastou"} <b>${fmt(tot)}</b>${hit ? ` em <b>${esc(hit[1])}</b>` : ""} em ${esc(monthName(mk))} (${list.length} lançamento${list.length === 1 ? "" : "s"}).`);
+  }
+  const p = parseMsg(text);
+  if (!p || !(p.valor > 0)) return say("bot", "Não achei o valor nessa mensagem. Tente assim: <b>gastei 45 no mercado</b> ou <b>recebi 1500 de comissão</b>.");
+  const grupo = p.rep > 1 ? uid() : undefined, day = +p.data.slice(8,10), ids = [], touched = new Set();
+  for (let i = 0; i < p.rep; i++) {
+    const k = addMonths(monthKey(p.data), i);
+    const it = { id: uid(), tipo: p.tipo, valor: p.valor, desc: p.desc, cat: p.cat, data: `${k}-${pad(Math.min(day, daysIn(k)))}`, pago: i === 0 ? p.pago : false };
+    if (grupo) { it.grupo = grupo; it.parcela = `${i+1}/${p.rep}`; }
+    (state.months[k] = state.months[k] || []).push(it); ids.push(it.id); touched.add(k);
+  }
+  chat.lastAdded.push(ids);
+  const first = state.months[monthKey(p.data)].find(x => x.id === ids[0]);
+  render();
+  say("bot", `✓ ${p.tipo === "receita" ? "Entrada" : "Saída"} de <b>${fmt(p.valor)}</b>
+${esc(p.desc)} · ${esc(p.cat)} · ${dataTxt(p.data)}` + (p.rep > 1 ? `\nRepetindo por <b>${p.rep} meses</b>` : "") + (p.tipo === "despesa" && !p.pago ? "\nFicou como <b>a pagar</b>" : ""),
+    `<button class="btn btn-sm" data-edit="${first.id}" data-k="${monthKey(first.data)}">Editar</button><button class="btn btn-sm" data-say="desfazer">Desfazer</button>`);
+  for (const k of touched) await store.writeMonth(k);
+}
+$("#chatForm").addEventListener("submit", e => { e.preventDefault(); const i = $("#chatText"); const v = i.value; i.value = ""; handle(v); i.focus(); });
+document.addEventListener("click", e => { const b = e.target.closest("[data-say]"); if (b) handle(b.dataset.say); });
+try { const old = JSON.parse(sessionStorage.getItem("mg-chat") || "null"); if (Array.isArray(old)) chat.log = old; } catch {}
+if (!chat.log.length) chat.log.push({ who: "bot", html: "Oi, Lucas! Me conte o que entrou e o que saiu que eu anoto.\n\n" + HELP, acts: "", time: hhmm() });
+drawChat();
 
 /* ---------- Toast ---------- */
 let tt;

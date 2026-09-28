@@ -1,6 +1,6 @@
 # Meus Gastos
 
-Controle financeiro pessoal: painel com entradas, saídas, sobra do mês e contas a pagar; gráficos dos últimos 6 meses e do gasto acumulado no mês; orçamento por categoria com alerta de estouro; lançamentos repetidos (parcelas); exportação em planilha (CSV) e backup (JSON).
+Controle financeiro pessoal, começa zerado. Aba **Conversa**: escreva "gastei 45 no mercado" ou "recebi 4200 de comissão" e o app lança sozinho (valor, data, entrada/saída, categoria, parcelas). Painel com entradas, saídas, sobra do mês e contas a pagar; gráficos dos últimos 6 meses e do gasto acumulado no mês; orçamento por categoria com alerta de estouro; lançamentos repetidos (parcelas); exportação em planilha (CSV) e backup (JSON).
 
 ## Como usar
 
