@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Meus Gastos</title>
+  <meta name="theme-color" content="#0f766e">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <!-- ABA LANÇAR -->
+    <section id="tab-lancar" class="tab active">
+      <h1>Novo gasto</h1>
+      <form id="form-gasto" autocomplete="off">
+        <input id="entrada" type="text" inputmode="text" placeholder="ex: 45 mercado" aria-label="Digite valor e descrição">
+        <div id="preview" class="preview">Digite o valor e o que foi.</div>
+        <div id="chips" class="chips"></div>
+        <button id="btn-salvar" type="submit" class="btn-primary" disabled>Salvar</button>
+      </form>
+      <div id="toast" class="toast" hidden>
+        <span id="toast-text"></span>
+        <button id="toast-undo" type="button">Desfazer</button>
+      </div>
+      <div class="hoje">
+        <h2>Hoje</h2>
+        <p id="hoje-total" class="hoje-total">R$ 0,00</p>
+        <ul id="hoje-lista" class="lista"></ul>
+      </div>
+    </section>
+
+    <!-- ABA PAINEL -->
+    <section id="tab-painel" class="tab">
+      <div class="mes-nav">
+        <button id="mes-ant" type="button" aria-label="Mês anterior">‹</button>
+        <h1 id="mes-nome">Mês</h1>
+        <button id="mes-prox" type="button" aria-label="Próximo mês">›</button>
+      </div>
+
+      <div class="card destaque">
+        <p id="destaque-rotulo" class="rotulo">Ainda posso gastar</p>
+        <p id="destaque-valor" class="valor-grande">R$ 0,00</p>
+        <div class="barra"><div id="destaque-barra" class="barra-cheia"></div></div>
+        <p id="destaque-sub" class="sub"></p>
+      </div>
+
+      <h2>Por categoria</h2>
+      <ul id="lista-cat" class="lista-cat"></ul>
+
+      <h2>Últimos gastos</h2>
+      <ul id="lista-ultimos" class="lista"></ul>
+    </section>
+
+    <!-- ABA AJUSTES -->
+    <section id="tab-ajustes" class="tab">
+      <h1>Ajustes</h1>
+
+      <div class="card">
+        <label for="orcamento">Quanto posso gastar por mês?</label>
+        <input id="orcamento" type="text" inputmode="decimal" placeholder="ex: 3000">
+        <button id="btn-orcamento" type="button" class="btn-primary">Salvar limite</button>
+      </div>
+
+      <div class="card">
+        <label for="lote">Colar vários gastos (um por linha)</label>
+        <textarea id="lote" rows="5" placeholder="45 mercado&#10;23,50 uber&#10;ontem 120 farmácia"></textarea>
+        <button id="btn-lote" type="button" class="btn-primary">Adicionar todos</button>
+        <p id="lote-msg" class="sub"></p>
+      </div>
+
+      <div class="card">
+        <p class="rotulo">Cópia de segurança</p>
+        <div class="linha-botoes">
+          <button id="btn-exportar" type="button" class="btn-sec">Baixar backup</button>
+          <label class="btn-sec" for="arquivo-import">Restaurar backup</label>
+          <input id="arquivo-import" type="file" accept="application/json" hidden>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="abas">
+    <button data-tab="lancar" class="ativa"><span>➕</span>Lançar</button>
+    <button data-tab="painel"><span>📊</span>Painel</button>
+    <button data-tab="ajustes"><span>⚙️</span>Ajustes</button>
+  </nav>
+
+  <script src="app.js"></script>
+</body>
+</html>
