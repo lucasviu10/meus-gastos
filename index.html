@@ -1,16 +1,22 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="pt-BR" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Meus Gastos</title>
-  <meta name="theme-color" content="#0f766e">
+  <meta name="theme-color" content="#ffffff">
+  <script>
+    // Tema: claro por padrão. Só fica escuro se você escolher.
+    try { if (localStorage.getItem('meus-gastos-tema') === 'dark') document.documentElement.dataset.theme = 'dark'; } catch (e) {}
+  </script>
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon-192.png">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button id="btn-tema" class="btn-tema" type="button" aria-label="Trocar tema claro/escuro">🌙</button>
+
   <main>
     <!-- ABA LANÇAR -->
     <section id="tab-lancar" class="tab active">
@@ -54,6 +60,34 @@
       <ul id="lista-ultimos" class="lista"></ul>
     </section>
 
+    <!-- ABA ASSISTENTE -->
+    <section id="tab-assistente" class="tab">
+      <h1>Sua assistente</h1>
+      <div class="card resumo-ia">
+        <p id="ia-resumo" class="ia-resumo"></p>
+      </div>
+
+      <h2>Seus gargalos este mês</h2>
+      <ul id="ia-gargalos" class="gargalos"></ul>
+
+      <h2>Pergunte à assistente</h2>
+      <p class="sub sub-topo">Abre o Claude já com os seus números do mês.</p>
+      <div class="perguntas">
+        <a class="pergunta" data-pergunta="analise" target="_blank" rel="noopener">📋 Analise meu mês</a>
+        <a class="pergunta" data-pergunta="cortar" target="_blank" rel="noopener">✂️ Onde posso cortar?</a>
+        <a class="pergunta" data-pergunta="orcamento" target="_blank" rel="noopener">🎯 Monte meu orçamento</a>
+        <a class="pergunta" data-pergunta="habito" target="_blank" rel="noopener">🧠 Por que gasto assim?</a>
+      </div>
+      <form id="form-pergunta" class="card" autocomplete="off">
+        <label for="pergunta-livre">Ou escreva sua pergunta</label>
+        <input id="pergunta-livre" type="text" placeholder="ex: vale a pena parcelar um celular?">
+        <button type="submit" class="btn-primary">Perguntar</button>
+      </form>
+
+      <h2>Dica do dia</h2>
+      <div class="card"><p id="ia-dica" class="dica"></p></div>
+    </section>
+
     <!-- ABA AJUSTES -->
     <section id="tab-ajustes" class="tab">
       <h1>Ajustes</h1>
@@ -62,6 +96,14 @@
         <label for="orcamento">Quanto posso gastar por mês?</label>
         <input id="orcamento" type="text" inputmode="decimal" placeholder="ex: 3000">
         <button id="btn-orcamento" type="button" class="btn-primary">Salvar limite</button>
+      </div>
+
+      <div class="card">
+        <p class="rotulo">Aparência</p>
+        <div class="linha-botoes">
+          <button type="button" class="btn-sec" data-tema="light">☀️ Claro</button>
+          <button type="button" class="btn-sec" data-tema="dark">🌙 Escuro</button>
+        </div>
       </div>
 
       <div class="card">
@@ -85,9 +127,11 @@
   <nav class="abas">
     <button data-tab="lancar" class="ativa"><span>➕</span>Lançar</button>
     <button data-tab="painel"><span>📊</span>Painel</button>
+    <button data-tab="assistente"><span>💬</span>Assistente</button>
     <button data-tab="ajustes"><span>⚙️</span>Ajustes</button>
   </nav>
 
   <script src="app.js"></script>
+  <script src="assistente.js"></script>
 </body>
 </html>
