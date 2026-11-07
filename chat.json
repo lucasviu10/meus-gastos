@@ -83,6 +83,13 @@
       "descricao": "assinatura claude",
       "categoria": "contas",
       "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261107-tadalafila-50",
+      "valor": 50,
+      "descricao": "tadalafila",
+      "categoria": "saude",
+      "data": "2026-11-07"
     }
   ],
   "apagar": [
