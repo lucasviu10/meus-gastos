@@ -85,7 +85,9 @@
       "data": "2026-11-06"
     }
   ],
-  "apagar": [],
+  "apagar": [
+    "r-20261107-ademicon-540"
+  ],
   "atualizar": [
     {
       "uid": "u-mc-1",
@@ -135,11 +137,6 @@
   },
   "saldoEm": "2026-11-07T12:00:00Z",
   "aReceber": [
-    {
-      "id": "r-20261107-ademicon-540",
-      "valor": 540,
-      "descricao": "Ademicon"
-    },
     {
       "id": "r-20261107-nestle-940",
       "valor": 940,
@@ -217,5 +214,16 @@
       "alvo": 1129.86,
       "descricao": "alinhamento de valor (fictício)"
     }
-  ]
+  ],
+  "empresa": {
+    "nome": "LM Serviços LTDA",
+    "dadosEm": "2026-11-07T18:00:00Z",
+    "aReceber": [
+      {
+        "id": "re-20261107-ademicon-540",
+        "valor": 540,
+        "descricao": "Ademicon"
+      }
+    ]
+  }
 }
