@@ -217,13 +217,14 @@
   ],
   "empresa": {
     "nome": "LM Serviços LTDA",
-    "dadosEm": "2026-11-07T18:00:00Z",
+    "dadosEm": "2026-11-07T19:00:00Z",
     "aReceber": [
       {
         "id": "re-20261107-ademicon-540",
         "valor": 540,
         "descricao": "Ademicon"
       }
-    ]
+    ],
+    "cnpj": "67071083000180"
   }
 }
