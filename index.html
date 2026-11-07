@@ -23,6 +23,7 @@
   <main>
     <!-- ABA LANÇAR -->
     <section id="tab-lancar" class="tab active">
+      <button id="card-hoje" type="button" class="card hoje-card" aria-expanded="false"></button>
       <h1>Novo gasto</h1>
       <form id="form-gasto" autocomplete="off">
         <div class="linha-entrada">
@@ -175,6 +176,33 @@
         <div id="ct-proximos" class="proximos"></div>
       </div>
 
+      <div class="segmento" role="tablist">
+        <button type="button" data-seg2="contas" class="sel">📅 Contas e parcelas</button>
+        <button type="button" data-seg2="neg">⚠️ Negativações</button>
+      </div>
+
+      <div id="seg-neg" hidden>
+        <div class="card neg-resumo">
+          <span class="rotulo-suave">Total negativado</span>
+          <strong id="neg-total" class="valor-medio num">R$ 0,00</strong>
+          <p id="neg-sub" class="sub">Fica separado: não entra no saldo, nas despesas nem no "posso gastar hoje".</p>
+        </div>
+        <ul id="neg-lista" class="lista-contas"></ul>
+        <button id="btn-nova-neg" type="button" class="btn-sec largo">+ Adicionar negativação</button>
+        <form id="form-neg" class="card" autocomplete="off" hidden>
+          <label for="neg-credor">Com quem é a dívida?</label>
+          <input id="neg-credor" type="text" placeholder="ex: banco, loja, operadora">
+          <label for="neg-valor">Valor no Serasa</label>
+          <input id="neg-valor" type="text" inputmode="decimal" placeholder="ex: 1500">
+          <label for="neg-obs">Observação (opcional)</label>
+          <input id="neg-obs" type="text" placeholder="ex: desde 2024, tem acordo no Serasa">
+          <div class="linha-botoes">
+            <button type="button" id="neg-cancelar" class="btn-sec">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar</button>
+          </div>
+        </form>
+      </div>
+
       <div id="seg-contas">
         <ul id="lista-contas" class="lista-contas"></ul>
         <button id="btn-nova-conta" type="button" class="btn-sec largo">+ Nova conta</button>
@@ -323,5 +351,7 @@
   <script src="sync.js"></script>
   <script src="tipo-gasto.js"></script>
   <script src="empresa.js"></script>
+  <script src="dividas.js"></script>
+  <script src="hoje.js"></script>
 </body>
 </html>

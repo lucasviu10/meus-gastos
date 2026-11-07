@@ -53,6 +53,7 @@
       const falta = p.total - k;
       msg = falta ? `🔢 Faltam ${falta} parcelas de ${brl(g.valor)}` : '🎉 Era a última parcela';
     }
+    g.origem = 'conta'; // conta fixa/parcela não come o "posso gastar hoje"
     Object.assign(conta, {
       id: 'k' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
       nome: g.descricao.replace(/\s\(\d+\/\d+\)$/, ''), valor: g.valor, proxMes: prox, dia,

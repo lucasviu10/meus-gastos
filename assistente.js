@@ -204,6 +204,10 @@ function textoDados(n) {
   if (n.maiores.length) linhas.push('- Maiores gastos: ' + n.maiores.map(g => `${g.descricao} ${brl(g.valor)}`).join('; '));
   linhas.push(`- Compras pequenas (até R$ 30): ${n.pequenos.length}, somando ${brl(n.somaPequenos)}`);
   if (n.totalAnt) linhas.push(`- Mês passado, no mesmo período: ${brl(n.totalAnt)}`);
+  const ph = window.possoGastarHoje ? window.possoGastarHoje() : null;
+  if (ph) linhas.push(`- Posso gastar hoje: ${brl(Math.max(0, ph.resta))} (livre no mês ${brl(ph.livreMes)}, ${ph.diasRestantes} dias restantes)`);
+  const ng = window.negativacoesResumo ? window.negativacoesResumo() : null;
+  if (ng && ng.qtd) linhas.push(`- Negativações no Serasa (fora do plano por enquanto): ${ng.qtd}, total ${brl(ng.total)}`);
   const em = window.empresaResumo ? window.empresaResumo() : null;
   if (em && (em.entrou || em.aReceber)) linhas.push(`- Empresa (LM Serviços): saldo ${brl(em.saldo)}, a receber ${brl(em.aReceber)}, despesas ${brl(em.despesas)}, já liberado para mim ${brl(em.liberado)}`);
   const sd = window.saldoAtual ? window.saldoAtual() : null;

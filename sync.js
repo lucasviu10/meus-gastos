@@ -34,7 +34,7 @@
         id: g.id, valor, categoria, data: g.data,
         descricao: String(g.descricao || CAT[categoria].nome).slice(0, 80),
         criado: g.criado || new Date().toISOString(),
-        origem: 'chat',
+        origem: g.origem === 'conta' ? 'conta' : 'chat',
       };
       const nota = lerNota(g);
       if (nota) novo.nota = nota;
@@ -65,6 +65,7 @@
 
     if (window.saldoAplicarRemoto) extras += window.saldoAplicarRemoto(remoto, vistos);
     if (window.empresaAplicarRemoto) extras += window.empresaAplicarRemoto(remoto, vistos);
+    if (window.negativacoesAplicarRemoto) extras += window.negativacoesAplicarRemoto(remoto, vistos);
 
     (Array.isArray(remoto.apagar) ? remoto.apagar : []).forEach(id => {
       const antes = dados.gastos.length;

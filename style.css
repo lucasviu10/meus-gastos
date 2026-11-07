@@ -304,3 +304,17 @@ main h1 { padding-right: 100px; }
 .emp-cabecalho h1 { margin-bottom: 4px; }
 .btn-link.inline { display: inline; padding: 0; margin: 0; font-size: 14px; }
 #emp-saldo .btn-primary { margin-top: 10px; }
+
+/* Posso gastar hoje */
+.hoje-card { width: 100%; display: grid; gap: 2px; text-align: center; font: inherit; color: var(--text); cursor: pointer; background: var(--soft); border: 0; margin-top: 52px; }
+.hoje-card .valor-grande { margin: 2px 0; }
+.hoje-card .sub { margin: 0; }
+.ver-conta { color: var(--accent) !important; font-size: 13px !important; margin-top: 4px !important; }
+.hoje-conta { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; text-align: left; font-size: 14px; color: var(--muted); margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); }
+.hoje-conta b { color: var(--text); text-align: right; }
+#tab-lancar h1 { margin-top: 20px; }
+
+/* Negativações */
+.neg-resumo { background: var(--soft); border: 0; }
+.conta.st-neg { border-left-color: var(--muted); }
+.check.troca { font-size: 15px; margin: 0 !important; }

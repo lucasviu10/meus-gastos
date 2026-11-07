@@ -150,7 +150,7 @@
     const f = desfazerExtra; desfazerExtra = null; f(); salvar(); desenharTudo();
   });
   function lancarGasto(valor, descricao, categoria) {
-    const g = { id: novoId('p'), valor: r2(valor), descricao, categoria, data: isoDia(new Date()), criado: new Date().toISOString() };
+    const g = { id: novoId('p'), valor: r2(valor), descricao, categoria, data: isoDia(new Date()), criado: new Date().toISOString(), origem: 'conta' };
     dados.gastos.push(g);
     return g.id;
   }
