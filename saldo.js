@@ -138,8 +138,12 @@
   // "vai entrar 540 ademicon" / "a receber 940 nestlé" = dinheiro que ainda não caiu
   const PALAVRAS_PREVISTO = /(^|\s)(vai entrar|vai cair|a receber|vou receber|falta entrar|falta receber)(\s|$)/;
   const ehPrevisto = t => PALAVRAS_PREVISTO.test(' ' + semAcento(t) + ' ');
-  const PALAVRAS_ENTRADA = /(^|\s)(recebi|entrou|entrada|salario|comissao|comissoes|ganhei|renda|reembolso|pix recebido|caiu)(\s|$)/;
-  function ehEntrada(texto) { return /^\s*\+/.test(texto) || ehPrevisto(texto) || PALAVRAS_ENTRADA.test(' ' + semAcento(texto) + ' '); }
+  const PALAVRAS_ENTRADA = /(^|\s)(recebi|entrou|salario|comissao|comissoes|ganhei|renda|reembolso|pix recebido|caiu)(\s|$)/;
+  function ehEntrada(texto) {
+    const tg = document.querySelector('#tipo-gasto .sel');
+    if (tg && tg.dataset.tg !== 'agora') return false; // fixo/parcelado é sempre gasto
+    return /^\s*\+/.test(texto) || ehPrevisto(texto) || PALAVRAS_ENTRADA.test(' ' + semAcento(texto) + ' ');
+  }
   function lerEntrada(texto) {
     const limpo = texto.replace(/^\s*\+\s*/, '')
       .replace(/(^|\s)(vai entrar|vai cair|a receber|vou receber|falta entrar|falta receber)(?=\s|$)/gi, ' ')

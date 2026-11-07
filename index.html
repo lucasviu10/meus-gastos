@@ -28,6 +28,23 @@
         </div>
         <div id="preview" class="preview">Digite o valor e o que foi.</div>
         <div id="chips" class="chips"></div>
+        <div class="segmento tres" id="tipo-gasto" role="radiogroup" aria-label="Esse gasto se repete?">
+          <button type="button" data-tg="agora" class="sel">Só agora</button>
+          <button type="button" data-tg="fixo">🔁 Fixo</button>
+          <button type="button" data-tg="parcelado">🔢 Parcelado</button>
+        </div>
+        <div id="grupo-tg-fixo" class="linha-tg" hidden>
+          <label for="tg-dia">Vence todo dia</label>
+          <input id="tg-dia" type="number" inputmode="numeric" min="1" max="31" placeholder="ex: 10">
+        </div>
+        <div id="grupo-tg-parc" class="linha-tg" hidden>
+          <label for="tg-parcela">Esta é a parcela</label>
+          <input id="tg-parcela" type="number" inputmode="numeric" min="1" value="1">
+          <label for="tg-total">de</label>
+          <input id="tg-total" type="number" inputmode="numeric" min="2" placeholder="12">
+          <label for="tg-dia-p">· dia</label>
+          <input id="tg-dia-p" type="number" inputmode="numeric" min="1" max="31" placeholder="10">
+        </div>
         <button id="btn-salvar" type="submit" class="btn-primary" disabled>Salvar</button>
       </form>
       <div class="hoje">
@@ -120,6 +137,12 @@
           <button type="button" class="btn-sec" data-tema="light">☀️ Claro</button>
           <button type="button" class="btn-sec" data-tema="dark">🌙 Escuro</button>
         </div>
+      </div>
+
+      <div class="card">
+        <p class="rotulo">💬 Lançamentos do chat</p>
+        <p id="sync-status" class="sub">Ainda não buscou.</p>
+        <button id="btn-sync" type="button" class="btn-primary">🔄 Buscar do chat agora</button>
       </div>
 
       <div class="card">
@@ -224,6 +247,7 @@
         </form>
       </div>
     </section>
+    <p id="versao" class="sub versao"></p>
   </main>
 
   <div id="toast" class="toast" hidden>
@@ -245,5 +269,6 @@
   <script src="assistente.js"></script>
   <script src="voz.js"></script>
   <script src="sync.js"></script>
+  <script src="tipo-gasto.js"></script>
 </body>
 </html>

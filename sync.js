@@ -95,16 +95,49 @@
     setTimeout(() => { t.hidden = true; document.getElementById('toast-undo').hidden = false; }, 6000);
   }
 
-  async function sincronizar(forcar) {
-    if (buscando || !navigator.onLine) return;
-    if (!forcar && Date.now() - ultimaBusca < INTERVALO_MIN) return;
-    buscando = true; ultimaBusca = Date.now();
+  const URL_RESERVA = 'https://raw.githubusercontent.com/lucasviu10/meus-gastos/dados/chat.json';
+  const status = { quando: null, ok: null, erro: '' };
+  window.statusSync = status;
+
+  async function buscar() {
+    // 1º: API do GitHub (atualiza na hora). 2º: arquivo direto (sem limite de acessos).
     try {
       const r = await fetch(URL_DADOS, { headers: { Accept: 'application/vnd.github.raw+json' }, cache: 'no-cache' });
-      if (r.ok) aplicar(await r.json());
-    } catch (e) { /* sem internet ou limite do GitHub: tenta na próxima */ }
-    buscando = false;
+      if (r.ok) return await r.json();
+    } catch (e) { /* tenta a reserva */ }
+    const r2 = await fetch(URL_RESERVA + '?t=' + Date.now(), { cache: 'no-store' });
+    if (!r2.ok) throw new Error('GitHub respondeu ' + r2.status);
+    return await r2.json();
   }
+
+  async function sincronizar(forcar) {
+    if (buscando) return;
+    if (!navigator.onLine) { status.ok = false; status.erro = 'Sem internet'; mostrarStatus(); return; }
+    if (!forcar && Date.now() - ultimaBusca < INTERVALO_MIN) return;
+    buscando = true; ultimaBusca = Date.now(); mostrarStatus('Buscando…');
+    try {
+      aplicar(await buscar());
+      status.ok = true; status.erro = '';
+    } catch (e) {
+      status.ok = false; status.erro = 'Não consegui buscar. Tente de novo em instantes.';
+    }
+    status.quando = new Date();
+    buscando = false;
+    mostrarStatus();
+  }
+
+  function mostrarStatus(txt) {
+    const el = document.getElementById('sync-status');
+    if (!el) return;
+    if (txt) { el.textContent = txt; return; }
+    if (status.ok === null) { el.textContent = 'Ainda não buscou.'; return; }
+    const h = status.quando ? status.quando.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
+    el.textContent = status.ok ? `✓ Atualizado com o chat às ${h}` : `⚠️ ${status.erro}`;
+    el.className = 'sub ' + (status.ok ? 'ok' : 'bad');
+  }
+  document.addEventListener('click', e => {
+    if (e.target.closest('#btn-sync')) sincronizar(true);
+  });
 
   window.sincronizarChat = sincronizar;
   sincronizar(true);

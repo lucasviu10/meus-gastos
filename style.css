@@ -284,3 +284,11 @@ main h1 { padding-right: 48px; }
 .a-receber { text-align: left; background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-top: 6px; }
 .a-receber .lista li { gap: 8px; }
 .a-receber .btn-pagar { padding: 7px 10px; font-size: 14px; }
+
+/* Fixo / parcelado no lançar */
+.segmento.tres { grid-template-columns: repeat(3, 1fr); margin: 0 0 12px; }
+.segmento.tres button { font-size: 14px; padding: 10px 4px; }
+.linha-tg { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; color: var(--muted); font-size: 15px; }
+.linha-tg input { width: 64px; font-size: 18px; padding: 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--soft); color: var(--text); text-align: center; }
+.versao { text-align: center; margin-top: 30px; opacity: .6; }
+.segmento.tres button.sel { background: var(--accent); color: #fff; }
