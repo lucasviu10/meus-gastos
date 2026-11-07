@@ -11,7 +11,7 @@ const CATEGORIAS = [
   { id: 'casa', nome: 'Casa', emoji: '🏠',
     palavras: ['aluguel', 'luz', 'energia', 'agua', 'internet', 'condominio', 'gas', 'iptu', 'limpeza', 'faxina', 'moveis', 'casa'] },
   { id: 'saude', nome: 'Saúde', emoji: '💊',
-    palavras: ['farmacia', 'remedio', 'academia', 'medico', 'dentista', 'consulta', 'exame', 'plano de saude', 'drogaria', 'suplemento', 'whey'] },
+    palavras: ['farmacia', 'remedio', 'academia', 'medico', 'dentista', 'consulta', 'exame', 'plano de saude', 'drogaria', 'suplemento', 'whey', 'medicamento', 'tadalafila', 'sildenafila'] },
   { id: 'lazer', nome: 'Lazer', emoji: '🎉',
     palavras: ['cinema', 'bar', 'show', 'netflix', 'spotify', 'viagem', 'cerveja', 'festa', 'balada', 'jogo', 'streaming', 'passeio', 'praia'] },
   { id: 'compras', nome: 'Compras', emoji: '🛍️',
@@ -84,8 +84,37 @@ function interpretar(texto) {
   m = t.match(/\s(?:r\$\s*)?(\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?|\d+(?:[.,]\d{1,2})?)(?=\s)/i);
   if (m) { valor = valorDeTexto(m[1]); t = t.replace(m[0], ' '); }
 
-  const descricao = t.replace(/\s+/g, ' ').trim().replace(/^(de|do|da|no|na|em|com|pro|pra|para)\s+/i, '').trim();
-  return { valor, descricao, categoria: adivinharCategoria(descricao), data: isoDia(data) };
+  const { descricao, categoriaDita } = simplificar(t);
+  return { valor, descricao, categoria: categoriaDita || adivinharCategoria(descricao), data: isoDia(data) };
+}
+
+// Deixa a descrição curta: "coloca lá na saúde tadalafila" -> "tadalafila" (categoria Saúde)
+const NOMES_CATEGORIA = { alimentacao: 'alimentacao', comida: 'alimentacao', transporte: 'transporte', casa: 'casa',
+  saude: 'saude', lazer: 'lazer', compras: 'compras', contas: 'contas', conta: 'contas', outros: 'outros', mc: 'mc' };
+const COMANDOS = new Set(['coloca', 'coloque', 'colocar', 'anota', 'anote', 'anotar', 'lanca', 'lance', 'lancar', 'registra',
+  'registre', 'bota', 'boto', 'poe', 'gastei', 'paguei', 'gasto', 'reais', 'real', 'conto', 'contos', 'pila']);
+const ENCHIMENTO = new Set(['la', 'ai', 'aqui', 'ali', 'na', 'no', 'nas', 'nos', 'de', 'do', 'da', 'dos', 'das', 'em', 'com',
+  'pro', 'pra', 'para', 'por', 'pelo', 'pela', 'o', 'a', 'os', 'as', 'um', 'uma', 'uns', 'umas', 'que', 'eu', 'me', 'mim',
+  'meu', 'minha', 'e', 'foi', 'foram', 'deu', 'tipo', 'entao', 'ne', 'tambem', 'so', 'isso', 'esse', 'essa', 'categoria',
+  'valor', 'hoje', 'agora', 'ta', 'esta', 'ja']);
+function simplificar(texto) {
+  let palavras = texto.replace(/[,.;!?]+(\s|$)/g, ' ').split(/\s+/).filter(Boolean);
+  const sa = w => semAcento(w);
+  let categoriaDita = null;
+  // "na saúde", "em lazer", "categoria casa" -> escolhe a categoria e tira da descrição
+  palavras = palavras.filter((w, i) => {
+    const cat = NOMES_CATEGORIA[sa(w)];
+    const antes = i > 0 ? sa(palavras[i - 1]) : '';
+    if (cat && /^(na|no|em|pra|para|de|da|do|categoria)$/.test(antes)) { categoriaDita = cat; return false; }
+    // categoria dita no fim: "50 tadalafila saúde" (casa/conta ficam, podem ser parte do nome)
+    if (cat && i === palavras.length - 1 && i > 0 && !['casa', 'conta', 'contas', 'mc'].includes(sa(w))) { categoriaDita = cat; return false; }
+    return !COMANDOS.has(sa(w));
+  });
+  // tira palavras de enchimento do começo e do fim (o meio fica: "café da manhã")
+  while (palavras.length && ENCHIMENTO.has(sa(palavras[0]))) palavras.shift();
+  while (palavras.length && ENCHIMENTO.has(sa(palavras[palavras.length - 1]))) palavras.pop();
+  const descricao = palavras.slice(0, 5).join(' ').toLowerCase();
+  return { descricao, categoriaDita };
 }
 const PALAVRAS_MC = /(^|\s)(mc|maconha|seda|sedas|beck|erva|piteira|dichavador|baseado)(\s|$)/;
 function adivinharCategoria(desc) {
@@ -143,7 +172,7 @@ function atualizarPreview() {
   const r = interpretar(texto);
   const cat = CAT[catEscolhida || r.categoria];
   if (r.valor > 0) {
-    $('preview').innerHTML = `<strong>${brl(r.valor)}</strong> · ${cat.emoji} ${cat.nome} · ${dataLegivel(r.data)}`;
+    $('preview').innerHTML = `<strong>${brl(r.valor)}</strong> · ${escapar(r.descricao || cat.nome)} · ${cat.emoji} ${cat.nome} · ${dataLegivel(r.data)}`;
     $('btn-salvar').disabled = false;
   } else {
     $('preview').textContent = 'Falta o valor. Ex: 45 mercado';
@@ -373,7 +402,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '12';
+const VERSAO_APP = '13';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;
