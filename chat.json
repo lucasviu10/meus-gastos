@@ -85,5 +85,40 @@
       "data": "2026-11-06"
     }
   ],
-  "apagar": []
+  "apagar": [],
+  "atualizar": [
+    {
+      "uid": "u-mc-1",
+      "id": "c-20261104-pessoal-50",
+      "nota64": "bWFjb25oYQ==",
+      "categoria": "mc",
+      "descricao": "MC"
+    },
+    {
+      "uid": "u-mc-2",
+      "id": "c-20261106-pessoal-8",
+      "nota64": "c2VkYQ==",
+      "categoria": "mc",
+      "descricao": "MC"
+    },
+    {
+      "uid": "u-mc-3",
+      "id": "c-20261106-pessoal-70",
+      "nota64": "bWFjb25oYQ==",
+      "categoria": "mc",
+      "descricao": "MC"
+    },
+    {
+      "uid": "u-mc-4",
+      "id": "c-20261106-pessoal-15",
+      "nota64": "bWFjb25oYQ==",
+      "categoria": "mc",
+      "descricao": "MC"
+    },
+    {
+      "uid": "u-med-1",
+      "id": "c-20261106-medicamento-225",
+      "nota64": "ZHVyYXRlc3Rvbg=="
+    }
+  ]
 }

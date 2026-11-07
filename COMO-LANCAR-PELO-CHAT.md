@@ -46,3 +46,9 @@ Acrescente nas listas `contas`, `cartoes` ou `compras` de `chat.json` (crie a li
 ```
 - `valor` é o TOTAL da compra; `parcelas` = 1 para à vista. `cartaoId` precisa ser o id de um cartão cadastrado pelo chat.
 - Pagamento de conta e de fatura é feito no app (botão "✓ Paguei").
+
+## Categoria MC e detalhe escondido
+- Categoria `mc`: use para maconha, seda e afins. `descricao` sempre `"MC"`.
+- O que foi de verdade vai em `nota64` (texto em base64), nunca em texto aberto. No app, só aparece quando ele toca no gasto.
+  Ex.: `{ "id": "c-20261107-mc-50", "valor": 50, "descricao": "MC", "categoria": "mc", "data": "2026-11-07", "nota64": "bWFjb25oYQ==" }`
+- Para corrigir um gasto já lançado, acrescente em `atualizar`: `{ "uid": "u-unico", "id": "<id do gasto>", "categoria": "...", "descricao": "...", "nota64": "..." }` (`uid` nunca se repete).
