@@ -204,6 +204,8 @@ function textoDados(n) {
   if (n.maiores.length) linhas.push('- Maiores gastos: ' + n.maiores.map(g => `${g.descricao} ${brl(g.valor)}`).join('; '));
   linhas.push(`- Compras pequenas (até R$ 30): ${n.pequenos.length}, somando ${brl(n.somaPequenos)}`);
   if (n.totalAnt) linhas.push(`- Mês passado, no mesmo período: ${brl(n.totalAnt)}`);
+  const sd = window.saldoAtual ? window.saldoAtual() : null;
+  if (sd) linhas.push(`- Saldo agora: ${brl(sd.agora)} (comecei com ${brl(sd.inicial)} em ${sd.data}, entrou ${brl(sd.entrou)}, saiu ${brl(sd.saiu)}); depois das contas do mês: ${brl(sd.depois)}`);
   const cp = window.compromissos ? window.compromissos.resumo() : null;
   if (cp) {
     linhas.push(`- Ainda a pagar este mês (contas e faturas): ${brl(cp.aPagar)}`);

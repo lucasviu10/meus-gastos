@@ -271,3 +271,13 @@ main h1 { padding-right: 48px; }
 .lista.dentro { margin: 8px 0 4px; padding-left: 8px; border-left: 2px solid var(--line); }
 
 [hidden] { display: none !important; }
+
+/* Saldo */
+.saldo { display: grid; gap: 6px; text-align: center; }
+.saldo .valor-grande { margin: 0 0 6px; }
+.saldo .linha-entrada { margin-top: 4px; }
+.saldo .linha-entrada input { flex: 1; min-width: 0; font-size: 18px; padding: 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--soft); color: var(--text); }
+.saldo-linhas { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; text-align: left; font-size: 15px; color: var(--muted); max-width: 320px; margin: 0 auto; width: 100%; }
+.saldo-linhas b { color: var(--text); text-align: right; }
+.saldo-linhas b.ok { color: var(--ok); }
+.saldo-depois { margin: 8px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 15px; color: var(--muted); }

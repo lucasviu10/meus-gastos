@@ -63,10 +63,12 @@
       extras++;
     }));
 
+    if (window.saldoAplicarRemoto) extras += window.saldoAplicarRemoto(remoto, vistos);
+
     (Array.isArray(remoto.apagar) ? remoto.apagar : []).forEach(id => {
       const antes = dados.gastos.length;
       dados.gastos = dados.gastos.filter(g => g.id !== id);
-      ['contas', 'cartoes', 'compras'].forEach(k => { if (Array.isArray(dados[k])) dados[k] = dados[k].filter(x => x.id !== id); });
+      ['contas', 'cartoes', 'compras', 'entradas'].forEach(k => { if (Array.isArray(dados[k])) dados[k] = dados[k].filter(x => x.id !== id); });
       if (dados.gastos.length < antes) removidos++;
       if (!vistos.has(id)) { vistos.add(id); dados.importados.push(id); }
     });

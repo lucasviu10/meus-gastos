@@ -45,6 +45,8 @@
         <button id="mes-prox" type="button" aria-label="Próximo mês">›</button>
       </div>
 
+      <div id="card-saldo" class="card saldo"></div>
+
       <div class="card destaque">
         <p id="destaque-rotulo" class="rotulo">Ainda posso gastar</p>
         <p id="destaque-valor" class="valor-grande">R$ 0,00</p>
@@ -59,6 +61,9 @@
 
       <h2>Últimos gastos</h2>
       <ul id="lista-ultimos" class="lista"></ul>
+
+      <h2>Entradas</h2>
+      <ul id="lista-entradas" class="lista"></ul>
     </section>
 
     <!-- ABA ASSISTENTE -->
@@ -97,6 +102,16 @@
         <label for="orcamento">Quanto posso gastar por mês?</label>
         <input id="orcamento" type="text" inputmode="decimal" placeholder="ex: 3000">
         <button id="btn-orcamento" type="button" class="btn-primary">Salvar limite</button>
+      </div>
+
+      <div class="card">
+        <label for="saldo-valor">Quanto você tinha no início?</label>
+        <div class="duas-colunas">
+          <div><input id="saldo-valor" type="text" inputmode="decimal" placeholder="ex: 2770" aria-label="Saldo inicial"></div>
+          <div><input id="saldo-data" type="date" aria-label="Data do saldo inicial"></div>
+        </div>
+        <button id="btn-saldo" type="button" class="btn-primary">Salvar saldo inicial</button>
+        <p class="sub">Some o que tinha em todas as contas nessa data. Depois o app soma o que entra e tira o que sai.</p>
       </div>
 
       <div class="card">
@@ -226,6 +241,7 @@
 
   <script src="app.js"></script>
   <script src="contas.js"></script>
+  <script src="saldo.js"></script>
   <script src="assistente.js"></script>
   <script src="voz.js"></script>
   <script src="sync.js"></script>
