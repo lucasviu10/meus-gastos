@@ -210,5 +210,12 @@
       "dia": 10,
       "categoria": "contas"
     }
+  ],
+  "ajustes": [
+    {
+      "id": "a-20261107-1129",
+      "alvo": 1129.86,
+      "descricao": "alinhamento de valor (fictício)"
+    }
   ]
 }
