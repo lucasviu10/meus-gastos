@@ -292,3 +292,15 @@ main h1 { padding-right: 48px; }
 .linha-tg input { width: 64px; font-size: 18px; padding: 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--soft); color: var(--text); text-align: center; }
 .versao { text-align: center; margin-top: 30px; opacity: .6; }
 .segmento.tres button.sel { background: var(--accent); color: #fff; }
+
+/* Botões do topo, cartão e empresa */
+.botoes-topo { position: absolute; top: calc(14px + env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); display: flex; gap: 8px; z-index: 5; }
+.botoes-topo .btn-tema { position: static; }
+main h1 { padding-right: 100px; }
+.abas button { font-size: 11px; min-width: 0; }
+.abas button span { font-size: 21px; }
+.compras-ativas { background: var(--soft); border-radius: 12px; padding: 10px 12px; }
+.compras-ativas summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+.emp-cabecalho h1 { margin-bottom: 4px; }
+.btn-link.inline { display: inline; padding: 0; margin: 0; font-size: 14px; }
+#emp-saldo .btn-primary { margin-top: 10px; }

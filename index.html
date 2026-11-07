@@ -15,7 +15,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <button id="btn-tema" class="btn-tema" type="button" aria-label="Trocar tema claro/escuro">🌙</button>
+  <div class="botoes-topo">
+    <button id="btn-tema" class="btn-tema" type="button" aria-label="Trocar tema claro/escuro">🌙</button>
+    <button id="btn-ajustes" class="btn-tema" type="button" aria-label="Ajustes">⚙️</button>
+  </div>
 
   <main>
     <!-- ABA LANÇAR -->
@@ -172,11 +175,6 @@
         <div id="ct-proximos" class="proximos"></div>
       </div>
 
-      <div class="segmento" role="tablist">
-        <button type="button" data-seg="contas" class="sel">📅 Contas e parcelas</button>
-        <button type="button" data-seg="cartoes">💳 Cartões</button>
-      </div>
-
       <div id="seg-contas">
         <ul id="lista-contas" class="lista-contas"></ul>
         <button id="btn-nova-conta" type="button" class="btn-sec largo">+ Nova conta</button>
@@ -219,12 +217,32 @@
         </form>
       </div>
 
-      <div id="seg-cartoes" hidden>
+    </section>
+    <!-- ABA CARTÃO -->
+    <section id="tab-cartao" class="tab">
+      <h1>Cartão de crédito</h1>
+      <div class="card resumo-contas">
+        <p class="rotulo-suave">Dívida total nos cartões</p>
+        <p id="cc-divida" class="valor-medio">R$ 0,00</p>
+        <p id="cc-divida-sub" class="sub"></p>
+      </div>
+      <div id="seg-cartoes">
         <div id="lista-cartoes"></div>
 
         <form id="form-compra" class="card" autocomplete="off" hidden>
           <label for="compra-texto">Nova compra no cartão</label>
+          <div class="segmento tres" id="tipo-compra" role="radiogroup" aria-label="Tipo de compra">
+            <button type="button" data-tc="nova" class="sel">🛒 Nova</button>
+            <button type="button" data-tc="andamento">🔢 Já parcelada</button>
+            <button type="button" data-tc="fixa">🔁 Fixa</button>
+          </div>
           <input id="compra-texto" type="text" placeholder="ex: 300 celular 10x">
+          <div id="grupo-andamento" class="linha-tg" hidden>
+            <label for="compra-k">Estou na parcela</label>
+            <input id="compra-k" type="number" inputmode="numeric" min="1" placeholder="5">
+            <label for="compra-n">de</label>
+            <input id="compra-n" type="number" inputmode="numeric" min="2" placeholder="10">
+          </div>
           <select id="compra-cartao" aria-label="Cartão" hidden></select>
           <p id="compra-preview" class="preview">Valor, o que foi e parcelas. Ex: 10x de 30 tênis</p>
           <button type="submit" id="compra-salvar" class="btn-primary" disabled>Salvar compra</button>
@@ -247,6 +265,38 @@
         </form>
       </div>
     </section>
+
+    <!-- ABA EMPRESA -->
+    <section id="tab-empresa" class="tab">
+      <div id="emp-cabecalho" class="emp-cabecalho"></div>
+      <form id="form-emp-dados" class="card" autocomplete="off" hidden>
+        <label for="emp-nome">Nome da empresa</label>
+        <input id="emp-nome" type="text">
+        <label for="emp-cnpj">CNPJ</label>
+        <input id="emp-cnpj" type="text" inputmode="numeric" placeholder="00.000.000/0000-00">
+        <div class="linha-botoes">
+          <button type="button" id="emp-dados-cancelar" class="btn-sec">Cancelar</button>
+          <button type="submit" class="btn-primary">Salvar</button>
+        </div>
+      </form>
+
+      <div id="emp-saldo" class="card saldo"></div>
+
+      <form id="form-emp" class="card" autocomplete="off">
+        <div class="segmento tres" id="tipo-emp" role="radiogroup" aria-label="Tipo de movimento">
+          <button type="button" data-te="entrada" class="sel">💰 Entrou</button>
+          <button type="button" data-te="despesa">🧾 Despesa</button>
+          <button type="button" data-te="retirada">💸 Liberar p/ mim</button>
+        </div>
+        <input id="emp-texto" type="text" placeholder="ex: 540 Ademicon">
+        <label class="check" id="emp-previsto-linha"><input id="emp-previsto" type="checkbox"> Ainda vai entrar (não caiu)</label>
+        <p id="emp-preview" class="preview">Valor e o que foi.</p>
+        <button type="submit" id="emp-salvar" class="btn-primary" disabled>Salvar</button>
+      </form>
+
+      <h2>Movimentos do mês</h2>
+      <ul id="emp-lista" class="lista"></ul>
+    </section>
     <p id="versao" class="sub versao"></p>
   </main>
 
@@ -259,8 +309,10 @@
     <button data-tab="lancar" class="ativa"><span>➕</span>Lançar</button>
     <button data-tab="painel"><span>📊</span>Painel</button>
     <button data-tab="contas"><span>📅</span>Contas</button>
-    <button data-tab="assistente"><span>💬</span>Assistente</button>
-    <button data-tab="ajustes"><span>⚙️</span>Ajustes</button>
+    <button data-tab="cartao"><span>💳</span>Cartão</button>
+    <button data-tab="empresa"><span>🏢</span>Empresa</button>
+    <button data-tab="assistente"><span>💬</span>IA</button>
+    <button data-tab="ajustes" hidden><span>⚙️</span>Ajustes</button>
   </nav>
 
   <script src="app.js"></script>
@@ -270,5 +322,6 @@
   <script src="voz.js"></script>
   <script src="sync.js"></script>
   <script src="tipo-gasto.js"></script>
+  <script src="empresa.js"></script>
 </body>
 </html>
