@@ -120,5 +120,18 @@
       "id": "c-20261106-medicamento-225",
       "nota64": "ZHVyYXRlc3Rvbg=="
     }
-  ]
+  ],
+  "entradas": [
+    {
+      "id": "e-20261103-pix-19247",
+      "valor": 192.47,
+      "descricao": "pix recebido",
+      "data": "2026-11-03"
+    }
+  ],
+  "saldoInicial": {
+    "valor": 2770,
+    "data": "2026-11-01"
+  },
+  "saldoEm": "2026-11-07T12:00:00Z"
 }
