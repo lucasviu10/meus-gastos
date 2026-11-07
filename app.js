@@ -18,6 +18,7 @@ const CATEGORIAS = [
     palavras: ['roupa', 'shopee', 'mercado livre', 'amazon', 'presente', 'tenis', 'shein', 'loja', 'celular novo', 'eletronico'] },
   { id: 'contas', nome: 'Contas', emoji: '🧾',
     palavras: ['cartao', 'boleto', 'fatura', 'telefone', 'plano celular', 'seguro', 'juros', 'emprestimo', 'parcela', 'consorcio', 'tarifa', 'banco', 'imposto'] },
+  { id: 'mc', nome: 'MC', emoji: 'Ⓜ️', palavras: [] },
   { id: 'outros', nome: 'Outros', emoji: '📦', palavras: [] },
 ];
 const CAT = Object.fromEntries(CATEGORIAS.map(c => [c.id, c]));
@@ -86,8 +87,10 @@ function interpretar(texto) {
   const descricao = t.replace(/\s+/g, ' ').trim().replace(/^(de|do|da|no|na|em|com|pro|pra|para)\s+/i, '').trim();
   return { valor, descricao, categoria: adivinharCategoria(descricao), data: isoDia(data) };
 }
+const PALAVRAS_MC = /(^|\s)(mc|maconha|seda|sedas|beck|erva|piteira|dichavador|baseado)(\s|$)/;
 function adivinharCategoria(desc) {
   const d = ' ' + semAcento(desc) + ' ';
+  if (PALAVRAS_MC.test(d)) return 'mc';
   for (const c of CATEGORIAS) {
     if (c.palavras.some(p => d.includes(' ' + p + ' ') || d.includes(' ' + p))) return c.id;
   }
@@ -99,14 +102,20 @@ function adivinharCategoria(desc) {
 function adicionar(texto, categoriaForcada) {
   const r = interpretar(texto);
   if (!(r.valor > 0)) return null;
+  const categoria = categoriaForcada || r.categoria;
   const g = {
     id: novoId(),
     valor: r.valor,
-    descricao: r.descricao || CAT[categoriaForcada || r.categoria].nome,
-    categoria: categoriaForcada || r.categoria,
+    descricao: r.descricao || CAT[categoria].nome,
+    categoria,
     data: r.data,
     criado: new Date().toISOString(),
   };
+  // MC: na lista aparece só "MC"; o que foi fica guardado no detalhe escondido
+  if (categoria === 'mc') {
+    if (r.descricao && semAcento(r.descricao) !== 'mc') g.nota = r.descricao;
+    g.descricao = 'MC';
+  }
   dados.gastos.push(g);
   return g;
 }
@@ -174,13 +183,27 @@ $('toast-undo').addEventListener('click', () => {
   $('toast').hidden = true;
 });
 
+// Detalhe escondido: só aparece quando você toca no gasto.
+const abertos = new Set();
+let editandoNota = null;
 function itemLista(g, mostrarData) {
   const c = CAT[g.categoria] || CAT.outros;
-  return `<li>
+  const aberto = abertos.has(g.id);
+  let detalhe = '';
+  if (aberto) {
+    detalhe = editandoNota === g.id
+      ? `<div class="detalhe"><input class="nota-input" data-nota-input="${g.id}" value="${escapar(g.nota || '')}" placeholder="O que foi? (só aparece aqui)">
+          <button type="button" class="btn-pagar" data-salvar-nota="${g.id}">Salvar</button></div>`
+      : `<div class="detalhe"><span>${g.nota ? `🔒 ${escapar(g.nota)}` : '<span class="sub">Sem detalhe</span>'}</span>
+          <span class="sub">${c.emoji} ${c.nome} · ${dataLegivel(g.data)}</span>
+          <button type="button" class="btn-link" data-editar-nota="${g.id}">✏️ ${g.nota ? 'Editar' : 'Adicionar'} detalhe</button></div>`;
+  }
+  return `<li class="item${aberto ? ' aberto' : ''}" data-gid="${g.id}">
     <span class="emoji">${c.emoji}</span>
-    <span class="desc">${escapar(g.descricao)}${mostrarData ? `<small>${dataLegivel(g.data)}</small>` : ''}</span>
+    <span class="desc">${escapar(g.descricao)}${g.nota && !aberto ? ' <span class="tem-nota" aria-label="tem detalhe">•</span>' : ''}${mostrarData ? `<small>${dataLegivel(g.data)}</small>` : ''}</span>
     <span class="val">${brl(g.valor)}</span>
     <button class="del" data-del="${g.id}" aria-label="Apagar">✕</button>
+    ${detalhe}
   </li>`;
 }
 function escapar(s) {
@@ -196,7 +219,31 @@ function remover(id, semPerguntar) {
 }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-del]');
-  if (b) remover(b.dataset.del);
+  if (b) { remover(b.dataset.del); return; }
+  const ed = e.target.closest('[data-editar-nota]');
+  if (ed) { editandoNota = ed.dataset.editarNota; desenharTudo(); const i = document.querySelector(`[data-nota-input="${editandoNota}"]`); if (i) i.focus(); return; }
+  const sv = e.target.closest('[data-salvar-nota]');
+  if (sv) {
+    const g = dados.gastos.find(x => x.id === sv.dataset.salvarNota);
+    const i = document.querySelector(`[data-nota-input="${sv.dataset.salvarNota}"]`);
+    if (g && i) { const v = i.value.trim(); if (v) g.nota = v.slice(0, 120); else delete g.nota; salvar(); }
+    editandoNota = null; desenharTudo(); return;
+  }
+  if (e.target.closest('.detalhe')) return;
+  const cat = e.target.closest('[data-cat-abrir]');
+  if (cat) { catAberta = catAberta === cat.dataset.catAbrir ? null : cat.dataset.catAbrir; desenharPainel(); return; }
+  const li = e.target.closest('li.item[data-gid]');
+  if (li) {
+    const id = li.dataset.gid;
+    if (abertos.has(id)) { abertos.delete(id); if (editandoNota === id) editandoNota = null; } else abertos.add(id);
+    desenharTudo();
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.matches('[data-nota-input]')) {
+    e.preventDefault();
+    document.querySelector(`[data-salvar-nota="${e.target.dataset.notaInput}"]`).click();
+  }
 });
 
 function desenharHoje() {
@@ -209,6 +256,7 @@ function desenharHoje() {
 // ---------- Aba Painel ----------
 let mesVisto = new Date(); mesVisto.setDate(1);
 
+let catAberta = null;
 function desenharPainel() {
   const km = chaveMes(mesVisto);
   { const n = mesVisto.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }); $('mes-nome').textContent = n.charAt(0).toUpperCase() + n.slice(1); }
@@ -251,8 +299,12 @@ function desenharPainel() {
   $('lista-cat').innerHTML = ordem.length ? ordem.map(([id, v]) => {
     const c = CAT[id] || CAT.outros;
     const pct = total ? Math.round((v / total) * 100) : 0;
-    return `<li><div class="topo"><span>${c.emoji} ${c.nome}</span><span><strong>${brl(v)}</strong> <small class="sub">${pct}%</small></span></div>
-      <div class="barra"><div class="barra-cheia" style="width:${(v / maior) * 100}%"></div></div></li>`;
+    const aberta = catAberta === id;
+    const itens = aberta ? doMes.filter(g => g.categoria === id).sort((a, b) => (b.data + b.criado).localeCompare(a.data + a.criado)) : [];
+    return `<li class="cat${aberta ? ' aberta' : ''}"><button type="button" class="cat-botao" data-cat-abrir="${id}" aria-expanded="${aberta}">
+      <div class="topo"><span>${c.emoji} ${c.nome} <span class="seta">${aberta ? '▾' : '›'}</span></span><span><strong>${brl(v)}</strong> <small class="sub">${pct}%</small></span></div>
+      <div class="barra"><div class="barra-cheia" style="width:${(v / maior) * 100}%"></div></div></button>
+      ${aberta ? `<ul class="lista dentro">${itens.map(g => itemLista(g, true)).join('')}</ul>` : ''}</li>`;
   }).join('') : '<li class="vazio">Sem gastos neste mês.</li>';
 
   const ultimos = [...doMes].sort((a, b) => (b.data + b.criado).localeCompare(a.data + a.criado)).slice(0, 8);

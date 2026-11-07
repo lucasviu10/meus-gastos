@@ -256,3 +256,18 @@ main h1 { padding-right: 48px; }
 .fatura-topo { display: flex; justify-content: space-between; gap: 10px; font-weight: 600; }
 .lista.compacta li { padding: 8px 0; }
 .lista.compacta .emoji { font-size: 18px; }
+
+/* Detalhe escondido e categorias que abrem */
+.lista li.item { flex-wrap: wrap; cursor: pointer; }
+.lista li.item.aberto { background: var(--soft); border-radius: 12px; padding-left: 8px; padding-right: 4px; }
+.tem-nota { color: var(--muted); font-weight: 700; }
+.detalhe { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 4px 0 2px 40px; cursor: default; }
+.detalhe > span:first-child { flex-basis: 100%; font-weight: 600; }
+.detalhe .btn-link { margin-left: 0; padding: 4px 0; }
+.nota-input { flex: 1; min-width: 0; font-size: 16px; padding: 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--card); color: var(--text); }
+.cat-botao { all: unset; display: block; width: 100%; cursor: pointer; box-sizing: border-box; }
+.cat-botao:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 6px; }
+.seta { color: var(--muted); font-size: 14px; }
+.lista.dentro { margin: 8px 0 4px; padding-left: 8px; border-left: 2px solid var(--line); }
+
+[hidden] { display: none !important; }
