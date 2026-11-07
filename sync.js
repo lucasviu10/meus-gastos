@@ -31,9 +31,19 @@
       novos++; soma += valor;
     });
 
+    let extras = 0;
+    ['contas', 'cartoes', 'compras'].forEach(k => (Array.isArray(remoto[k]) ? remoto[k] : []).forEach(x => {
+      if (!x || typeof x.id !== 'string' || !x.id || vistos.has(x.id) || !window.compromissos) return;
+      vistos.add(x.id); dados.importados.push(x.id);
+      if (!Array.isArray(dados[k])) dados[k] = [];
+      dados[k].push(window.compromissos.normalizar(k, x));
+      extras++;
+    }));
+
     (Array.isArray(remoto.apagar) ? remoto.apagar : []).forEach(id => {
       const antes = dados.gastos.length;
       dados.gastos = dados.gastos.filter(g => g.id !== id);
+      ['contas', 'cartoes', 'compras'].forEach(k => { if (Array.isArray(dados[k])) dados[k] = dados[k].filter(x => x.id !== id); });
       if (dados.gastos.length < antes) removidos++;
       if (!vistos.has(id)) { vistos.add(id); dados.importados.push(id); }
     });
@@ -46,8 +56,9 @@
       if (campo) campo.value = String(orc).replace('.', ',');
     }
 
-    if (novos || removidos || orc > 0) { salvar(); desenharTudo(); }
+    if (novos || removidos || extras || orc > 0) { salvar(); desenharTudo(); }
     if (novos) avisar(`💬 ${novos} gasto(s) do chat chegaram: ${brl(soma)}`);
+    else if (extras) avisar(`💬 ${extras} conta(s)/compra(s) chegaram do chat`);
     else if (removidos) avisar(`💬 ${removidos} gasto(s) apagado(s) pelo chat`);
   }
 

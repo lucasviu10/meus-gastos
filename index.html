@@ -30,10 +30,6 @@
         <div id="chips" class="chips"></div>
         <button id="btn-salvar" type="submit" class="btn-primary" disabled>Salvar</button>
       </form>
-      <div id="toast" class="toast" hidden>
-        <span id="toast-text"></span>
-        <button id="toast-undo" type="button">Desfazer</button>
-      </div>
       <div class="hoje">
         <h2>Hoje</h2>
         <p id="hoje-total" class="hoje-total">R$ 0,00</p>
@@ -55,6 +51,8 @@
         <div class="barra"><div id="destaque-barra" class="barra-cheia"></div></div>
         <p id="destaque-sub" class="sub"></p>
       </div>
+
+      <button id="painel-compromissos" type="button" class="card compromissos" hidden></button>
 
       <h2>Por categoria</h2>
       <ul id="lista-cat" class="lista-cat"></ul>
@@ -125,16 +123,109 @@
         </div>
       </div>
     </section>
+    <!-- ABA CONTAS -->
+    <section id="tab-contas" class="tab">
+      <h1>Contas</h1>
+
+      <div class="card resumo-contas">
+        <p class="rotulo-suave">Ainda vai sair este mês</p>
+        <p id="ct-apagar" class="valor-medio">R$ 0,00</p>
+        <p id="ct-apagar-sub" class="sub"></p>
+        <div id="ct-proximos" class="proximos"></div>
+      </div>
+
+      <div class="segmento" role="tablist">
+        <button type="button" data-seg="contas" class="sel">📅 Contas e parcelas</button>
+        <button type="button" data-seg="cartoes">💳 Cartões</button>
+      </div>
+
+      <div id="seg-contas">
+        <ul id="lista-contas" class="lista-contas"></ul>
+        <button id="btn-nova-conta" type="button" class="btn-sec largo">+ Nova conta</button>
+
+        <form id="form-conta" class="card" autocomplete="off" hidden>
+          <label for="conta-nome">Nome da conta</label>
+          <input id="conta-nome" type="text" placeholder="ex: financiamento da moto">
+
+          <p class="rotulo">Tipo</p>
+          <div class="chips" id="conta-tipos">
+            <button type="button" class="chip sel" data-tipo="fixa">🔁 Fixa todo mês</button>
+            <button type="button" class="chip" data-tipo="parcelada">🔢 Parcelada</button>
+            <button type="button" class="chip" data-tipo="unica">1️⃣ Só uma vez</button>
+          </div>
+
+          <label for="conta-valor" id="conta-valor-rotulo">Valor por mês</label>
+          <input id="conta-valor" type="text" inputmode="decimal" placeholder="ex: 1011">
+
+          <div id="grupo-parcelas" class="duas-colunas" hidden>
+            <div><label for="conta-total">Total de parcelas</label><input id="conta-total" type="number" inputmode="numeric" min="1" placeholder="ex: 48"></div>
+            <div><label for="conta-pagas">Já paguei</label><input id="conta-pagas" type="number" inputmode="numeric" min="0" placeholder="ex: 12"></div>
+          </div>
+
+          <div id="grupo-dia">
+            <label for="conta-dia">Dia do vencimento</label>
+            <input id="conta-dia" type="number" inputmode="numeric" min="1" max="31" placeholder="ex: 10">
+            <label class="check"><input id="conta-paga-mes" type="checkbox"> A deste mês já está paga</label>
+          </div>
+
+          <div id="grupo-data" hidden>
+            <label for="conta-data">Vence em</label>
+            <input id="conta-data" type="date">
+          </div>
+
+          <p id="conta-preview" class="preview"></p>
+          <div class="linha-botoes">
+            <button type="button" id="conta-cancelar" class="btn-sec">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar conta</button>
+          </div>
+        </form>
+      </div>
+
+      <div id="seg-cartoes" hidden>
+        <div id="lista-cartoes"></div>
+
+        <form id="form-compra" class="card" autocomplete="off" hidden>
+          <label for="compra-texto">Nova compra no cartão</label>
+          <input id="compra-texto" type="text" placeholder="ex: 300 celular 10x">
+          <select id="compra-cartao" aria-label="Cartão" hidden></select>
+          <p id="compra-preview" class="preview">Valor, o que foi e parcelas. Ex: 10x de 30 tênis</p>
+          <button type="submit" id="compra-salvar" class="btn-primary" disabled>Salvar compra</button>
+        </form>
+
+        <button id="btn-novo-cartao" type="button" class="btn-sec largo">+ Novo cartão</button>
+        <form id="form-cartao" class="card" autocomplete="off" hidden>
+          <label for="cartao-nome">Nome do cartão</label>
+          <input id="cartao-nome" type="text" placeholder="ex: Nubank">
+          <label for="cartao-limite">Limite</label>
+          <input id="cartao-limite" type="text" inputmode="decimal" placeholder="ex: 2000">
+          <div class="duas-colunas">
+            <div><label for="cartao-fecha">Dia que fecha</label><input id="cartao-fecha" type="number" inputmode="numeric" min="1" max="31" placeholder="ex: 3"></div>
+            <div><label for="cartao-vence">Dia que vence</label><input id="cartao-vence" type="number" inputmode="numeric" min="1" max="31" placeholder="ex: 10"></div>
+          </div>
+          <div class="linha-botoes">
+            <button type="button" id="cartao-cancelar" class="btn-sec">Cancelar</button>
+            <button type="submit" class="btn-primary">Salvar cartão</button>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
+
+  <div id="toast" class="toast" hidden>
+    <span id="toast-text"></span>
+    <button id="toast-undo" type="button">Desfazer</button>
+  </div>
 
   <nav class="abas">
     <button data-tab="lancar" class="ativa"><span>➕</span>Lançar</button>
     <button data-tab="painel"><span>📊</span>Painel</button>
+    <button data-tab="contas"><span>📅</span>Contas</button>
     <button data-tab="assistente"><span>💬</span>Assistente</button>
     <button data-tab="ajustes"><span>⚙️</span>Ajustes</button>
   </nav>
 
   <script src="app.js"></script>
+  <script src="contas.js"></script>
   <script src="assistente.js"></script>
   <script src="voz.js"></script>
   <script src="sync.js"></script>

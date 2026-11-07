@@ -88,6 +88,26 @@ function acharGargalos(n) {
       'Continue assim. Se sobrar, separe para guardar no dia 1.');
   }
 
+  const cp = window.compromissos ? window.compromissos.resumo() : null;
+  if (cp && cp.aPagar > 0) {
+    if (n.orc && n.total + cp.aPagar > n.orc) {
+      add('bad', 'Contas a vencer estouram o limite',
+        `Você já gastou ${brl(n.total)} e ainda vão sair ${brl(cp.aPagar)} em contas e faturas. Total: ${brl(n.total + cp.aPagar)}, acima do limite de ${brl(n.orc)}.`,
+        'Antes de qualquer gasto extra, separe o dinheiro das contas.');
+    } else {
+      add('info', `Ainda vão sair ${brl(cp.aPagar)} este mês`,
+        cp.itens.slice(0, 3).map(i => `${i.nome} ${brl(i.valor)}`).join(' · '),
+        'Confira as datas na aba 📅 Contas.');
+    }
+  }
+  if (cp) cp.cartoes.forEach(u => {
+    if (u.cartao.limite > 0 && u.usado / u.cartao.limite >= 0.8) {
+      add('warn', `Cartão ${u.cartao.nome} com ${Math.round(u.usado / u.cartao.limite * 100)}% do limite usado`,
+        `Sobram ${brl(u.disponivel)} de limite. Parcelas novas prendem o limite por meses.`,
+        'Evite parcelar até a próxima fatura ser paga.');
+    }
+  });
+
   if (n.cats.length && n.total > 0) {
     const [id, v] = n.cats[0];
     const pct = Math.round((v / n.total) * 100);
@@ -184,6 +204,14 @@ function textoDados(n) {
   if (n.maiores.length) linhas.push('- Maiores gastos: ' + n.maiores.map(g => `${g.descricao} ${brl(g.valor)}`).join('; '));
   linhas.push(`- Compras pequenas (até R$ 30): ${n.pequenos.length}, somando ${brl(n.somaPequenos)}`);
   if (n.totalAnt) linhas.push(`- Mês passado, no mesmo período: ${brl(n.totalAnt)}`);
+  const cp = window.compromissos ? window.compromissos.resumo() : null;
+  if (cp) {
+    linhas.push(`- Ainda a pagar este mês (contas e faturas): ${brl(cp.aPagar)}`);
+    linhas.push('- Compromissos dos próximos meses: ' + cp.proximos.map(p => `${p.mes} ${brl(p.total)}`).join('; '));
+    if (cp.faltaParcelas) linhas.push(`- Total que falta pagar em parcelas: ${brl(cp.faltaParcelas)}`);
+    if (dados.contas && dados.contas.length) linhas.push('- Contas: ' + dados.contas.map(c => `${c.nome} ${brl(c.valor)} (${c.tipo === 'parcelada' ? `${c.pagas}/${c.total} pagas` : c.tipo})`).join('; '));
+    cp.cartoes.forEach(u => linhas.push(`- Cartão ${u.cartao.nome}: limite ${brl(u.cartao.limite)}, usado ${brl(u.usado)}`));
+  }
   return linhas.join('\n');
 }
 function linkClaude(pergunta) {

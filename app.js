@@ -162,6 +162,7 @@ $('form-gasto').addEventListener('submit', e => {
   catEscolhida = null;
   atualizarPreview();
   $('toast-text').textContent = `✓ ${brl(g.valor)} em ${CAT[g.categoria].nome}`;
+  $('toast-undo').hidden = false;
   $('toast').hidden = false;
   clearTimeout(timerToast);
   timerToast = setTimeout(() => { $('toast').hidden = true; }, 5000);
