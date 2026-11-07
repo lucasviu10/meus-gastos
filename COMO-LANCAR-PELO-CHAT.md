@@ -27,3 +27,22 @@ do repositório `lucasviu10/meus-gastos` e faça commit.
 - Mensagem do commit: `Gasto: 45 mercado`.
 
 Depois de gravar, responda curto: "Anotado: R$ 45,00 em Alimentação (mercado). Abra o app para ver."
+
+## Contas fixas, parcelas e cartões (opcional)
+Acrescente nas listas `contas`, `cartoes` ou `compras` de `chat.json` (crie a lista se não existir). Mesmas regras: só acrescentar, `id` único.
+
+**Conta** (`contas`):
+```json
+{ "id": "k-financiamento-moto", "nome": "financiamento da moto", "tipo": "parcelada", "valor": 1011, "total": 48, "pagas": 12, "proxMes": "2026-12", "dia": 10, "categoria": "transporte" }
+```
+- `tipo`: `fixa` (todo mês, sem `total`), `parcelada` (com `total` e `pagas`) ou `unica` (`total`: 1).
+- `proxMes`: mês (AAAA-MM) da próxima parcela ainda não paga.
+
+**Cartão** (`cartoes`): `{ "id": "c-nubank", "nome": "Nubank", "limite": 2000, "fecha": 3, "vence": 10 }`
+
+**Compra no cartão** (`compras`):
+```json
+{ "id": "b-20261107-celular", "cartaoId": "c-nubank", "descricao": "celular", "valor": 300, "parcelas": 10, "data": "2026-11-07", "categoria": "compras" }
+```
+- `valor` é o TOTAL da compra; `parcelas` = 1 para à vista. `cartaoId` precisa ser o id de um cartão cadastrado pelo chat.
+- Pagamento de conta e de fatura é feito no app (botão "✓ Paguei").
