@@ -145,5 +145,70 @@
       "valor": 940,
       "descricao": "Nestlé"
     }
+  ],
+  "contas": [
+    {
+      "id": "k-cartao-dede-405",
+      "nome": "cartão da Dedé",
+      "tipo": "unica",
+      "valor": 405,
+      "total": 1,
+      "pagas": 0,
+      "proxMes": "2026-11",
+      "dia": 20,
+      "categoria": "contas"
+    },
+    {
+      "id": "k-contador",
+      "nome": "contador",
+      "tipo": "fixa",
+      "valor": 220,
+      "pagas": 0,
+      "proxMes": "2026-11",
+      "dia": 9,
+      "categoria": "contas"
+    },
+    {
+      "id": "k-financiamento-909",
+      "nome": "financiamento",
+      "tipo": "fixa",
+      "valor": 909,
+      "pagas": 0,
+      "proxMes": "2026-11",
+      "dia": 14,
+      "categoria": "contas"
+    },
+    {
+      "id": "k-entrada-casa",
+      "nome": "entrada da casa",
+      "tipo": "parcelada",
+      "valor": 848,
+      "total": 50,
+      "pagas": 40,
+      "proxMes": "2026-11",
+      "dia": 20,
+      "categoria": "casa"
+    },
+    {
+      "id": "k-academia-cartao",
+      "nome": "academia (cartão)",
+      "tipo": "fixa",
+      "valor": 140,
+      "pagas": 0,
+      "proxMes": "2026-11",
+      "dia": 10,
+      "categoria": "saude"
+    },
+    {
+      "id": "k-brasil-paralelo",
+      "nome": "Brasil Paralelo (cartão)",
+      "tipo": "parcelada",
+      "valor": 22.8,
+      "total": 12,
+      "pagas": 0,
+      "proxMes": "2026-12",
+      "dia": 10,
+      "categoria": "contas"
+    }
   ]
 }
