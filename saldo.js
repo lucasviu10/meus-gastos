@@ -16,11 +16,17 @@
     const entrou = doPeriodo.filter(e => !e.ajuste).reduce((s, e) => s + e.valor, 0);
     const ajuste = doPeriodo.filter(e => e.ajuste).reduce((s, e) => s + e.valor, 0);
     const saiu = dados.gastos.filter(g => g.data >= ini.data).reduce((s, g) => s + g.valor, 0);
-    const agora = r2(ini.valor + entrou + ajuste - saiu);
+    // empresa: tudo cai na mesma conta, então o saldo dela entra no total (uma vez só:
+    // "liberar para mim" tira de lá e põe aqui, o total não muda)
+    const e = dados.empresa || {};
+    const movs = (Array.isArray(e.movs) ? e.movs : []).filter(m => m.data >= ini.data);
+    const empresa = r2(movs.reduce((s, m) => s + (m.tipo === 'entrada' ? m.valor : -m.valor), 0));
+    const agora = r2(ini.valor + entrou + ajuste - saiu + empresa);
     const aPagar = window.compromissos ? window.compromissos.resumo().aPagar : 0;
     if (!Array.isArray(dados.aReceber)) dados.aReceber = [];
-    const aReceber = r2(dados.aReceber.reduce((s, x) => s + x.valor, 0));
-    return { inicial: ini.valor, data: ini.data, entrou: r2(entrou), ajuste: r2(ajuste), saiu: r2(saiu), agora, aPagar, aReceber,
+    const receberEmp = Array.isArray(e.aReceber) ? e.aReceber : [];
+    const aReceber = r2(dados.aReceber.reduce((s, x) => s + x.valor, 0) + receberEmp.reduce((s, x) => s + x.valor, 0));
+    return { inicial: ini.valor, data: ini.data, entrou: r2(entrou), ajuste: r2(ajuste), saiu: r2(saiu), empresa, agora, aPagar, aReceber,
       depois: r2(agora - aPagar), previsao: r2(agora + aReceber - aPagar) };
   }
   window.saldoAtual = calcular;
@@ -46,13 +52,16 @@
         <span>➕ Entrou</span><b class="ok">${brl(s.entrou)}</b>
         <span>➖ Saiu</span><b>${brl(s.saiu)}</b>
         ${s.ajuste ? `<span>🔧 Ajuste</span><b>${s.ajuste > 0 ? '+' : '−'}${brl(Math.abs(s.ajuste))}</b>` : ''}
+        ${s.empresa ? `<span>🏢 Na empresa</span><b class="${s.empresa > 0 ? 'ok' : ''}">${s.empresa > 0 ? '+' : '−'}${brl(Math.abs(s.empresa))}</b>` : ''}
       </div>`;
-    if (dados.aReceber.length) {
-      html += `<div class="a-receber"><span class="rotulo-suave">⏳ Ainda vai entrar · ${brl(s.aReceber)}</span>
-        <ul class="lista compacta">${dados.aReceber.map(x => `<li><span class="desc">${escapar(x.descricao)}</span>
+    const receberEmp = (dados.empresa && Array.isArray(dados.empresa.aReceber)) ? dados.empresa.aReceber : [];
+    if (dados.aReceber.length || receberEmp.length) {
+      const linha = (x, emp) => `<li><span class="desc">${emp ? '🏢 ' : ''}${escapar(x.descricao)}${emp ? '<small>pela empresa</small>' : ''}</span>
           <span class="val num">${brl(x.valor)}</span>
-          <button type="button" class="btn-pagar" data-recebi="${x.id}">✓ Recebi</button>
-          <button type="button" class="del" data-del-receber="${x.id}" aria-label="Apagar">✕</button></li>`).join('')}</ul></div>`;
+          <button type="button" class="btn-pagar" ${emp ? 'data-emp-recebi' : 'data-recebi'}="${x.id}">✓ Recebi</button>
+          <button type="button" class="del" ${emp ? 'data-emp-del-receber' : 'data-del-receber'}="${x.id}" aria-label="Apagar">✕</button></li>`;
+      html += `<div class="a-receber"><span class="rotulo-suave">⏳ Ainda vai entrar · ${brl(s.aReceber)}</span>
+        <ul class="lista compacta">${dados.aReceber.map(x => linha(x, false)).join('')}${receberEmp.map(x => linha(x, true)).join('')}</ul></div>`;
     }
     if (s.aPagar > 0 || s.aReceber > 0) {
       const partes = [];

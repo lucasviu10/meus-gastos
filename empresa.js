@@ -37,7 +37,7 @@
       · <button type="button" class="btn-link inline" id="emp-editar">✏️ Editar</button></p>`;
 
     const s = saldoEmpresa();
-    let html = `<span class="rotulo-suave">Saldo da empresa</span>
+    let html = `<span class="rotulo-suave">Saldo da empresa <small>(já somado no 📊 Painel)</small></span>
       <strong class="valor-grande num ${s.saldo < 0 ? 'bad' : 'ok'}">${brl(s.saldo)}</strong>
       <div class="saldo-linhas num">
         <span>➕ Entrou</span><b class="ok">${brl(s.entrou)}</b>
