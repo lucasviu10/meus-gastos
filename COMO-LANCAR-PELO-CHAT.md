@@ -66,3 +66,7 @@ Acrescente nas listas `contas`, `cartoes` ou `compras` de `chat.json` (crie a li
 - Dados: `empresa.nome`, `empresa.cnpj` (só números) e `empresa.dadosEm` (data/hora ISO ao mudar).
 - "Liberar para mim" é feito no app (botão 💸), que tira da empresa e soma no saldo pessoal.
 - Compras de cartão: `fixa: true` para cobrança mensal; `parcelaAtual` para compra que já está no meio.
+
+## Negativações (Serasa)
+- Ficam FORA do saldo e das despesas. Acrescente em `negativacoes`: `{ "id": "n-credor", "credor": "...", "valor": 1500, "obs": "desde 2024" }`.
+- Só entram no plano se ele ligar "Somar no meu plano" no app.
