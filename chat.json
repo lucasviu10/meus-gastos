@@ -133,5 +133,17 @@
     "valor": 2770,
     "data": "2026-11-01"
   },
-  "saldoEm": "2026-11-07T12:00:00Z"
+  "saldoEm": "2026-11-07T12:00:00Z",
+  "aReceber": [
+    {
+      "id": "r-20261107-ademicon-540",
+      "valor": 540,
+      "descricao": "Ademicon"
+    },
+    {
+      "id": "r-20261107-nestle-940",
+      "valor": 940,
+      "descricao": "Nestlé"
+    }
+  ]
 }

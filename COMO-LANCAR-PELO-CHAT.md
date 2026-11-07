@@ -58,3 +58,4 @@ Acrescente nas listas `contas`, `cartoes` ou `compras` de `chat.json` (crie a li
   `{ "id": "e-20261107-comissao-500", "valor": 500, "descricao": "comissão", "data": "2026-11-07" }`
 - Transferência entre contas do próprio Lucas NÃO é entrada.
 - Saldo inicial: `"saldoInicial": { "valor": 2770, "data": "2026-11-01" }` e `"saldoEm"` com a data/hora atual (ISO) sempre que mudar.
+- Dinheiro que AINDA VAI cair ("falta entrar", "vai entrar"): acrescente em `aReceber`: `{ "id": "r-20261107-nestle-940", "valor": 940, "descricao": "Nestlé" }`. Ele toca em "✓ Recebi" no app quando cair.
