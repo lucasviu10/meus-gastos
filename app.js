@@ -265,6 +265,7 @@ $('orcamento').value = dados.orcamento ? String(dados.orcamento).replace('.', ',
 $('btn-orcamento').addEventListener('click', () => {
   const v = valorDeTexto($('orcamento').value);
   dados.orcamento = v > 0 ? v : 0;
+  dados.orcamentoEm = new Date().toISOString();
   salvar();
   desenharTudo();
   $('btn-orcamento').textContent = '✓ Salvo';
