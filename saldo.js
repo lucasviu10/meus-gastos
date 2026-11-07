@@ -12,13 +12,15 @@
     if (!Array.isArray(dados.entradas)) dados.entradas = [];
     const ini = dados.saldoInicial;
     if (!ini || !(ini.valor >= 0) || !ini.data) return null;
-    const entrou = dados.entradas.filter(e => e.data >= ini.data).reduce((s, e) => s + e.valor, 0);
+    const doPeriodo = dados.entradas.filter(e => e.data >= ini.data);
+    const entrou = doPeriodo.filter(e => !e.ajuste).reduce((s, e) => s + e.valor, 0);
+    const ajuste = doPeriodo.filter(e => e.ajuste).reduce((s, e) => s + e.valor, 0);
     const saiu = dados.gastos.filter(g => g.data >= ini.data).reduce((s, g) => s + g.valor, 0);
-    const agora = r2(ini.valor + entrou - saiu);
+    const agora = r2(ini.valor + entrou + ajuste - saiu);
     const aPagar = window.compromissos ? window.compromissos.resumo().aPagar : 0;
     if (!Array.isArray(dados.aReceber)) dados.aReceber = [];
     const aReceber = r2(dados.aReceber.reduce((s, x) => s + x.valor, 0));
-    return { inicial: ini.valor, data: ini.data, entrou: r2(entrou), saiu: r2(saiu), agora, aPagar, aReceber,
+    return { inicial: ini.valor, data: ini.data, entrou: r2(entrou), ajuste: r2(ajuste), saiu: r2(saiu), agora, aPagar, aReceber,
       depois: r2(agora - aPagar), previsao: r2(agora + aReceber - aPagar) };
   }
   window.saldoAtual = calcular;
@@ -43,6 +45,7 @@
         <span>Comecei ${d}/${m}</span><b>${brl(s.inicial)}</b>
         <span>➕ Entrou</span><b class="ok">${brl(s.entrou)}</b>
         <span>➖ Saiu</span><b>${brl(s.saiu)}</b>
+        ${s.ajuste ? `<span>🔧 Ajuste</span><b>${s.ajuste > 0 ? '+' : '−'}${brl(Math.abs(s.ajuste))}</b>` : ''}
       </div>`;
     if (dados.aReceber.length) {
       html += `<div class="a-receber"><span class="rotulo-suave">⏳ Ainda vai entrar · ${brl(s.aReceber)}</span>
@@ -66,7 +69,7 @@
     $('lista-entradas').innerHTML = lista.length ? lista.map(e => `<li>
       <span class="emoji">💰</span>
       <span class="desc">${escapar(e.descricao)}<small>${dataLegivel(e.data)}</small></span>
-      <span class="val num ok">+${brl(e.valor)}</span>
+      <span class="val num ${e.valor < 0 ? '' : 'ok'}">${e.valor < 0 ? '−' : '+'}${brl(Math.abs(e.valor))}</span>
       <button class="del" data-del-entrada="${e.id}" aria-label="Apagar entrada">✕</button></li>`).join('')
       : '<li class="vazio">Nenhuma entrada neste mês. Para lançar: "+500 comissão".</li>';
   }
@@ -197,6 +200,9 @@
       dados.aReceber.push({ id: x.id, valor: r2(Number(x.valor)), descricao: String(x.descricao || 'a receber').slice(0, 60) });
       n++;
     });
+    // reajuste: lança a diferença para o saldo bater com o valor real informado
+    const pendentesAjuste = (Array.isArray(remoto.ajustes) ? remoto.ajustes : [])
+      .filter(a => a && typeof a.id === 'string' && !vistos.has(a.id) && Number.isFinite(Number(a.alvo)));
     const si = remoto.saldoInicial;
     if (si && Number(si.valor) >= 0 && /^\d{4}-\d{2}-\d{2}$/.test(si.data || '') && remoto.saldoEm && remoto.saldoEm > (dados.saldoEm || '')) {
       dados.saldoInicial = { valor: r2(Number(si.valor)), data: si.data };
@@ -204,6 +210,16 @@
       preencherAjustes();
       n++;
     }
+    pendentesAjuste.forEach(a => {
+      vistos.add(a.id); dados.importados.push(a.id);
+      const atual = calcular();
+      if (!atual) return;
+      const dif = r2(Number(a.alvo) - atual.agora);
+      if (dif === 0) return;
+      dados.entradas.push({ id: a.id, valor: dif, descricao: String(a.descricao || 'ajuste').slice(0, 60),
+        data: isoDia(new Date()), criado: new Date().toISOString(), ajuste: true });
+      n++;
+    });
     return n;
   };
 
