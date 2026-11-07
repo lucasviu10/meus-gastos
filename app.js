@@ -83,7 +83,7 @@ function interpretar(texto) {
   m = t.match(/\s(?:r\$\s*)?(\d{1,3}(?:\.\d{3})+(?:,\d{1,2})?|\d+(?:[.,]\d{1,2})?)(?=\s)/i);
   if (m) { valor = valorDeTexto(m[1]); t = t.replace(m[0], ' '); }
 
-  const descricao = t.replace(/\s+/g, ' ').replace(/^(de|no|na|em|com)\s/i, '').trim();
+  const descricao = t.replace(/\s+/g, ' ').trim().replace(/^(de|do|da|no|na|em|com|pro|pra|para)\s+/i, '').trim();
   return { valor, descricao, categoria: adivinharCategoria(descricao), data: isoDia(data) };
 }
 function adivinharCategoria(desc) {

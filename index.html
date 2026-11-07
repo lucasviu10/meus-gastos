@@ -22,7 +22,10 @@
     <section id="tab-lancar" class="tab active">
       <h1>Novo gasto</h1>
       <form id="form-gasto" autocomplete="off">
-        <input id="entrada" type="text" inputmode="text" placeholder="ex: 45 mercado" aria-label="Digite valor e descrição">
+        <div class="linha-entrada">
+          <input id="entrada" type="text" inputmode="text" placeholder="ex: 45 mercado" aria-label="Digite valor e descrição">
+          <button id="btn-voz" type="button" class="btn-voz" aria-label="Falar o gasto" hidden>🎤</button>
+        </div>
         <div id="preview" class="preview">Digite o valor e o que foi.</div>
         <div id="chips" class="chips"></div>
         <button id="btn-salvar" type="submit" class="btn-primary" disabled>Salvar</button>
@@ -133,5 +136,6 @@
 
   <script src="app.js"></script>
   <script src="assistente.js"></script>
+  <script src="voz.js"></script>
 </body>
 </html>
