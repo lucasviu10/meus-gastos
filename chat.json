@@ -76,6 +76,13 @@
       "descricao": "financiamento",
       "categoria": "contas",
       "data": "2026-11-07"
+    },
+    {
+      "id": "c-20261106-claude-115",
+      "valor": 115,
+      "descricao": "assinatura claude",
+      "categoria": "contas",
+      "data": "2026-11-06"
     }
   ],
   "apagar": []
