@@ -1,4 +1,82 @@
 {
-  "gastos": [],
+  "gastos": [
+    {
+      "id": "c-20261104-gasolina-60",
+      "valor": 60,
+      "descricao": "gasolina",
+      "categoria": "transporte",
+      "data": "2026-11-04"
+    },
+    {
+      "id": "c-20261104-eletronicos-60",
+      "valor": 60,
+      "descricao": "fone, balança e microfone",
+      "categoria": "compras",
+      "data": "2026-11-04"
+    },
+    {
+      "id": "c-20261104-pessoal-50",
+      "valor": 50,
+      "descricao": "pessoal",
+      "categoria": "outros",
+      "data": "2026-11-04"
+    },
+    {
+      "id": "c-20261106-moto-30",
+      "valor": 30,
+      "descricao": "moto (manete e corrente)",
+      "categoria": "transporte",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261106-pessoal-8",
+      "valor": 8,
+      "descricao": "pessoal",
+      "categoria": "outros",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261106-fatura-18861",
+      "valor": 188.61,
+      "descricao": "fatura cartão",
+      "categoria": "contas",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261106-medicamento-225",
+      "valor": 225,
+      "descricao": "medicamento",
+      "categoria": "saude",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261106-pessoal-70",
+      "valor": 70,
+      "descricao": "pessoal",
+      "categoria": "outros",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261106-pessoal-15",
+      "valor": 15,
+      "descricao": "pessoal",
+      "categoria": "outros",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261106-academia-160",
+      "valor": 160,
+      "descricao": "academia",
+      "categoria": "saude",
+      "data": "2026-11-06"
+    },
+    {
+      "id": "c-20261107-financiamento-1011",
+      "valor": 1011,
+      "descricao": "financiamento",
+      "categoria": "contas",
+      "data": "2026-11-07"
+    }
+  ],
   "apagar": []
 }
