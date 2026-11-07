@@ -90,6 +90,13 @@
       "descricao": "tadalafila",
       "categoria": "saude",
       "data": "2026-11-07"
+    },
+    {
+      "id": "c-20261107-gasolina-60",
+      "valor": 60,
+      "descricao": "gasolina",
+      "categoria": "transporte",
+      "data": "2026-11-07"
     }
   ],
   "apagar": [
