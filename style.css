@@ -281,3 +281,6 @@ main h1 { padding-right: 48px; }
 .saldo-linhas b { color: var(--text); text-align: right; }
 .saldo-linhas b.ok { color: var(--ok); }
 .saldo-depois { margin: 8px 0 0; padding-top: 10px; border-top: 1px solid var(--line); font-size: 15px; color: var(--muted); }
+.a-receber { text-align: left; background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-top: 6px; }
+.a-receber .lista li { gap: 8px; }
+.a-receber .btn-pagar { padding: 7px 10px; font-size: 14px; }
