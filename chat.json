@@ -103,7 +103,7 @@
       "valor": 130,
       "descricao": "lazer",
       "categoria": "lazer",
-      "data": "2026-11-08",
+      "data": "2026-11-07",
       "nota64": "bW90ZWw="
     }
   ],
@@ -143,6 +143,11 @@
       "uid": "u-med-1",
       "id": "c-20261106-medicamento-225",
       "nota64": "ZHVyYXRlc3Rvbg=="
+    },
+    {
+      "uid": "u-lazer130-data",
+      "id": "c-20261108-lazer-130",
+      "data": "2026-11-07"
     }
   ],
   "entradas": [

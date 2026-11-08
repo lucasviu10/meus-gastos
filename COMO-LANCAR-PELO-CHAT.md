@@ -51,7 +51,7 @@ Acrescente nas listas `contas`, `cartoes` ou `compras` de `chat.json` (crie a li
 - Categoria `mc`: use para maconha, seda e afins. `descricao` sempre `"MC"`.
 - O que foi de verdade vai em `nota64` (texto em base64), nunca em texto aberto. No app, só aparece quando ele toca no gasto.
   Ex.: `{ "id": "c-20261107-mc-50", "valor": 50, "descricao": "MC", "categoria": "mc", "data": "2026-11-07", "nota64": "bWFjb25oYQ==" }`
-- Para corrigir um gasto já lançado, acrescente em `atualizar`: `{ "uid": "u-unico", "id": "<id do gasto>", "categoria": "...", "descricao": "...", "nota64": "..." }` (`uid` nunca se repete).
+- Para corrigir um gasto já lançado, acrescente em `atualizar`: `{ "uid": "u-unico", "id": "<id do gasto>", "categoria": "...", "descricao": "...", "nota64": "...", "data": "AAAA-MM-DD", "valor": 0 } (só os campos que mudam)` (`uid` nunca se repete).
 
 ## Entradas e saldo
 - Dinheiro que entrou (comissão, salário, Pix recebido de outra pessoa): acrescente em `entradas`:
