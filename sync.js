@@ -51,6 +51,8 @@
       if (!g) return;
       if (u.descricao) g.descricao = String(u.descricao).slice(0, 80);
       if (CAT[u.categoria]) g.categoria = u.categoria;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(u.data || '')) g.data = u.data;
+      if (Number(u.valor) > 0) g.valor = Math.round(Number(u.valor) * 100) / 100;
       const nota = lerNota(u);
       if (nota) g.nota = nota;
       extras++;
