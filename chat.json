@@ -97,6 +97,14 @@
       "descricao": "gasolina",
       "categoria": "transporte",
       "data": "2026-11-07"
+    },
+    {
+      "id": "c-20261108-lazer-130",
+      "valor": 130,
+      "descricao": "lazer",
+      "categoria": "lazer",
+      "data": "2026-11-08",
+      "nota64": "bW90ZWw="
     }
   ],
   "apagar": [
