@@ -202,18 +202,42 @@
           <p class="sub">Pago ${brl(pago)} · <b>Falta ${brl(total - pago)}</b> · Total ${brl(total)}</p>`;
       }
       const podePagar = st === 'atrasada' || st === 'pagar';
+      const podeDesmarcar = !!ultimoPagamento(c);
       return `<li class="conta st-${st}">
         <div class="conta-topo"><span>${cat.emoji} ${escapar(c.nome)}</span><strong class="num">${brl(c.valor)}</strong></div>
         <div class="conta-tags"><span class="tag">${tag}</span><span class="tag tag-${st}">${stTxt}</span></div>
         ${extra}
         <div class="conta-acoes">
           ${podePagar ? `<button type="button" class="btn-pagar" data-pagar-conta="${c.id}">✓ Paguei</button>` : ''}
+          ${podeDesmarcar ? `<button type="button" class="btn-desmarcar" data-desmarcar-conta="${c.id}">↩️ Desmarcar pagamento</button>` : ''}
           <button type="button" class="btn-link" data-apagar-conta="${c.id}">Apagar</button>
         </div></li>`;
     }).join('') : '<li class="vazio">Nenhuma conta ainda. Cadastre aluguel, financiamento, internet…</li>';
   }
 
+  // último pagamento marcado (para poder desmarcar). Pagamentos antigos: acha pelo gasto lançado.
+  function ultimoPagamento(c) {
+    if (Array.isArray(c.pagamentos) && c.pagamentos.length) return c.pagamentos[c.pagamentos.length - 1];
+    if (!(c.pagas > 0)) return null;
+    const g = dados.gastos.filter(x => x.origem === 'conta' && (x.descricao === c.nome || x.descricao.startsWith(c.nome + ' (')))
+      .sort((a, b) => b.criado.localeCompare(a.criado))[0];
+    return g ? { gastoId: g.id, antes: { pagas: c.pagas - 1, proxMes: addMes(c.proxMes, -1) } } : null;
+  }
+
   $('lista-contas').addEventListener('click', e => {
+    const dz = e.target.closest('[data-desmarcar-conta]');
+    if (dz) {
+      const c = dados.contas.find(x => x.id === dz.dataset.desmarcarConta); if (!c) return;
+      const u = ultimoPagamento(c); if (!u) return;
+      const g = dados.gastos.find(x => x.id === u.gastoId);
+      if (!confirm(`Desmarcar o pagamento de ${c.nome}? ${g ? `O gasto de ${brl(g.valor)} lançado junto será apagado.` : ''}`)) return;
+      Object.assign(c, u.antes);
+      if (Array.isArray(c.pagamentos) && c.pagamentos.length) c.pagamentos.pop();
+      tirarGastos([u.gastoId]);
+      salvar(); desenharTudo();
+      aviso(`↩️ ${c.nome} voltou para "a pagar"`);
+      return;
+    }
     const p = e.target.closest('[data-pagar-conta]');
     const a = e.target.closest('[data-apagar-conta]');
     if (p) {
@@ -222,6 +246,8 @@
       c.pagas++; c.proxMes = addMes(c.proxMes, 1);
       const desc = c.tipo === 'parcelada' ? `${c.nome} (${c.pagas}/${c.total})` : c.nome;
       const gid = lancarGasto(c.valor, desc, c.categoria);
+      if (!Array.isArray(c.pagamentos)) c.pagamentos = [];
+      c.pagamentos.push({ gastoId: gid, antes });
       salvar(); desenharTudo();
       aviso(`✓ ${desc}: ${brl(c.valor)} lançado nos gastos`, () => { Object.assign(c, antes); tirarGastos([gid]); });
     }
@@ -332,12 +358,29 @@
         ${desenharCompras(c)}
         <div class="fatura">${fatura}</div>
         ${seguintes.length ? `<p class="sub">Próximas faturas: ${seguintes.map(m => `${nomeMes(m, true)} <b>${brl(u.faturas[m].total)}</b>`).join(' · ')}</p>` : ''}
+        ${ultimaFaturaPaga(c) ? `<p class="sub">Última fatura paga: ${nomeMes(ultimaFaturaPaga(c).mes)} ·
+          <button type="button" class="btn-desmarcar" data-desmarcar-fatura="${c.id}">↩️ Desmarcar</button></p>` : ''}
         <button type="button" class="btn-sec largo" data-add-compra="${c.id}">+ Adicionar compra neste cartão</button>
       </div>`;
     }).join('') : '<p class="vazio card">Cadastre seu cartão para ver limite, fatura e parcelas.</p>';
   }
 
+  function ultimaFaturaPaga(c) {
+    return Array.isArray(c.pagamentosFatura) && c.pagamentosFatura.length ? c.pagamentosFatura[c.pagamentosFatura.length - 1] : null;
+  }
   $('lista-cartoes').addEventListener('click', e => {
+    const df = e.target.closest('[data-desmarcar-fatura]');
+    if (df) {
+      const c = dados.cartoes.find(x => x.id === df.dataset.desmarcarFatura); if (!c) return;
+      const u = ultimaFaturaPaga(c); if (!u) return;
+      if (!confirm(`Desmarcar a fatura de ${nomeMes(u.mes)} do ${c.nome}? Os gastos lançados junto serão apagados.`)) return;
+      c.pagas = (c.pagas || []).filter(m => m !== u.mes);
+      c.pagamentosFatura.pop();
+      tirarGastos(u.ids);
+      salvar(); desenharTudo();
+      aviso(`↩️ Fatura de ${nomeMes(u.mes)} voltou para "a pagar"`);
+      return;
+    }
     const pf = e.target.closest('[data-pagar-fatura]');
     const ac = e.target.closest('[data-apagar-compra]');
     const ak = e.target.closest('[data-apagar-cartao]');
@@ -349,6 +392,8 @@
       const ids = itens.map(p => lancarGasto(p.valor,
         `${p.compra.descricao}${p.n > 1 ? ` (${p.k}/${p.n})` : ''} · ${c.nome}`, p.compra.categoria));
       const total = itens.reduce((s, p) => s + p.valor, 0);
+      if (!Array.isArray(c.pagamentosFatura)) c.pagamentosFatura = [];
+      c.pagamentosFatura.push({ mes, ids });
       salvar(); desenharTudo();
       aviso(`✓ Fatura ${c.nome} paga: ${brl(total)} lançados nos gastos`, () => { c.pagas = c.pagas.filter(m => m !== mes); tirarGastos(ids); });
     }

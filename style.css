@@ -318,3 +318,5 @@ main h1 { padding-right: 100px; }
 .neg-resumo { background: var(--soft); border: 0; }
 .conta.st-neg { border-left-color: var(--muted); }
 .check.troca { font-size: 15px; margin: 0 !important; }
+.btn-desmarcar { background: none; border: 1.5px solid var(--line); color: var(--text); border-radius: 10px; padding: 8px 12px; font-size: 14px; font-weight: 600; }
+.conta-acoes { flex-wrap: wrap; }
