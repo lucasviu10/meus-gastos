@@ -204,6 +204,14 @@
       </div>
 
       <div id="seg-contas">
+        <form id="form-agora" class="card agora" autocomplete="off">
+          <label for="agora-texto">⚡ Paguei agora</label>
+          <div class="linha-entrada">
+            <input id="agora-texto" type="text" placeholder="ex: 70 maconha">
+            <button type="submit" id="agora-salvar" class="btn-pagar" disabled>Salvar</button>
+          </div>
+          <p id="agora-preview" class="sub">Já pagou? Digite o valor e o que foi. Entra direto como pago.</p>
+        </form>
         <ul id="lista-contas" class="lista-contas"></ul>
         <button id="btn-nova-conta" type="button" class="btn-sec largo">+ Nova conta</button>
 
@@ -353,5 +361,6 @@
   <script src="empresa.js"></script>
   <script src="dividas.js"></script>
   <script src="hoje.js"></script>
+  <script src="pago-agora.js"></script>
 </body>
 </html>
