@@ -203,13 +203,15 @@
       }
       const podePagar = st === 'atrasada' || st === 'pagar';
       const podeDesmarcar = !!ultimoPagamento(c);
+      const estaPaga = (st === 'emdia' || st === 'quitada') && podeDesmarcar;
       return `<li class="conta st-${st}">
         <div class="conta-topo"><span>${cat.emoji} ${escapar(c.nome)}</span><strong class="num">${brl(c.valor)}</strong></div>
         <div class="conta-tags"><span class="tag">${tag}</span><span class="tag tag-${st}">${stTxt}</span></div>
         ${extra}
         <div class="conta-acoes">
           ${podePagar ? `<button type="button" class="btn-pagar" data-pagar-conta="${c.id}">✓ Paguei</button>` : ''}
-          ${podeDesmarcar ? `<button type="button" class="btn-desmarcar" data-desmarcar-conta="${c.id}">↩️ Desmarcar pagamento</button>` : ''}
+          ${estaPaga ? `<button type="button" class="btn-paga" data-desmarcar-conta="${c.id}">✓ Paga · toque para desfazer</button>` : ''}
+          ${podePagar && podeDesmarcar && Array.isArray(c.pagamentos) && c.pagamentos.length ? `<button type="button" class="btn-desmarcar" data-desmarcar-conta="${c.id}">↩️ Desfazer último</button>` : ''}
           <button type="button" class="btn-link" data-apagar-conta="${c.id}">Apagar</button>
         </div></li>`;
     }).join('') : '<li class="vazio">Nenhuma conta ainda. Cadastre aluguel, financiamento, internet…</li>';
@@ -219,9 +221,10 @@
   function ultimoPagamento(c) {
     if (Array.isArray(c.pagamentos) && c.pagamentos.length) return c.pagamentos[c.pagamentos.length - 1];
     if (!(c.pagas > 0)) return null;
+    if (difMes(mesAtual(), c.proxMes) <= 0) return null; // nada pago no período atual
     const g = dados.gastos.filter(x => x.origem === 'conta' && (x.descricao === c.nome || x.descricao.startsWith(c.nome + ' (')))
       .sort((a, b) => b.criado.localeCompare(a.criado))[0];
-    return g ? { gastoId: g.id, antes: { pagas: c.pagas - 1, proxMes: addMes(c.proxMes, -1) } } : null;
+    return { gastoId: g ? g.id : null, antes: { pagas: c.pagas - 1, proxMes: addMes(c.proxMes, -1) } };
   }
 
   $('lista-contas').addEventListener('click', e => {
@@ -230,12 +233,16 @@
       const c = dados.contas.find(x => x.id === dz.dataset.desmarcarConta); if (!c) return;
       const u = ultimoPagamento(c); if (!u) return;
       const g = dados.gastos.find(x => x.id === u.gastoId);
-      if (!confirm(`Desmarcar o pagamento de ${c.nome}? ${g ? `O gasto de ${brl(g.valor)} lançado junto será apagado.` : ''}`)) return;
+      const depois = { pagas: c.pagas, proxMes: c.proxMes };
+      const registro = Array.isArray(c.pagamentos) && c.pagamentos.length ? c.pagamentos.pop() : null;
       Object.assign(c, u.antes);
-      if (Array.isArray(c.pagamentos) && c.pagamentos.length) c.pagamentos.pop();
-      tirarGastos([u.gastoId]);
+      if (g) tirarGastos([g.id]);
       salvar(); desenharTudo();
-      aviso(`↩️ ${c.nome} voltou para "a pagar"`);
+      aviso(`↩️ ${c.nome} voltou para "a pagar"${g ? ` e o gasto de ${brl(g.valor)} saiu` : ''}`, () => {
+        Object.assign(c, depois);
+        if (registro) c.pagamentos.push(registro);
+        if (g) dados.gastos.push(g);
+      });
       return;
     }
     const p = e.target.closest('[data-pagar-conta]');
