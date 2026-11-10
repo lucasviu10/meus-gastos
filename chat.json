@@ -116,10 +116,18 @@
     },
     {
       "id": "c-20261110-chapinha-macarico-30",
-      "valor": 30,
-      "descricao": "chapinha e maçarico",
+      "valor": 20,
+      "descricao": "chapinha",
       "categoria": "compras",
       "data": "2026-11-10"
+    },
+    {
+      "id": "c-20261110-mc-10",
+      "valor": 10,
+      "descricao": "MC",
+      "categoria": "mc",
+      "data": "2026-11-10",
+      "nota64": "bWHDp2FyaWNv"
     }
   ],
   "apagar": [
@@ -163,6 +171,13 @@
       "uid": "u-lazer130-data",
       "id": "c-20261108-lazer-130",
       "data": "2026-11-07"
+    },
+    {
+      "uid": "u-chapinha-20",
+      "id": "c-20261110-chapinha-macarico-30",
+      "valor": 20,
+      "descricao": "chapinha",
+      "categoria": "compras"
     }
   ],
   "entradas": [
