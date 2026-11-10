@@ -261,5 +261,84 @@
       }
     ],
     "cnpj": "67071083000180"
-  }
+  },
+  "negativacoes": [
+    {
+      "id": "n-santander",
+      "credor": "Santander (4 dívidas)",
+      "valor": 11150.16,
+      "oferta": 971.51,
+      "obs": "Feirão Serasa (nov/26): R$ 971,51 à vista"
+    },
+    {
+      "id": "n-claro-3",
+      "credor": "Claro (3 dívidas)",
+      "valor": 240.96,
+      "oferta": 84.33,
+      "obs": "Feirão Serasa (nov/26): R$ 84,33 à vista"
+    },
+    {
+      "id": "n-claro-2",
+      "credor": "Claro (2 dívidas)",
+      "valor": 150.17,
+      "oferta": 82.59,
+      "obs": "Feirão Serasa (nov/26): R$ 82,59 à vista"
+    },
+    {
+      "id": "n-credsystem",
+      "credor": "Credsystem",
+      "valor": 1544.29,
+      "oferta": 537.48,
+      "obs": "Feirão Serasa (nov/26): R$ 537,48 à vista"
+    },
+    {
+      "id": "n-simplic",
+      "credor": "Simplic",
+      "valor": 3435.31,
+      "oferta": 675.3,
+      "obs": "Feirão Serasa (nov/26): R$ 675,30 à vista"
+    },
+    {
+      "id": "n-estacio",
+      "credor": "Estácio de Sá (4 dívidas)",
+      "valor": 1173.54,
+      "oferta": 704.13,
+      "obs": "Feirão Serasa (nov/26): R$ 704,13 à vista"
+    },
+    {
+      "id": "n-mercadopago",
+      "credor": "Mercado Pago",
+      "valor": 428.68,
+      "oferta": 171.47,
+      "obs": "Feirão Serasa (nov/26): R$ 171,47 à vista"
+    },
+    {
+      "id": "n-pagaleve",
+      "credor": "Pagaleve",
+      "valor": 79.4,
+      "oferta": 63.52,
+      "obs": "Feirão Serasa (nov/26): R$ 63,52 à vista"
+    },
+    {
+      "id": "n-gooroo-376",
+      "credor": "Gooroo",
+      "valor": 376.41,
+      "oferta": 150.56,
+      "obs": "Feirão Serasa (nov/26): R$ 150,56 à vista"
+    },
+    {
+      "id": "n-gooroo-1611",
+      "credor": "Gooroo",
+      "valor": 1611.33,
+      "oferta": 1127.93,
+      "obs": "Feirão Serasa (nov/26): R$ 1.127,93 à vista"
+    },
+    {
+      "id": "n-gooroo-731",
+      "credor": "Gooroo",
+      "valor": 731.01,
+      "oferta": 584.81,
+      "obs": "Feirão Serasa (nov/26): R$ 584,81 à vista"
+    }
+  ]
 }
