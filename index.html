@@ -30,7 +30,11 @@
           <input id="entrada" type="text" inputmode="text" placeholder="ex: 45 mercado" aria-label="Digite valor e descrição">
           <button id="btn-voz" type="button" class="btn-voz" aria-label="Falar o gasto" hidden>🎤</button>
         </div>
-        <button id="btn-nota" type="button" class="btn-nota">📷 Lançar pela foto da nota</button>
+        <div class="linha-nota">
+          <button id="btn-nota-camera" type="button" class="btn-nota">📷 Tirar foto da nota</button>
+          <button id="btn-nota" type="button" class="btn-nota galeria">🖼️ Galeria</button>
+        </div>
+        <input id="arquivo-nota-camera" type="file" accept="image/*" capture="environment" hidden>
         <input id="arquivo-nota" type="file" accept="image/*" hidden>
         <div id="preview" class="preview">Digite o valor e o que foi.</div>
         <div id="chips" class="chips"></div>

@@ -134,7 +134,8 @@
   function fechar() { $('nota-painel').hidden = true; $('nota-campos').hidden = true; lida = null; }
 
   $('btn-nota').addEventListener('click', () => $('arquivo-nota').click());
-  $('arquivo-nota').addEventListener('change', async e => {
+  $('btn-nota-camera').addEventListener('click', () => $('arquivo-nota-camera').click());
+  async function aoEscolher(e) {
     const arq = e.target.files && e.target.files[0];
     e.target.value = ''; // a foto não fica guardada
     if (!arq) return;
@@ -149,7 +150,9 @@
     } catch (err) {
       status('Não consegui ler a foto. Tente com mais luz e a nota bem reta, ou digite o gasto acima.');
     }
-  });
+  }
+  $('arquivo-nota').addEventListener('change', aoEscolher);
+  $('arquivo-nota-camera').addEventListener('change', aoEscolher);
   $('nota-cats').addEventListener('click', e => {
     const b = e.target.closest('[data-cat-nota]'); if (!b) return;
     catNota = b.dataset.catNota; desenharCats();

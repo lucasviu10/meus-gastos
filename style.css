@@ -333,3 +333,5 @@ main h1 { padding-right: 100px; }
 #nota-detalhes { background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
 #nota-detalhes summary { cursor: pointer; font-weight: 600; font-size: 15px; }
 .itens-nota { flex-basis: 100%; font-size: 13px; color: var(--muted); line-height: 1.5; }
+.linha-nota { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
+.linha-nota .btn-nota { margin-top: 10px; }
