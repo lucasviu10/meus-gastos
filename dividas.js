@@ -25,7 +25,7 @@
       : 'Fica separado: não entra no saldo, nas despesas nem no "posso gastar hoje".');
     const ordenadas = [...lista()].sort((a, b) => (a.quitada - b.quitada) || b.valor - a.valor);
     $('neg-lista').innerHTML = ordenadas.length ? ordenadas.map(n => `<li class="conta ${n.quitada ? 'st-quitada' : n.incluir ? 'st-pagar' : 'st-neg'}">
-      <div class="conta-topo"><span>⚠️ ${escapar(n.credor)}</span><strong class="num">${brl(n.valor)}</strong></div>
+      <div class="conta-topo"><span>⚠️ ${escapar(n.credor)} <span class="selo-serasa">Serasa</span></span><strong class="num">${brl(n.valor)}</strong></div>
       ${n.oferta ? `<p class="oferta-neg">🏷️ Oferta: <b>${brl(n.oferta)}</b> <span class="tag tag-emdia">−${Math.round((1 - n.oferta / n.valor) * 100)}%</span></p>` : ''}
       ${n.obs ? `<p class="sub">${escapar(n.obs)}</p>` : ''}
       ${n.quitada ? '<div class="conta-tags"><span class="tag tag-emdia">Quitada 🎉</span></div>' : `

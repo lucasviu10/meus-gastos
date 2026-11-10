@@ -336,3 +336,6 @@ main h1 { padding-right: 100px; }
 .linha-nota { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; }
 .linha-nota .btn-nota { margin-top: 10px; }
 .oferta-neg { margin: 0; font-size: 15px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.alerta-atraso { margin: 8px 0 0; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--bad) 12%, transparent); color: var(--bad); font-size: 14px; }
+.conta.st-atrasada { background: color-mix(in srgb, var(--bad) 5%, var(--card)); }
+.selo-serasa { display: inline-block; vertical-align: middle; font-size: 11px; font-weight: 700; letter-spacing: .03em; padding: 2px 6px; border-radius: 6px; background: #e6007e; color: #fff; margin-left: 4px; }

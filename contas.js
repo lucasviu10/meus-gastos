@@ -160,6 +160,13 @@
   function desenharResumo() {
     const r = resumo();
     $('ct-apagar').textContent = brl(r.aPagar);
+    const atrasadas = dados.contas.filter(c => statusConta(c) === 'atrasada');
+    const atrasoFat = r.cartoes.flatMap(u => u.meses.filter(m => difMes(m, mesAtual()) > 0).map(m => u.faturas[m].total));
+    const totalAtraso = r2(atrasadas.reduce((s, c) => s + devidoAte(c, addMes(mesAtual(), -1)), 0) + atrasoFat.reduce((s, v) => s + v, 0));
+    const qtd = atrasadas.length + atrasoFat.length;
+    const alerta = $('ct-atraso');
+    alerta.hidden = !qtd;
+    if (qtd) alerta.innerHTML = `⚠️ <b>${qtd} ${qtd === 1 ? 'conta atrasada' : 'contas atrasadas'}</b> · ${brl(totalAtraso)} de meses anteriores já somados acima`;
     $('ct-apagar-sub').textContent = r.itens.length
       ? r.itens.slice(0, 4).map(i => `${i.nome} ${brl(i.valor)}`).join(' · ') + (r.itens.length > 4 ? ' …' : '')
       : 'Nada pendente este mês. 👏';
@@ -193,7 +200,9 @@
       const cat = CAT[c.categoria] || CAT.contas;
       const tag = c.tipo === 'fixa' ? '🔁 Fixa' : c.tipo === 'unica' ? '1️⃣ Única'
         : `Parcela ${Math.min(c.pagas + 1, c.total)} de ${c.total}`;
-      const stTxt = { atrasada: `Atrasada desde ${nomeMes(c.proxMes, true)}`, pagar: `Vence dia ${c.dia}`,
+      const mesesAtraso = st === 'atrasada' ? Math.min(difMes(c.proxMes, mesAtual()), restantes(c)) : 0;
+      const acumulado = st === 'atrasada' ? devidoAte(c, mesAtual()) : 0;
+      const stTxt = { atrasada: `⚠️ Atrasada há ${mesesAtraso} ${mesesAtraso === 1 ? 'mês' : 'meses'} · acumulado ${brl(acumulado)}`, pagar: `Vence dia ${c.dia}`,
         emdia: c.tipo === 'unica' ? `Vence ${pad(c.dia)}/${c.proxMes.slice(5)}` : `Paga ✓ · próxima em ${nomeMes(c.proxMes, true)}`, quitada: 'Quitada 🎉' }[st];
       let extra = '';
       if (c.tipo === 'parcelada') {
@@ -349,7 +358,8 @@
       let fatura = '<p class="sub">Nenhuma fatura em aberto.</p>';
       if (prox) {
         const f = u.faturas[prox];
-        fatura = `<div class="fatura-topo"><span>Fatura de ${nomeMes(prox)} · vence ${pad(c.vence)}/${prox.slice(5)}</span><strong class="num">${brl(f.total)}</strong></div>
+        const atrasoF = difMes(prox, mesAtual()) > 0;
+        fatura = `${atrasoF ? `<p class="alerta-atraso">⚠️ Fatura de ${nomeMes(prox)} em atraso</p>` : ''}<div class="fatura-topo"><span>Fatura de ${nomeMes(prox)} · vence ${pad(c.vence)}/${prox.slice(5)}</span><strong class="num">${brl(f.total)}</strong></div>
           <ul class="lista compacta">${f.itens.map(p => `<li><span class="emoji">${(CAT[p.compra.categoria] || CAT.outros).emoji}</span>
             <span class="desc">${escapar(p.compra.descricao)}${p.fixa ? ' <small>🔁 todo mês</small>' : p.n > 1 ? ` <small>parcela ${p.k}/${p.n} · ${p.n - p.k ? `faltam ${p.n - p.k}` : 'última'}</small>` : ''}</span>
             <span class="val num">${brl(p.valor)}</span>
