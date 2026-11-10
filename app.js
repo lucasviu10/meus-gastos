@@ -225,11 +225,12 @@ function itemLista(g, mostrarData) {
           <button type="button" class="btn-pagar" data-salvar-nota="${g.id}">Salvar</button></div>`
       : `<div class="detalhe"><span>${g.nota ? `🔒 ${escapar(g.nota)}` : '<span class="sub">Sem detalhe</span>'}</span>
           <span class="sub">${c.emoji} ${c.nome} · ${dataLegivel(g.data)}</span>
+          ${Array.isArray(g.itens) && g.itens.length ? `<span class="itens-nota">🧾 ${g.itens.map(escapar).join('<br>')}</span>` : ''}
           <button type="button" class="btn-link" data-editar-nota="${g.id}">✏️ ${g.nota ? 'Editar' : 'Adicionar'} detalhe</button></div>`;
   }
   return `<li class="item${aberto ? ' aberto' : ''}" data-gid="${g.id}">
     <span class="emoji">${c.emoji}</span>
-    <span class="desc">${escapar(g.descricao)}${g.nota && !aberto ? ' <span class="tem-nota" aria-label="tem detalhe">•</span>' : ''}${mostrarData ? `<small>${dataLegivel(g.data)}</small>` : ''}</span>
+    <span class="desc">${escapar(g.descricao)}${(g.nota || g.itens) && !aberto ? ' <span class="tem-nota" aria-label="tem detalhe">•</span>' : ''}${mostrarData ? `<small>${dataLegivel(g.data)}</small>` : ''}</span>
     <span class="val">${brl(g.valor)}</span>
     <button class="del" data-del="${g.id}" aria-label="Apagar">✕</button>
     ${detalhe}
@@ -402,7 +403,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '19';
+const VERSAO_APP = '20';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;

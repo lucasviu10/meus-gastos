@@ -1,6 +1,6 @@
 // Guarda o app no celular para abrir mesmo sem internet.
-const CACHE = 'meus-gastos-v19';
-const ARQUIVOS = ['./', 'index.html', 'style.css', 'app.js', 'contas.js', 'saldo.js', 'assistente.js', 'voz.js', 'sync.js', 'tipo-gasto.js', 'empresa.js', 'dividas.js', 'hoje.js', 'pago-agora.js', 'manifest.webmanifest', 'icons/cifrao-192.png', 'icons/cifrao-512.png'];
+const CACHE = 'meus-gastos-v20';
+const ARQUIVOS = ['./', 'index.html', 'style.css', 'app.js', 'contas.js', 'saldo.js', 'assistente.js', 'voz.js', 'sync.js', 'tipo-gasto.js', 'empresa.js', 'dividas.js', 'hoje.js', 'pago-agora.js', 'nota.js', 'manifest.webmanifest', 'icons/cifrao-192.png', 'icons/cifrao-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARQUIVOS.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));

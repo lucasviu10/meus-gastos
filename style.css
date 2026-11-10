@@ -325,3 +325,11 @@ main h1 { padding-right: 100px; }
 .agora label { margin-bottom: 8px; }
 .agora .linha-entrada input { flex: 1; min-width: 0; font-size: 18px; padding: 12px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text); margin: 0; }
 .agora .sub { margin: 8px 0 0; }
+
+/* Foto da nota */
+.btn-nota { width: 100%; margin: 10px 0 0; background: var(--soft); border: 1.5px dashed var(--line); color: var(--text); border-radius: 12px; padding: 12px; font-size: 16px; font-weight: 600; }
+.nota-painel { margin-top: 14px; }
+.nota-painel input { width: 100%; }
+#nota-detalhes { background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
+#nota-detalhes summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+.itens-nota { flex-basis: 100%; font-size: 13px; color: var(--muted); line-height: 1.5; }

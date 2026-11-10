@@ -30,6 +30,8 @@
           <input id="entrada" type="text" inputmode="text" placeholder="ex: 45 mercado" aria-label="Digite valor e descrição">
           <button id="btn-voz" type="button" class="btn-voz" aria-label="Falar o gasto" hidden>🎤</button>
         </div>
+        <button id="btn-nota" type="button" class="btn-nota">📷 Lançar pela foto da nota</button>
+        <input id="arquivo-nota" type="file" accept="image/*" hidden>
         <div id="preview" class="preview">Digite o valor e o que foi.</div>
         <div id="chips" class="chips"></div>
         <div class="segmento tres" id="tipo-gasto" role="radiogroup" aria-label="Esse gasto se repete?">
@@ -51,6 +53,26 @@
         </div>
         <button id="btn-salvar" type="submit" class="btn-primary" disabled>Salvar</button>
       </form>
+
+      <div id="nota-painel" class="card nota-painel" hidden>
+        <p class="rotulo">🧾 Nota lida</p>
+        <p id="nota-status" class="sub"></p>
+        <div id="nota-campos" hidden>
+          <label for="nota-loja">Onde foi</label>
+          <input id="nota-loja" type="text">
+          <div class="duas-colunas">
+            <div><label for="nota-total">Total pago</label><input id="nota-total" type="text" inputmode="decimal"></div>
+            <div><label for="nota-data">Data</label><input id="nota-data" type="date"></div>
+          </div>
+          <p class="rotulo">Categoria</p>
+          <div id="nota-cats" class="chips"></div>
+          <details id="nota-detalhes"><summary id="nota-resumo-itens">O que tinha na nota</summary><ul id="nota-itens" class="lista compacta"></ul></details>
+          <div class="linha-botoes">
+            <button type="button" id="nota-cancelar" class="btn-sec">Cancelar</button>
+            <button type="button" id="nota-salvar" class="btn-primary">Salvar gasto</button>
+          </div>
+        </div>
+      </div>
       <div class="hoje">
         <h2>Hoje</h2>
         <p id="hoje-total" class="hoje-total">R$ 0,00</p>
@@ -362,5 +384,6 @@
   <script src="dividas.js"></script>
   <script src="hoje.js"></script>
   <script src="pago-agora.js"></script>
+  <script src="nota.js"></script>
 </body>
 </html>
