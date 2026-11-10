@@ -113,6 +113,13 @@
       "categoria": "mc",
       "data": "2026-11-09",
       "nota64": "bWFjb25oYQ=="
+    },
+    {
+      "id": "c-20261110-chapinha-macarico-30",
+      "valor": 30,
+      "descricao": "chapinha e maçarico",
+      "categoria": "compras",
+      "data": "2026-11-10"
     }
   ],
   "apagar": [
