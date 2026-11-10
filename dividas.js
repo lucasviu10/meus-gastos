@@ -9,7 +9,8 @@
     const abertas = lista().filter(n => !n.quitada);
     return {
       total: r2(abertas.reduce((s, n) => s + n.valor, 0)),
-      noPlano: r2(abertas.filter(n => n.incluir).reduce((s, n) => s + n.valor, 0)),
+      noPlano: r2(abertas.filter(n => n.incluir).reduce((s, n) => s + (n.oferta || n.valor), 0)),
+      ofertas: r2(abertas.reduce((s, n) => s + (n.oferta || n.valor), 0)),
       qtd: abertas.length,
     };
   }
@@ -18,12 +19,14 @@
   function desenhar() {
     const r = resumo();
     $('neg-total').textContent = brl(r.total);
-    $('neg-sub').textContent = r.noPlano
+    const comOferta = lista().some(n => !n.quitada && n.oferta);
+    $('neg-sub').textContent = (comOferta ? `Com as ofertas do Serasa: ${brl(r.ofertas)} (economia de ${brl(r.total - r.ofertas)}). ` : '') + (r.noPlano
       ? `${brl(r.noPlano)} está somado no seu plano. O resto fica só para você saber que existe.`
-      : 'Fica separado: não entra no saldo, nas despesas nem no "posso gastar hoje".';
+      : 'Fica separado: não entra no saldo, nas despesas nem no "posso gastar hoje".');
     const ordenadas = [...lista()].sort((a, b) => (a.quitada - b.quitada) || b.valor - a.valor);
     $('neg-lista').innerHTML = ordenadas.length ? ordenadas.map(n => `<li class="conta ${n.quitada ? 'st-quitada' : n.incluir ? 'st-pagar' : 'st-neg'}">
       <div class="conta-topo"><span>⚠️ ${escapar(n.credor)}</span><strong class="num">${brl(n.valor)}</strong></div>
+      ${n.oferta ? `<p class="oferta-neg">🏷️ Oferta: <b>${brl(n.oferta)}</b> <span class="tag tag-emdia">−${Math.round((1 - n.oferta / n.valor) * 100)}%</span></p>` : ''}
       ${n.obs ? `<p class="sub">${escapar(n.obs)}</p>` : ''}
       ${n.quitada ? '<div class="conta-tags"><span class="tag tag-emdia">Quitada 🎉</span></div>' : `
       <label class="check troca"><input type="checkbox" data-neg-incluir="${n.id}" ${n.incluir ? 'checked' : ''}> Somar no meu plano deste mês</label>`}
@@ -82,7 +85,8 @@
       if (!x || typeof x.id !== 'string' || vistos.has(x.id) || !(Number(x.valor) > 0)) return;
       vistos.add(x.id); dados.importados.push(x.id);
       lista().push({ id: x.id, credor: String(x.credor || 'dívida').slice(0, 60), valor: r2(Number(x.valor)),
-        obs: String(x.obs || '').slice(0, 100), incluir: !!x.incluir, quitada: false });
+        obs: String(x.obs || '').slice(0, 100), incluir: !!x.incluir, quitada: false,
+        ...(Number(x.oferta) > 0 ? { oferta: r2(Number(x.oferta)) } : {}) });
       n++;
     });
     return n;
