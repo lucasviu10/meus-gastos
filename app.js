@@ -38,7 +38,10 @@ function salvar() {
 const novoId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
 // ---------- Utilidades ----------
-const brl = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+// Valores ocultos (botão 👁️): o app mostra "R$ •••" no lugar dos números.
+let valoresOcultos = false;
+try { valoresOcultos = localStorage.getItem('meus-gastos-ocultar') === '1'; } catch (e) {}
+const brl = v => valoresOcultos ? 'R$ •••' : v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 const semAcento = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const pad = n => String(n).padStart(2, '0');
 const isoDia = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -403,7 +406,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '23';
+const VERSAO_APP = '24';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;

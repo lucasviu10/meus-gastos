@@ -339,3 +339,6 @@ main h1 { padding-right: 100px; }
 .alerta-atraso { margin: 8px 0 0; padding: 8px 10px; border-radius: 10px; background: color-mix(in srgb, var(--bad) 12%, transparent); color: var(--bad); font-size: 14px; }
 .conta.st-atrasada { background: color-mix(in srgb, var(--bad) 5%, var(--card)); }
 .selo-serasa { display: inline-block; vertical-align: middle; font-size: 11px; font-weight: 700; letter-spacing: .03em; padding: 2px 6px; border-radius: 6px; background: #e6007e; color: #fff; margin-left: 4px; }
+main h1 { padding-right: 150px; }
+.mes-nav { margin-top: 52px; }
+.mes-nav h1 { padding-right: 0; text-align: center; }

@@ -77,4 +77,18 @@
 
   function avisar(txt) { $('toast-text').textContent = txt; $('toast').hidden = false; }
   mostrar();
+
+  // ---------- 👁️ esconder / mostrar valores ----------
+  const olho = $('btn-olho');
+  function pintarOlho() {
+    olho.textContent = valoresOcultos ? '🙈' : '👁️';
+    olho.setAttribute('aria-label', valoresOcultos ? 'Mostrar valores' : 'Esconder valores');
+    document.documentElement.classList.toggle('ocultos', valoresOcultos);
+  }
+  olho.addEventListener('click', () => {
+    valoresOcultos = !valoresOcultos;
+    try { localStorage.setItem('meus-gastos-ocultar', valoresOcultos ? '1' : '0'); } catch (e) {}
+    pintarOlho(); desenharTudo();
+  });
+  pintarOlho();
 })();
