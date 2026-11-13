@@ -406,7 +406,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '24';
+const VERSAO_APP = '25';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;
