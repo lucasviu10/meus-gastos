@@ -128,6 +128,14 @@
       "categoria": "mc",
       "data": "2026-11-10",
       "nota64": "bWHDp2FyaWNv"
+    },
+    {
+      "id": "c-20261115-mc-70",
+      "valor": 70,
+      "descricao": "MC",
+      "categoria": "mc",
+      "data": "2026-11-15",
+      "nota64": "bWFjb25oYQ=="
     }
   ],
   "apagar": [
@@ -186,6 +194,12 @@
       "valor": 192.47,
       "descricao": "pix recebido",
       "data": "2026-11-03"
+    },
+    {
+      "id": "e-20261115-emprestimo-mae-60",
+      "valor": 60,
+      "descricao": "empréstimo da mãe",
+      "data": "2026-11-15"
     }
   ],
   "saldoInicial": {
