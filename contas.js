@@ -194,7 +194,7 @@
   // ---------- Desenhar: contas ----------
   const ORDEM = { atrasada: 0, pagar: 1, emdia: 2, quitada: 3 };
   function desenharContas() {
-    const lista = [...dados.contas].sort((a, b) => ORDEM[statusConta(a)] - ORDEM[statusConta(b)] || a.dia - b.dia);
+    const lista = [...dados.contas].sort((a, b) => ORDEM[statusConta(a)] - ORDEM[statusConta(b)] || a.proxMes.localeCompare(b.proxMes) || a.dia - b.dia);
     $('lista-contas').innerHTML = lista.length ? lista.map(c => {
       const st = statusConta(c);
       const cat = CAT[c.categoria] || CAT.contas;
@@ -202,7 +202,10 @@
         : `Parcela ${Math.min(c.pagas + 1, c.total)} de ${c.total}`;
       const mesesAtraso = st === 'atrasada' ? difMes(c.proxMes, mesAtual()) : 0;
       const acumulado = st === 'atrasada' ? devidoAte(c, mesAtual()) : 0;
-      const stTxt = { atrasada: `⚠️ Atrasada há ${mesesAtraso} ${mesesAtraso === 1 ? 'mês' : 'meses'} · acumulado ${brl(acumulado)}`, pagar: `Vence dia ${c.dia}`,
+      const dataVenc = `${pad(c.dia)}/${c.proxMes.slice(5)}`;
+      const varios = st === 'atrasada' && acumulado > c.valor + 0.001;
+      const stTxt = { atrasada: `⚠️ Venceu ${dataVenc} · atrasada há ${mesesAtraso} ${mesesAtraso === 1 ? 'mês' : 'meses'}${varios ? ` · acumulado ${brl(acumulado)}` : ''}`,
+        pagar: `Vence ${dataVenc}`,
         emdia: c.tipo === 'unica' ? `Vence ${pad(c.dia)}/${c.proxMes.slice(5)}` : `Paga ✓ · próxima em ${nomeMes(c.proxMes, true)}`, quitada: 'Quitada 🎉' }[st];
       let extra = '';
       if (c.tipo === 'parcelada') {
