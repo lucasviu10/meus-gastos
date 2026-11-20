@@ -292,6 +292,16 @@
       "proxMes": "2026-12",
       "dia": 10,
       "categoria": "assinaturas"
+    },
+    {
+      "id": "k-claude",
+      "nome": "Claude",
+      "tipo": "fixa",
+      "valor": 115,
+      "pagas": 1,
+      "proxMes": "2026-12",
+      "dia": 6,
+      "categoria": "assinaturas"
     }
   ],
   "ajustes": [
