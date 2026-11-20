@@ -13,11 +13,17 @@ const CATEGORIAS = [
   { id: 'saude', nome: 'Saúde', emoji: '💊',
     palavras: ['farmacia', 'remedio', 'academia', 'medico', 'dentista', 'consulta', 'exame', 'plano de saude', 'drogaria', 'suplemento', 'whey', 'medicamento', 'tadalafila', 'sildenafila'] },
   { id: 'lazer', nome: 'Lazer', emoji: '🎉',
-    palavras: ['cinema', 'bar', 'show', 'netflix', 'spotify', 'viagem', 'cerveja', 'festa', 'balada', 'jogo', 'streaming', 'passeio', 'praia'] },
+    palavras: ['cinema', 'bar ', 'show', 'viagem', 'cerveja', 'festa', 'balada', 'jogo', 'passeio', 'praia'] },
   { id: 'compras', nome: 'Compras', emoji: '🛍️',
     palavras: ['roupa', 'shopee', 'mercado livre', 'amazon', 'presente', 'tenis', 'shein', 'loja', 'celular novo', 'eletronico'] },
   { id: 'contas', nome: 'Contas', emoji: '🧾',
     palavras: ['cartao', 'boleto', 'fatura', 'telefone', 'plano celular', 'seguro', 'juros', 'emprestimo', 'parcela', 'consorcio', 'tarifa', 'banco', 'imposto'] },
+  { id: 'assinaturas', nome: 'Assinaturas', emoji: '📺',
+    palavras: ['assinatura', 'netflix', 'spotify', 'deezer', 'youtube', 'prime video', 'amazon prime', 'disney', 'hbo', 'max', 'globoplay',
+      'paramount', 'icloud', 'google one', 'claude', 'chatgpt', 'brasil paralelo', 'streaming', 'apple music', 'canva', 'kindle'] },
+  { id: 'pessoal', nome: 'Cuidados pessoais', emoji: '💈',
+    palavras: ['barbeiro', 'barbearia', 'corte', 'cabelo', 'barba', 'sobrancelha', 'perfume', 'creme', 'hidratante', 'shampoo',
+      'desodorante', 'chapinha', 'alisador', 'manicure', 'pedicure', 'depilacao', 'skincare', 'protetor solar', 'pomada', 'gel'] },
   { id: 'mc', nome: 'MC', emoji: 'Ⓜ️', palavras: [] },
   { id: 'outros', nome: 'Outros', emoji: '📦', palavras: [] },
 ];
@@ -406,7 +412,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '25';
+const VERSAO_APP = '26';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;
