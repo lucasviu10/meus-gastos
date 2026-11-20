@@ -81,7 +81,7 @@
       "id": "c-20261106-claude-115",
       "valor": 115,
       "descricao": "assinatura claude",
-      "categoria": "contas",
+      "categoria": "assinaturas",
       "data": "2026-11-06"
     },
     {
@@ -118,7 +118,7 @@
       "id": "c-20261110-chapinha-macarico-30",
       "valor": 20,
       "descricao": "chapinha",
-      "categoria": "compras",
+      "categoria": "pessoal",
       "data": "2026-11-10"
     },
     {
@@ -186,6 +186,21 @@
       "valor": 20,
       "descricao": "chapinha",
       "categoria": "compras"
+    },
+    {
+      "uid": "u-claude-assin",
+      "id": "c-20261106-claude-115",
+      "categoria": "assinaturas"
+    },
+    {
+      "uid": "u-bp-assin",
+      "id": "k-brasil-paralelo",
+      "categoria": "assinaturas"
+    },
+    {
+      "uid": "u-chapinha-pessoal",
+      "id": "c-20261110-chapinha-macarico-30",
+      "categoria": "pessoal"
     }
   ],
   "entradas": [
@@ -276,7 +291,7 @@
       "pagas": 0,
       "proxMes": "2026-12",
       "dia": 10,
-      "categoria": "contas"
+      "categoria": "assinaturas"
     }
   ],
   "ajustes": [
