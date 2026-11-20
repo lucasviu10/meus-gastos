@@ -322,6 +322,38 @@
       "proxMes": "2026-12",
       "dia": 10,
       "categoria": "assinaturas"
+    },
+    {
+      "id": "k-condominio-set26",
+      "nome": "condomínio set/26",
+      "tipo": "unica",
+      "valor": 166.99,
+      "total": 1,
+      "pagas": 0,
+      "proxMes": "2026-09",
+      "dia": 28,
+      "categoria": "casa"
+    },
+    {
+      "id": "k-condominio-out26",
+      "nome": "condomínio out/26",
+      "tipo": "unica",
+      "valor": 318.74,
+      "total": 1,
+      "pagas": 0,
+      "proxMes": "2026-10",
+      "dia": 20,
+      "categoria": "casa"
+    },
+    {
+      "id": "k-condominio",
+      "nome": "condomínio",
+      "tipo": "fixa",
+      "valor": 385.53,
+      "pagas": 0,
+      "proxMes": "2026-11",
+      "dia": 20,
+      "categoria": "casa"
     }
   ],
   "ajustes": [
