@@ -302,6 +302,16 @@
       "proxMes": "2026-12",
       "dia": 6,
       "categoria": "assinaturas"
+    },
+    {
+      "id": "k-vivo",
+      "nome": "Vivo",
+      "tipo": "fixa",
+      "valor": 90,
+      "pagas": 0,
+      "proxMes": "2026-11",
+      "dia": 26,
+      "categoria": "assinaturas"
     }
   ],
   "ajustes": [
