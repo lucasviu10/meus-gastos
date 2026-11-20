@@ -200,7 +200,7 @@
       const cat = CAT[c.categoria] || CAT.contas;
       const tag = c.tipo === 'fixa' ? '🔁 Fixa' : c.tipo === 'unica' ? '1️⃣ Única'
         : `Parcela ${Math.min(c.pagas + 1, c.total)} de ${c.total}`;
-      const mesesAtraso = st === 'atrasada' ? Math.min(difMes(c.proxMes, mesAtual()), restantes(c)) : 0;
+      const mesesAtraso = st === 'atrasada' ? difMes(c.proxMes, mesAtual()) : 0;
       const acumulado = st === 'atrasada' ? devidoAte(c, mesAtual()) : 0;
       const stTxt = { atrasada: `⚠️ Atrasada há ${mesesAtraso} ${mesesAtraso === 1 ? 'mês' : 'meses'} · acumulado ${brl(acumulado)}`, pagar: `Vence dia ${c.dia}`,
         emdia: c.tipo === 'unica' ? `Vence ${pad(c.dia)}/${c.proxMes.slice(5)}` : `Paga ✓ · próxima em ${nomeMes(c.proxMes, true)}`, quitada: 'Quitada 🎉' }[st];
