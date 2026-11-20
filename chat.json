@@ -312,6 +312,16 @@
       "proxMes": "2026-11",
       "dia": 26,
       "categoria": "assinaturas"
+    },
+    {
+      "id": "k-nucel",
+      "nome": "NuCel",
+      "tipo": "fixa",
+      "valor": 45,
+      "pagas": 0,
+      "proxMes": "2026-12",
+      "dia": 10,
+      "categoria": "assinaturas"
     }
   ],
   "ajustes": [
