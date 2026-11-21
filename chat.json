@@ -354,6 +354,17 @@
       "proxMes": "2026-11",
       "dia": 20,
       "categoria": "casa"
+    },
+    {
+      "id": "k-notebook-matheus",
+      "nome": "Notebook Matheus",
+      "tipo": "parcelada",
+      "valor": 292.72,
+      "total": 12,
+      "pagas": 0,
+      "proxMes": "2026-12",
+      "dia": 20,
+      "categoria": "compras"
     }
   ],
   "ajustes": [
