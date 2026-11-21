@@ -343,3 +343,12 @@ main h1 { padding-right: 150px; }
 .mes-nav { margin-top: 52px; }
 .mes-nav h1 { padding-right: 0; text-align: center; }
 #btn-olho { color: var(--text); display: grid; place-items: center; }
+
+/* Nuvem */
+#card-nuvem input, #card-nuvem textarea { width: 100%; }
+#nuvem-sql { font-family: ui-monospace, monospace; font-size: 12px; }
+.nuvem-ajuda { background: var(--soft); border-radius: 12px; padding: 10px 12px; margin-top: 12px; }
+.nuvem-ajuda summary { cursor: pointer; font-weight: 600; font-size: 15px; }
+.nuvem-escolha { display: grid; gap: 8px; margin-top: 8px; }
+.nuvem-escolha p { margin: 0; }
+#nuvem-status.ok { color: var(--ok); } #nuvem-status.bad { color: var(--bad); }

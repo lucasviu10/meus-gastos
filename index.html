@@ -170,6 +170,36 @@
         </div>
       </div>
 
+      <div class="card" id="card-nuvem">
+        <p class="rotulo">☁️ Nuvem (Supabase)</p>
+        <p id="nuvem-status" class="sub sub-topo">Desligada. Seus dados ficam só neste celular.</p>
+        <div id="nuvem-form">
+          <label for="nuvem-url">Project URL</label>
+          <input id="nuvem-url" type="url" inputmode="url" placeholder="https://xxxx.supabase.co" autocomplete="off">
+          <label for="nuvem-chave">anon public key</label>
+          <input id="nuvem-chave" type="text" placeholder="eyJ..." autocomplete="off">
+          <label for="nuvem-email">E-mail</label>
+          <input id="nuvem-email" type="email" autocomplete="username">
+          <label for="nuvem-senha">Senha</label>
+          <input id="nuvem-senha" type="password" autocomplete="current-password">
+          <button id="nuvem-entrar" type="button" class="btn-primary">Entrar e sincronizar</button>
+          <details class="nuvem-ajuda"><summary>Primeira vez? Prepare o banco (1 vez só)</summary>
+            <p class="sub">No Supabase: <b>SQL Editor → New query</b>, cole o texto abaixo e toque em <b>Run</b>.</p>
+            <textarea id="nuvem-sql" rows="6" readonly></textarea>
+            <button id="nuvem-copiar" type="button" class="btn-sec largo">Copiar texto</button>
+          </details>
+        </div>
+        <div id="nuvem-ligada" hidden>
+          <button id="nuvem-agora" type="button" class="btn-sec largo">🔄 Sincronizar agora</button>
+          <button id="nuvem-sair" type="button" class="btn-link">Desconectar este celular</button>
+        </div>
+        <div id="nuvem-escolha" class="nuvem-escolha" hidden>
+          <p><b>Já existem dados na nuvem e neste celular.</b> Qual você quer usar?</p>
+          <button id="nuvem-usar-nuvem" type="button" class="btn-primary">Usar os da nuvem</button>
+          <button id="nuvem-usar-local" type="button" class="btn-sec largo">Manter os deste celular</button>
+        </div>
+      </div>
+
       <div class="card">
         <p class="rotulo">💬 Lançamentos do chat</p>
         <p id="sync-status" class="sub">Ainda não buscou.</p>
@@ -391,5 +421,6 @@
   <script src="hoje.js"></script>
   <script src="pago-agora.js"></script>
   <script src="nota.js"></script>
+  <script src="nuvem.js"></script>
 </body>
 </html>
