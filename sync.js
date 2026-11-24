@@ -48,8 +48,12 @@
       if (!u || typeof u.uid !== 'string' || vistos.has(u.uid)) return;
       vistos.add(u.uid); dados.importados.push(u.uid);
       const g = dados.gastos.find(x => x.id === u.id)
-        || (dados.contas || []).find(x => x.id === u.id) || (dados.compras || []).find(x => x.id === u.id);
+        || (dados.contas || []).find(x => x.id === u.id) || (dados.compras || []).find(x => x.id === u.id)
+        || (dados.negativacoes || []).find(x => x.id === u.id);
       if (!g) return;
+      if (typeof u.acordo === 'boolean') g.acordo = u.acordo;
+      if (typeof u.quitada === 'boolean') g.quitada = u.quitada;
+      if (typeof u.obs === 'string') g.obs = u.obs.slice(0, 100);
       if (u.descricao) g.descricao = String(u.descricao).slice(0, 80);
       if (CAT[u.categoria]) g.categoria = u.categoria;
       if (/^\d{4}-\d{2}-\d{2}$/.test(u.data || '')) g.data = u.data;

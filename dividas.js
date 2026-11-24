@@ -6,7 +6,7 @@
   const lista = () => { if (!Array.isArray(dados.negativacoes)) dados.negativacoes = []; return dados.negativacoes; };
 
   function resumo() {
-    const abertas = lista().filter(n => !n.quitada);
+    const abertas = lista().filter(n => !n.quitada && !n.acordo);
     return {
       total: r2(abertas.reduce((s, n) => s + n.valor, 0)),
       noPlano: r2(abertas.filter(n => n.incluir).reduce((s, n) => s + (n.oferta || n.valor), 0)),
@@ -23,12 +23,13 @@
     $('neg-sub').textContent = (comOferta ? `Com as ofertas do Serasa: ${brl(r.ofertas)} (economia de ${brl(r.total - r.ofertas)}). ` : '') + (r.noPlano
       ? `${brl(r.noPlano)} está somado no seu plano. O resto fica só para você saber que existe.`
       : 'Fica separado: não entra no saldo, nas despesas nem no "posso gastar hoje".');
-    const ordenadas = [...lista()].sort((a, b) => (a.quitada - b.quitada) || b.valor - a.valor);
-    $('neg-lista').innerHTML = ordenadas.length ? ordenadas.map(n => `<li class="conta ${n.quitada ? 'st-quitada' : n.incluir ? 'st-pagar' : 'st-neg'}">
+    const ordem = n => n.quitada ? 2 : n.acordo ? 1 : 0;
+    const ordenadas = [...lista()].sort((a, b) => ordem(a) - ordem(b) || b.valor - a.valor);
+    $('neg-lista').innerHTML = ordenadas.length ? ordenadas.map(n => `<li class="conta ${n.quitada ? 'st-quitada' : n.acordo ? 'st-emdia' : n.incluir ? 'st-pagar' : 'st-neg'}">
       <div class="conta-topo"><span>⚠️ ${escapar(n.credor)} <span class="selo-serasa">Serasa</span></span><strong class="num">${brl(n.valor)}</strong></div>
       ${n.oferta ? `<p class="oferta-neg">🏷️ Oferta: <b>${brl(n.oferta)}</b> <span class="tag tag-emdia">−${Math.round((1 - n.oferta / n.valor) * 100)}%</span></p>` : ''}
       ${n.obs ? `<p class="sub">${escapar(n.obs)}</p>` : ''}
-      ${n.quitada ? '<div class="conta-tags"><span class="tag tag-emdia">Quitada 🎉</span></div>' : `
+      ${n.quitada ? '<div class="conta-tags"><span class="tag tag-emdia">Quitada 🎉</span></div>' : n.acordo ? '<div class="conta-tags"><span class="tag tag-emdia">🤝 Em acordo · parcelas em 📅 Contas</span></div>' : `
       <label class="check troca"><input type="checkbox" data-neg-incluir="${n.id}" ${n.incluir ? 'checked' : ''}> Somar no meu plano deste mês</label>`}
       <div class="conta-acoes">
         ${n.quitada ? '' : `<button type="button" class="btn-pagar" data-neg-quitei="${n.id}">✓ Quitei</button>`}
