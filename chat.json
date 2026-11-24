@@ -207,6 +207,13 @@
       "id": "n-santander",
       "acordo": true,
       "obs": "Acordo: R$ 1.653,03 (entrada 110,20 em 30/11 + 10x 154,28 dia 21)"
+    },
+    {
+      "uid": "u-santander-quitada",
+      "id": "n-santander",
+      "quitada": true,
+      "acordo": false,
+      "obs": "Concluída com acordo (parcelas em Contas)"
     }
   ],
   "entradas": [
@@ -430,8 +437,9 @@
       "credor": "Santander (4 dívidas)",
       "valor": 11150.16,
       "oferta": 971.51,
-      "obs": "Acordo: R$ 1.653,03 (entrada 110,20 em 30/11 + 10x 154,28 dia 21)",
-      "acordo": true
+      "obs": "Concluída com acordo (parcelas em Contas)",
+      "acordo": false,
+      "quitada": true
     },
     {
       "id": "n-claro-3",
