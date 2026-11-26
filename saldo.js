@@ -36,31 +36,31 @@
     const el = $('card-saldo');
     const s = calcular();
     if (!s) {
-      el.innerHTML = `<span class="rotulo-suave">💰 Quanto sobrou?</span>
+      el.innerHTML = `<span class="rotulo-suave">${icone('carteira', 16)} Quanto sobrou?</span>
         <p class="sub sub-topo">Coloque quanto você tinha no começo e o app calcula o que sobra.</p>
         <div class="linha-entrada"><input id="saldo-rapido" type="text" inputmode="decimal" placeholder="ex: 2770" aria-label="Quanto você tinha no dia 1">
         <button type="button" id="btn-saldo-rapido" class="btn-pagar">Salvar</button></div>
-        <p class="sub">Vale a partir do dia 1 deste mês. Dá para mudar em ⚙️ Ajustes.</p>`;
+        <p class="sub">Vale a partir do dia 1 deste mês. Dá para mudar em Ajustes.</p>`;
       return;
     }
     const cor = s.agora < 0 ? 'bad' : 'ok';
     const [, m, d] = s.data.split('-');
-    let html = `<span class="rotulo-suave">💰 Tenho agora</span>
+    let html = `<span class="rotulo-suave">${icone('carteira', 16)} Tenho agora</span>
       <strong class="valor-grande num ${cor}">${brl(s.agora)}</strong>
       <div class="saldo-linhas num">
         <span>Comecei ${d}/${m}</span><b>${brl(s.inicial)}</b>
-        <span>➕ Entrou</span><b class="ok">${brl(s.entrou)}</b>
-        <span>➖ Saiu</span><b>${brl(s.saiu)}</b>
-        ${s.ajuste ? `<span>🔧 Ajuste</span><b>${s.ajuste > 0 ? '+' : '−'}${brl(Math.abs(s.ajuste))}</b>` : ''}
-        ${s.empresa ? `<span>🏢 Na empresa</span><b class="${s.empresa > 0 ? 'ok' : ''}">${s.empresa > 0 ? '+' : '−'}${brl(Math.abs(s.empresa))}</b>` : ''}
+        <span>${icone('mais', 13)} Entrou</span><b class="ok">${brl(s.entrou)}</b>
+        <span>${icone('menos', 13)} Saiu</span><b>${brl(s.saiu)}</b>
+        ${s.ajuste ? `<span>${icone('ajuste', 13)} Ajuste</span><b>${s.ajuste > 0 ? '+' : '−'}${brl(Math.abs(s.ajuste))}</b>` : ''}
+        ${s.empresa ? `<span>${icone('empresa', 13)} Na empresa</span><b class="${s.empresa > 0 ? 'ok' : ''}">${s.empresa > 0 ? '+' : '−'}${brl(Math.abs(s.empresa))}</b>` : ''}
       </div>`;
     const receberEmp = (dados.empresa && Array.isArray(dados.empresa.aReceber)) ? dados.empresa.aReceber : [];
     if (dados.aReceber.length || receberEmp.length) {
-      const linha = (x, emp) => `<li><span class="desc">${emp ? '🏢 ' : ''}${escapar(x.descricao)}${emp ? '<small>pela empresa</small>' : ''}</span>
+      const linha = (x, emp) => `<li><span class="desc">${emp ? icone('empresa', 14) + ' ' : ''}${escapar(x.descricao)}${emp ? '<small>pela empresa</small>' : ''}</span>
           <span class="val num">${brl(x.valor)}</span>
           <button type="button" class="btn-pagar" ${emp ? 'data-emp-recebi' : 'data-recebi'}="${x.id}">✓ Recebi</button>
           <button type="button" class="del" ${emp ? 'data-emp-del-receber' : 'data-del-receber'}="${x.id}" aria-label="Apagar">✕</button></li>`;
-      html += `<div class="a-receber"><span class="rotulo-suave">⏳ Ainda vai entrar · ${brl(s.aReceber)}</span>
+      html += `<div class="a-receber"><span class="rotulo-suave">${icone('ampulheta', 14)} Ainda vai entrar · ${brl(s.aReceber)}</span>
         <ul class="lista compacta">${dados.aReceber.map(x => linha(x, false)).join('')}${receberEmp.map(x => linha(x, true)).join('')}</ul></div>`;
     }
     if (s.aPagar > 0 || s.aReceber > 0) {
@@ -76,7 +76,7 @@
     const km = chaveMes(mesVisto);
     const lista = dados.entradas.filter(e => e.data.startsWith(km)).sort((a, b) => b.data.localeCompare(a.data));
     $('lista-entradas').innerHTML = lista.length ? lista.map(e => `<li>
-      <span class="emoji">💰</span>
+      <span class="emoji">${icone('entrada', 18)}</span>
       <span class="desc">${escapar(e.descricao)}<small>${dataLegivel(e.data)}</small></span>
       <span class="val num ${e.valor < 0 ? '' : 'ok'}">${e.valor < 0 ? '−' : '+'}${brl(Math.abs(e.valor))}</span>
       <button class="del" data-del-entrada="${e.id}" aria-label="Apagar entrada">✕</button></li>`).join('')
@@ -98,7 +98,7 @@
       dados.aReceber = dados.aReceber.filter(y => y.id !== x.id);
       dados.entradas.push({ id: novoIdE('e'), valor: x.valor, descricao: x.descricao, data: isoDia(new Date()), criado: new Date().toISOString() });
       salvar(); desenharTudo();
-      avisarSaldo(`💰 ${x.descricao}: ${brl(x.valor)} entrou no saldo`);
+      avisarSaldo(`${x.descricao}: ${brl(x.valor)} entrou no saldo`);
       return;
     }
     const dr = e.target.closest('[data-del-receber]');
@@ -167,8 +167,8 @@
     const r = lerEntrada(entrada.value);
     if (r.valor > 0) {
       $('preview').innerHTML = ehPrevisto(entrada.value)
-        ? `<strong>${brl(r.valor)}</strong> · ⏳ Ainda vai entrar · ${escapar(r.descricao)}`
-        : `<strong class="ok">+${brl(r.valor)}</strong> · 💰 Entrada · ${escapar(r.descricao)} · ${dataLegivel(r.data)}`;
+        ? `<strong>${brl(r.valor)}</strong> · ${icone('ampulheta', 13)} Ainda vai entrar · ${escapar(r.descricao)}`
+        : `<strong class="ok">+${brl(r.valor)}</strong> · ${icone('entrada', 13)} Entrada · ${escapar(r.descricao)} · ${dataLegivel(r.data)}`;
       $('btn-salvar').disabled = false;
     }
   });
@@ -181,7 +181,7 @@
     if (ehPrevisto(entrada.value)) {
       dados.aReceber.push({ id: novoIdE('r'), valor: r.valor, descricao: r.descricao });
       salvar(); entrada.value = ''; entrada.dispatchEvent(new Event('input'));
-      avisarSaldo(`⏳ ${brl(r.valor)} anotado em "ainda vai entrar"`);
+      avisarSaldo(`${brl(r.valor)} anotado em "ainda vai entrar"`);
       desenharTudo();
       return;
     }
@@ -190,7 +190,7 @@
     salvar();
     entrada.value = ''; entrada.dispatchEvent(new Event('input'));
     ultimoId = null;
-    $('toast-text').textContent = `💰 Entrada de ${brl(en.valor)} anotada`;
+    $('toast-text').textContent = `Entrada de ${brl(en.valor)} anotada`;
     $('toast-undo').hidden = true;
     $('toast').hidden = false;
     setTimeout(() => { $('toast').hidden = true; $('toast-undo').hidden = false; }, 5000);

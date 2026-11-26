@@ -26,10 +26,10 @@
     const ordem = n => n.quitada ? 2 : n.acordo ? 1 : 0;
     const ordenadas = [...lista()].sort((a, b) => ordem(a) - ordem(b) || b.valor - a.valor);
     $('neg-lista').innerHTML = ordenadas.length ? ordenadas.map(n => `<li class="conta ${n.quitada ? 'st-quitada' : n.acordo ? 'st-emdia' : n.incluir ? 'st-pagar' : 'st-neg'}">
-      <div class="conta-topo"><span>⚠️ ${escapar(n.credor)} <span class="selo-serasa">Serasa</span></span><strong class="num">${brl(n.valor)}</strong></div>
-      ${n.oferta ? `<p class="oferta-neg">🏷️ Oferta: <b>${brl(n.oferta)}</b> <span class="tag tag-emdia">−${Math.round((1 - n.oferta / n.valor) * 100)}%</span></p>` : ''}
+      <div class="conta-topo"><span class="cat-nome"><span class="cat-ico">${icone('alerta', 15)}</span>${escapar(n.credor)} <span class="selo-serasa">Serasa</span></span><strong class="num">${brl(n.valor)}</strong></div>
+      ${n.oferta ? `<p class="oferta-neg">${icone('etiqueta', 14)} Oferta: <b>${brl(n.oferta)}</b> <span class="tag tag-emdia">−${Math.round((1 - n.oferta / n.valor) * 100)}%</span></p>` : ''}
       ${n.obs ? `<p class="sub">${escapar(n.obs)}</p>` : ''}
-      ${n.quitada ? '<div class="conta-tags"><span class="tag tag-emdia">Quitada 🎉</span></div>' : n.acordo ? '<div class="conta-tags"><span class="tag tag-emdia">🤝 Em acordo · parcelas em 📅 Contas</span></div>' : `
+      ${n.quitada ? '<div class="conta-tags"><span class="tag tag-emdia">Quitada</span></div>' : n.acordo ? '<div class="conta-tags"><span class="tag tag-emdia">' + icone('acordo', 13) + ' Em acordo · parcelas em Contas</span></div>' : `
       <label class="check troca"><input type="checkbox" data-neg-incluir="${n.id}" ${n.incluir ? 'checked' : ''}> Somar no meu plano deste mês</label>`}
       <div class="conta-acoes">
         ${n.quitada ? '' : `<button type="button" class="btn-pagar" data-neg-quitei="${n.id}">✓ Quitei</button>`}
@@ -86,7 +86,7 @@
       if (!x || typeof x.id !== 'string' || vistos.has(x.id) || !(Number(x.valor) > 0)) return;
       vistos.add(x.id); dados.importados.push(x.id);
       lista().push({ id: x.id, credor: String(x.credor || 'dívida').slice(0, 60), valor: r2(Number(x.valor)),
-        obs: String(x.obs || '').slice(0, 100), incluir: !!x.incluir, quitada: false,
+        obs: String(x.obs || '').slice(0, 100), incluir: !!x.incluir, quitada: !!x.quitada, acordo: !!x.acordo,
         ...(Number(x.oferta) > 0 ? { oferta: r2(Number(x.oferta)) } : {}) });
       n++;
     });

@@ -42,8 +42,8 @@
         <div id="chips" class="chips"></div>
         <div class="segmento tres" id="tipo-gasto" role="radiogroup" aria-label="Esse gasto se repete?">
           <button type="button" data-tg="agora" class="sel">Só agora</button>
-          <button type="button" data-tg="fixo">🔁 Fixo</button>
-          <button type="button" data-tg="parcelado">🔢 Parcelado</button>
+          <button type="button" data-tg="fixo"><i data-i="repetir"></i> Fixo</button>
+          <button type="button" data-tg="parcelado"><i data-i="parcelas"></i> Parcelado</button>
         </div>
         <div id="grupo-tg-fixo" class="linha-tg" hidden>
           <label for="tg-dia">Vence todo dia</label>
@@ -61,7 +61,7 @@
       </form>
 
       <div id="nota-painel" class="card nota-painel" hidden>
-        <p class="rotulo">🧾 Nota lida</p>
+        <p class="rotulo"><i data-i="recibo"></i> Nota lida</p>
         <p id="nota-status" class="sub"></p>
         <div id="nota-campos" hidden>
           <label for="nota-loja">Onde foi</label>
@@ -128,10 +128,10 @@
       <h2>Pergunte à assistente</h2>
       <p class="sub sub-topo">Abre o Claude já com os seus números do mês.</p>
       <div class="perguntas">
-        <a class="pergunta" data-pergunta="analise" target="_blank" rel="noopener">📋 Analise meu mês</a>
-        <a class="pergunta" data-pergunta="cortar" target="_blank" rel="noopener">✂️ Onde posso cortar?</a>
-        <a class="pergunta" data-pergunta="orcamento" target="_blank" rel="noopener">🎯 Monte meu orçamento</a>
-        <a class="pergunta" data-pergunta="habito" target="_blank" rel="noopener">🧠 Por que gasto assim?</a>
+        <a class="pergunta" data-pergunta="analise" target="_blank" rel="noopener"><i data-i="lista"></i> Analise meu mês</a>
+        <a class="pergunta" data-pergunta="cortar" target="_blank" rel="noopener"><i data-i="tesoura"></i> Onde posso cortar?</a>
+        <a class="pergunta" data-pergunta="orcamento" target="_blank" rel="noopener"><i data-i="alvo"></i> Monte meu orçamento</a>
+        <a class="pergunta" data-pergunta="habito" target="_blank" rel="noopener"><i data-i="cerebro"></i> Por que gasto assim?</a>
       </div>
       <form id="form-pergunta" class="card" autocomplete="off">
         <label for="pergunta-livre">Ou escreva sua pergunta</label>
@@ -166,13 +166,13 @@
       <div class="card">
         <p class="rotulo">Aparência</p>
         <div class="linha-botoes">
-          <button type="button" class="btn-sec" data-tema="light">☀️ Claro</button>
-          <button type="button" class="btn-sec" data-tema="dark">🌙 Escuro</button>
+          <button type="button" class="btn-sec" data-tema="light"><i data-i="sol"></i> Claro</button>
+          <button type="button" class="btn-sec" data-tema="dark"><i data-i="lua"></i> Escuro</button>
         </div>
       </div>
 
       <div class="card" id="card-nuvem">
-        <p class="rotulo">☁️ Nuvem (Supabase)</p>
+        <p class="rotulo"><i data-i="nuvem"></i> Nuvem (Supabase)</p>
         <p id="nuvem-status" class="sub sub-topo">Desligada. Seus dados ficam só neste celular.</p>
         <div id="nuvem-form">
           <label for="nuvem-url">Project URL</label>
@@ -191,7 +191,7 @@
           </details>
         </div>
         <div id="nuvem-ligada" hidden>
-          <button id="nuvem-agora" type="button" class="btn-sec largo">🔄 Sincronizar agora</button>
+          <button id="nuvem-agora" type="button" class="btn-sec largo"><i data-i="atualizar"></i> Sincronizar agora</button>
           <button id="nuvem-sair" type="button" class="btn-link">Desconectar este celular</button>
         </div>
         <div id="nuvem-escolha" class="nuvem-escolha" hidden>
@@ -202,9 +202,9 @@
       </div>
 
       <div class="card">
-        <p class="rotulo">💬 Lançamentos do chat</p>
+        <p class="rotulo"><i data-i="ia"></i> Lançamentos do chat</p>
         <p id="sync-status" class="sub">Ainda não buscou.</p>
-        <button id="btn-sync" type="button" class="btn-primary">🔄 Buscar do chat agora</button>
+        <button id="btn-sync" type="button" class="btn-primary"><i data-i="atualizar"></i> Buscar do chat agora</button>
       </div>
 
       <div class="card">
@@ -236,8 +236,8 @@
       </div>
 
       <div class="segmento" role="tablist">
-        <button type="button" data-seg2="contas" class="sel">📅 Contas e parcelas</button>
-        <button type="button" data-seg2="neg">⚠️ Negativações</button>
+        <button type="button" data-seg2="contas" class="sel"><i data-i="calendario"></i> Contas e parcelas</button>
+        <button type="button" data-seg2="neg"><i data-i="alerta"></i> Negativações</button>
       </div>
 
       <div id="seg-neg" hidden>
@@ -264,7 +264,7 @@
 
       <div id="seg-contas">
         <form id="form-agora" class="card agora" autocomplete="off">
-          <label for="agora-texto">⚡ Paguei agora</label>
+          <label for="agora-texto"><i data-i="raio"></i> Paguei agora</label>
           <div class="linha-entrada">
             <input id="agora-texto" type="text" placeholder="ex: 70 maconha">
             <button type="submit" id="agora-salvar" class="btn-pagar" disabled>Salvar</button>
@@ -280,9 +280,9 @@
 
           <p class="rotulo">Tipo</p>
           <div class="chips" id="conta-tipos">
-            <button type="button" class="chip sel" data-tipo="fixa">🔁 Fixa todo mês</button>
-            <button type="button" class="chip" data-tipo="parcelada">🔢 Parcelada</button>
-            <button type="button" class="chip" data-tipo="unica">1️⃣ Só uma vez</button>
+            <button type="button" class="chip sel" data-tipo="fixa"><i data-i="repetir"></i> Fixa todo mês</button>
+            <button type="button" class="chip" data-tipo="parcelada"><i data-i="parcelas"></i> Parcelada</button>
+            <button type="button" class="chip" data-tipo="unica"><i data-i="um"></i> Só uma vez</button>
           </div>
 
           <label for="conta-valor" id="conta-valor-rotulo">Valor por mês</label>
@@ -327,9 +327,9 @@
         <form id="form-compra" class="card" autocomplete="off" hidden>
           <label for="compra-texto">Nova compra no cartão</label>
           <div class="segmento tres" id="tipo-compra" role="radiogroup" aria-label="Tipo de compra">
-            <button type="button" data-tc="nova" class="sel">🛒 Nova</button>
-            <button type="button" data-tc="andamento">🔢 Já parcelada</button>
-            <button type="button" data-tc="fixa">🔁 Fixa</button>
+            <button type="button" data-tc="nova" class="sel"><i data-i="carrinho"></i> Nova</button>
+            <button type="button" data-tc="andamento"><i data-i="parcelas"></i> Já parcelada</button>
+            <button type="button" data-tc="fixa"><i data-i="repetir"></i> Fixa</button>
           </div>
           <input id="compra-texto" type="text" placeholder="ex: 300 celular 10x">
           <div id="grupo-andamento" class="linha-tg" hidden>
@@ -379,9 +379,9 @@
 
       <form id="form-emp" class="card" autocomplete="off">
         <div class="segmento tres" id="tipo-emp" role="radiogroup" aria-label="Tipo de movimento">
-          <button type="button" data-te="entrada" class="sel">💰 Entrou</button>
-          <button type="button" data-te="despesa">🧾 Despesa</button>
-          <button type="button" data-te="retirada">💸 Liberar p/ mim</button>
+          <button type="button" data-te="entrada" class="sel"><i data-i="entrada"></i> Entrou</button>
+          <button type="button" data-te="despesa"><i data-i="recibo"></i> Despesa</button>
+          <button type="button" data-te="retirada"><i data-i="liberar"></i> Liberar p/ mim</button>
         </div>
         <input id="emp-texto" type="text" placeholder="ex: 540 Ademicon">
         <label class="check" id="emp-previsto-linha"><input id="emp-previsto" type="checkbox"> Ainda vai entrar (não caiu)</label>
@@ -401,13 +401,13 @@
   </div>
 
   <nav class="abas">
-    <button data-tab="lancar" class="ativa"><span>➕</span>Lançar</button>
-    <button data-tab="painel"><span>📊</span>Painel</button>
-    <button data-tab="contas"><span>📅</span>Contas</button>
-    <button data-tab="cartao"><span>💳</span>Cartão</button>
-    <button data-tab="empresa"><span>🏢</span>Empresa</button>
-    <button data-tab="assistente"><span>💬</span>IA</button>
-    <button data-tab="ajustes" hidden><span>⚙️</span>Ajustes</button>
+    <button data-tab="lancar" class="ativa"><span></span>Lançar</button>
+    <button data-tab="painel"><span></span>Painel</button>
+    <button data-tab="contas"><span></span>Contas</button>
+    <button data-tab="cartao"><span></span>Cartão</button>
+    <button data-tab="empresa"><span></span>Empresa</button>
+    <button data-tab="assistente"><span></span>IA</button>
+    <button data-tab="ajustes" hidden><span></span>Ajustes</button>
   </nav>
 
   <script src="icones.js"></script>

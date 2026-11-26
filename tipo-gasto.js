@@ -45,13 +45,13 @@
     let conta, msg;
     if (p.tipo === 'fixo') {
       conta = { tipo: 'fixa', total: null, pagas: 1 };
-      msg = `🔁 Virou conta fixa: todo dia ${dia}`;
+      msg = `Virou conta fixa: todo dia ${dia}`;
     } else {
       const k = Math.min(p.parcela, p.total);
       conta = { tipo: 'parcelada', total: p.total, pagas: k };
       g.descricao = `${g.descricao} (${k}/${p.total})`;
       const falta = p.total - k;
-      msg = falta ? `🔢 Faltam ${falta} parcelas de ${brl(g.valor)}` : '🎉 Era a última parcela';
+      msg = falta ? `Faltam ${falta} parcelas de ${brl(g.valor)}` : 'Era a última parcela';
     }
     g.origem = 'conta'; // conta fixa/parcela não come o "posso gastar hoje"
     Object.assign(conta, {

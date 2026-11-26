@@ -72,7 +72,7 @@ function acharGargalos(n) {
   if (!n.orc) {
     add('info', 'Sem limite do mês',
       'Sem uma meta, o cérebro não tem referência do que é "muito".',
-      'Vá em ⚙️ Ajustes e coloque quanto pode gastar por mês.');
+      'Vá em Ajustes e coloque quanto pode gastar por mês.');
   } else if (n.total > n.orc) {
     add('bad', 'Limite estourado',
       `Você já gastou ${brl(n.total)}, ${brl(n.total - n.orc)} acima do limite de ${brl(n.orc)}.`,
@@ -97,7 +97,7 @@ function acharGargalos(n) {
     } else {
       add('info', `Ainda vão sair ${brl(cp.aPagar)} este mês`,
         cp.itens.slice(0, 3).map(i => `${i.nome} ${brl(i.valor)}`).join(' · '),
-        'Confira as datas na aba 📅 Contas.');
+        'Confira as datas na aba Contas.');
     }
   }
   if (cp) cp.cartoes.forEach(u => {
@@ -114,7 +114,7 @@ function acharGargalos(n) {
     const c = CAT[id] || CAT.outros;
     if (id !== 'casa' && pct >= 35) {
       const corteMes = id === 'contas' ? v * 0.1 : (v / n.dia) * n.diasMes * 0.1;
-      add('warn', `${c.emoji} ${c.nome} levou ${pct}% do mês`,
+      add('warn', `${c.nome} levou ${pct}% do mês`,
         `Foram ${brl(v)} até agora. É aqui que o dinheiro mais escapa.`,
         `Cortar só 10% nessa categoria libera cerca de ${brl(corteMes)} no mês.`);
     }
@@ -134,7 +134,7 @@ function acharGargalos(n) {
       Object.entries(n.porCat).forEach(([id, v]) => { const d = v - (n.porCatAnt[id] || 0); if (d > alta) { alta = d; maiorAlta = id; } });
       add('warn', `Gastando ${Math.round(dif)}% a mais que no mês passado`,
         `Até o dia ${n.dia}: ${brl(n.total)} agora, contra ${brl(n.totalAnt)} no mesmo período do mês passado.`,
-        maiorAlta ? `O que mais subiu: ${CAT[maiorAlta].emoji} ${CAT[maiorAlta].nome} (+${brl(alta)}).` : '');
+        maiorAlta ? `O que mais subiu: ${CAT[maiorAlta].nome} (+${brl(alta)}).` : '');
     } else if (dif <= -10) {
       add('ok', `Gastando ${Math.round(-dif)}% a menos que no mês passado`,
         `Até o dia ${n.dia}: ${brl(n.total)} agora, contra ${brl(n.totalAnt)} no mesmo período do mês passado.`,
@@ -161,7 +161,7 @@ function acharGargalos(n) {
 function resumo(n) {
   if (!n.doMes.length) return 'Ainda não tenho gastos deste mês. Lance por alguns dias e eu te mostro onde o dinheiro está escapando.';
   let s = `Em ${nomeMes(n.agora)} você gastou <strong>${brl(n.total)}</strong> em ${n.doMes.length} lançamento(s).`;
-  if (n.orc && n.projecao) s += n.projecao > n.orc ? ' Nesse ritmo, vai passar do limite.' : ' Nesse ritmo, fecha dentro do limite. 👏';
+  if (n.orc && n.projecao) s += n.projecao > n.orc ? ' Nesse ritmo, vai passar do limite.' : ' Nesse ritmo, fecha dentro do limite.';
   return s;
 }
 
@@ -242,7 +242,7 @@ function desenharAssistente() {
   const n = numerosDoMes();
   document.getElementById('ia-resumo').innerHTML = resumo(n);
   document.getElementById('ia-gargalos').innerHTML = acharGargalos(n).map(g =>
-    `<li class="${g.nivel}"><b>${escapar(g.titulo)}</b><p>${escapar(g.texto)}</p>${g.acao ? `<p class="acao">👉 ${escapar(g.acao)}</p>` : ''}</li>`
+    `<li class="${g.nivel}"><b>${escapar(g.titulo)}</b><p>${escapar(g.texto)}</p>${g.acao ? `<p class="acao">→ ${escapar(g.acao)}</p>` : ''}</li>`
   ).join('') || '<li class="ok"><b>Nenhum gargalo agora</b><p>Seus gastos estão equilibrados. Continue lançando.</p></li>';
   document.querySelectorAll('[data-pergunta]').forEach(a => { a.href = linkClaude(PERGUNTAS[a.dataset.pergunta]); });
   document.getElementById('ia-dica').textContent = dicaDoDia();

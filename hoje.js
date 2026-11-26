@@ -19,16 +19,16 @@
     if (s) {
       // dinheiro do início do dia: o saldo de agora + o que já gastei hoje
       livreMes = r2(s.agora + gastoHoje + s.aReceber - s.aPagar - neg);
-      partes = [['💰 Tenho agora', s.agora], ['↩️ O que já gastei hoje', gastoHoje],
-        ['⏳ Ainda vai entrar', s.aReceber], ['📅 Contas e faturas do mês', -s.aPagar]];
-      if (neg) partes.push(['⚠️ Negativações no plano', -neg]);
+      partes = [[icone('carteira', 13) + ' Tenho agora', s.agora], [icone('desfazer', 13) + ' O que já gastei hoje', gastoHoje],
+        [icone('ampulheta', 13) + ' Ainda vai entrar', s.aReceber], [icone('calendario', 13) + ' Contas e faturas do mês', -s.aPagar]];
+      if (neg) partes.push([icone('alerta', 13) + ' Negativações no plano', -neg]);
     } else if (dados.orcamento > 0) {
       const km = chaveMes(agora);
       const gastoMes = dados.gastos.filter(g => g.data.startsWith(km)).reduce((t, g) => t + g.valor, 0);
       const aPagar = window.compromissos ? window.compromissos.resumo().aPagar : 0;
       livreMes = r2(dados.orcamento - gastoMes + gastoHoje - aPagar - neg);
-      partes = [['🎯 Limite do mês', dados.orcamento], ['➖ Já gastei no mês (sem hoje)', -(gastoMes - gastoHoje)], ['📅 Contas a vencer', -aPagar]];
-      if (neg) partes.push(['⚠️ Negativações no plano', -neg]);
+      partes = [[icone('alvo', 13) + ' Limite do mês', dados.orcamento], [icone('menos', 13) + ' Já gastei no mês (sem hoje)', -(gastoMes - gastoHoje)], [icone('calendario', 13) + ' Contas a vencer', -aPagar]];
+      if (neg) partes.push([icone('alerta', 13) + ' Negativações no plano', -neg]);
     } else return null;
 
     const porDia = livreMes > 0 ? r2(livreMes / diasRestantes) : 0;
@@ -40,19 +40,19 @@
     const el = $('card-hoje');
     const c = calcular();
     if (!c) {
-      el.innerHTML = `<span class="rotulo-suave">🎯 Posso gastar hoje</span>
-        <span class="sub">Coloque seu saldo no 📊 Painel (ou um limite em ⚙️ Ajustes) para eu calcular.</span>`;
+      el.innerHTML = `<span class="rotulo-suave">${icone('alvo', 16)} Posso gastar hoje</span>
+        <span class="sub">Coloque seu saldo no Painel (ou um limite em Ajustes) para eu calcular.</span>`;
       return;
     }
     let cor, titulo, valor, sub;
     if (c.livreMes <= 0) {
-      cor = 'bad'; titulo = '🎯 Posso gastar hoje'; valor = brl(0);
+      cor = 'bad'; titulo = icone('alvo', 16) + ' Posso gastar hoje'; valor = brl(0);
       sub = `Este mês não sobra para gastos extras. Faltam ${brl(-c.livreMes)} para fechar as contas.`;
     } else if (c.resta < 0) {
-      cor = 'bad'; titulo = '🎯 Passei do valor de hoje'; valor = brl(-c.resta);
+      cor = 'bad'; titulo = icone('alvo', 16) + ' Passei do valor de hoje'; valor = brl(-c.resta);
       sub = `Hoje o valor era ${brl(c.porDia)}. O de amanhã vai diminuir.`;
     } else {
-      cor = c.resta >= c.porDia * 0.5 ? 'ok' : 'warn'; titulo = '🎯 Posso gastar hoje'; valor = brl(c.resta);
+      cor = c.resta >= c.porDia * 0.5 ? 'ok' : 'warn'; titulo = icone('alvo', 16) + ' Posso gastar hoje'; valor = brl(c.resta);
       sub = c.gastoHoje ? `de ${brl(c.porDia)} · já gastei ${brl(c.gastoHoje)} hoje` : `${brl(c.porDia)} por dia nos próximos ${c.diasRestantes} dias`;
     }
     let html = `<span class="rotulo-suave">${titulo}</span><strong class="valor-grande num ${cor}">${valor}</strong><span class="sub">${sub}</span>`;

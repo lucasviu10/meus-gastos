@@ -43,6 +43,18 @@
     });
 
     let extras = 0;
+    ['contas', 'cartoes', 'compras'].forEach(k => (Array.isArray(remoto[k]) ? remoto[k] : []).forEach(x => {
+      if (!x || typeof x.id !== 'string' || !x.id || vistos.has(x.id) || !window.compromissos) return;
+      vistos.add(x.id); dados.importados.push(x.id);
+      if (!Array.isArray(dados[k])) dados[k] = [];
+      dados[k].push(window.compromissos.normalizar(k, x));
+      extras++;
+    }));
+
+    if (window.saldoAplicarRemoto) extras += window.saldoAplicarRemoto(remoto, vistos);
+    if (window.empresaAplicarRemoto) extras += window.empresaAplicarRemoto(remoto, vistos);
+    if (window.negativacoesAplicarRemoto) extras += window.negativacoesAplicarRemoto(remoto, vistos);
+
     // correções em gastos que já existem: {uid, id, descricao?, categoria?, nota64?}
     (Array.isArray(remoto.atualizar) ? remoto.atualizar : []).forEach(u => {
       if (!u || typeof u.uid !== 'string' || vistos.has(u.uid)) return;
@@ -62,18 +74,6 @@
       if (nota) g.nota = nota;
       extras++;
     });
-    ['contas', 'cartoes', 'compras'].forEach(k => (Array.isArray(remoto[k]) ? remoto[k] : []).forEach(x => {
-      if (!x || typeof x.id !== 'string' || !x.id || vistos.has(x.id) || !window.compromissos) return;
-      vistos.add(x.id); dados.importados.push(x.id);
-      if (!Array.isArray(dados[k])) dados[k] = [];
-      dados[k].push(window.compromissos.normalizar(k, x));
-      extras++;
-    }));
-
-    if (window.saldoAplicarRemoto) extras += window.saldoAplicarRemoto(remoto, vistos);
-    if (window.empresaAplicarRemoto) extras += window.empresaAplicarRemoto(remoto, vistos);
-    if (window.negativacoesAplicarRemoto) extras += window.negativacoesAplicarRemoto(remoto, vistos);
-
     (Array.isArray(remoto.apagar) ? remoto.apagar : []).forEach(id => {
       const antes = dados.gastos.length;
       dados.gastos = dados.gastos.filter(g => g.id !== id);

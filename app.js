@@ -327,7 +327,7 @@ function desenharPainel() {
     $('destaque-rotulo').textContent = 'Gastei este mês';
     valorEl.textContent = brl(total);
     barra.style.width = '0';
-    $('destaque-sub').textContent = 'Defina seu limite em ⚙️ Ajustes para ver quanto sobra.';
+    $('destaque-sub').textContent = 'Defina seu limite em Ajustes para ver quanto sobra.';
   }
 
   // categorias
@@ -412,7 +412,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '31';
+const VERSAO_APP = '33';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;

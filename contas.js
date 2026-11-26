@@ -166,10 +166,10 @@
     const qtd = atrasadas.length + atrasoFat.length;
     const alerta = $('ct-atraso');
     alerta.hidden = !qtd;
-    if (qtd) alerta.innerHTML = `⚠️ <b>${qtd} ${qtd === 1 ? 'conta atrasada' : 'contas atrasadas'}</b> · ${brl(totalAtraso)} de meses anteriores já somados acima`;
+    if (qtd) alerta.innerHTML = `${icone('alerta', 16)} <b>${qtd} ${qtd === 1 ? 'conta atrasada' : 'contas atrasadas'}</b> · ${brl(totalAtraso)} de meses anteriores já somados acima`;
     $('ct-apagar-sub').textContent = r.itens.length
       ? r.itens.slice(0, 4).map(i => `${i.nome} ${brl(i.valor)}`).join(' · ') + (r.itens.length > 4 ? ' …' : '')
-      : 'Nada pendente este mês. 👏';
+      : 'Nada pendente este mês.';
     $('ct-proximos').innerHTML = r.proximos.map(p =>
       `<div><small>${nomeMes(p.mes, true)}</small><strong class="num">${brl(p.total)}</strong></div>`).join('');
 
@@ -180,7 +180,7 @@
     if (tem) {
       const km = mesAtual();
       const gastoMes = dados.gastos.filter(g => g.data.startsWith(km)).reduce((s, g) => s + g.valor, 0);
-      let html = `<span class="rotulo-suave">📅 Ainda vai sair este mês</span><strong class="valor-medio num">${brl(r.aPagar)}</strong>`;
+      let html = `<span class="rotulo-suave">${icone('calendario', 14)} Ainda vai sair este mês</span><strong class="valor-medio num">${brl(r.aPagar)}</strong>`;
       if (dados.orcamento > 0) {
         const sobra = dados.orcamento - gastoMes - r.aPagar;
         html += `<span class="sub">Sobra de verdade, já tirando as contas: <b class="${sobra < 0 ? 'bad' : 'ok'}">${brl(sobra)}</b></span>`;
@@ -198,15 +198,15 @@
     $('lista-contas').innerHTML = lista.length ? lista.map(c => {
       const st = statusConta(c);
       const cat = CAT[c.categoria] || CAT.contas;
-      const tag = c.tipo === 'fixa' ? '🔁 Fixa' : c.tipo === 'unica' ? '1️⃣ Única'
+      const tag = c.tipo === 'fixa' ? icone('repetir', 13) + ' Fixa' : c.tipo === 'unica' ? 'Única'
         : `Parcela ${Math.min(c.pagas + 1, c.total)} de ${c.total}`;
       const mesesAtraso = st === 'atrasada' ? difMes(c.proxMes, mesAtual()) : 0;
       const acumulado = st === 'atrasada' ? devidoAte(c, mesAtual()) : 0;
       const dataVenc = `${pad(c.dia)}/${c.proxMes.slice(5)}`;
       const varios = st === 'atrasada' && acumulado > c.valor + 0.001;
-      const stTxt = { atrasada: `⚠️ Venceu ${dataVenc} · atrasada há ${mesesAtraso} ${mesesAtraso === 1 ? 'mês' : 'meses'}${varios ? ` · acumulado ${brl(acumulado)}` : ''}`,
+      const stTxt = { atrasada: `${icone('alerta', 13)} Venceu ${dataVenc} · atrasada há ${mesesAtraso} ${mesesAtraso === 1 ? 'mês' : 'meses'}${varios ? ` · acumulado ${brl(acumulado)}` : ''}`,
         pagar: `Vence ${dataVenc}`,
-        emdia: c.tipo === 'unica' ? `Vence ${pad(c.dia)}/${c.proxMes.slice(5)}` : `Paga ✓ · próxima em ${nomeMes(c.proxMes, true)}`, quitada: 'Quitada 🎉' }[st];
+        emdia: c.tipo === 'unica' ? `Vence ${pad(c.dia)}/${c.proxMes.slice(5)}` : `Paga ✓ · próxima em ${nomeMes(c.proxMes, true)}`, quitada: 'Quitada' }[st];
       let extra = '';
       if (c.tipo === 'parcelada') {
         const pago = c.pagas * c.valor, total = c.total * c.valor;
@@ -217,7 +217,7 @@
       const podeDesmarcar = !!ultimoPagamento(c);
       const estaPaga = (st === 'emdia' || st === 'quitada') && podeDesmarcar;
       return `<li class="conta st-${st}">
-        <div class="conta-topo"><span>${cat.emoji} ${escapar(c.nome)}</span><strong class="num">${brl(c.valor)}</strong></div>
+        <div class="conta-topo"><span class="cat-nome"><span class="cat-ico">${iconeCat(cat, 16)}</span>${escapar(c.nome)}</span><strong class="num">${brl(c.valor)}</strong></div>
         <div class="conta-tags"><span class="tag">${tag}</span><span class="tag tag-${st}">${stTxt}</span></div>
         ${extra}
         <div class="conta-acoes">
@@ -338,8 +338,8 @@
     }).filter(x => x.c.fixa || (x.c.parcelas > 1 && x.ps.length));
     if (!ativas.length) return '';
     return `<details class="compras-ativas"><summary>Parcelados e fixos neste cartão (${ativas.length})</summary><ul class="lista compacta">${ativas.map(({ c, ps }) => {
-      const info = c.fixa ? `🔁 ${brl(c.valor)} todo mês` : `${brl(c.valor / c.parcelas)} · faltam ${ps.length} de ${c.parcelas} · resta ${brl(ps.reduce((s, p) => s + p.valor, 0))}`;
-      return `<li><span class="emoji">${(CAT[c.categoria] || CAT.outros).emoji}</span><span class="desc">${escapar(c.descricao)}<small>${info}</small></span>
+      const info = c.fixa ? `${icone('repetir', 12)} ${brl(c.valor)} todo mês` : `${brl(c.valor / c.parcelas)} · faltam ${ps.length} de ${c.parcelas} · resta ${brl(ps.reduce((s, p) => s + p.valor, 0))}`;
+      return `<li><span class="emoji">${iconeCat(CAT[c.categoria] || CAT.outros, 18)}</span><span class="desc">${escapar(c.descricao)}<small>${info}</small></span>
         <button type="button" class="del" data-apagar-compra="${c.id}" aria-label="Apagar">✕</button></li>`;
     }).join('')}</ul></details>`;
   }
@@ -362,16 +362,16 @@
       if (prox) {
         const f = u.faturas[prox];
         const atrasoF = difMes(prox, mesAtual()) > 0;
-        fatura = `${atrasoF ? `<p class="alerta-atraso">⚠️ Fatura de ${nomeMes(prox)} em atraso</p>` : ''}<div class="fatura-topo"><span>Fatura de ${nomeMes(prox)} · vence ${pad(c.vence)}/${prox.slice(5)}</span><strong class="num">${brl(f.total)}</strong></div>
-          <ul class="lista compacta">${f.itens.map(p => `<li><span class="emoji">${(CAT[p.compra.categoria] || CAT.outros).emoji}</span>
-            <span class="desc">${escapar(p.compra.descricao)}${p.fixa ? ' <small>🔁 todo mês</small>' : p.n > 1 ? ` <small>parcela ${p.k}/${p.n} · ${p.n - p.k ? `faltam ${p.n - p.k}` : 'última'}</small>` : ''}</span>
+        fatura = `${atrasoF ? `<p class="alerta-atraso">${icone('alerta', 14)} Fatura de ${nomeMes(prox)} em atraso</p>` : ''}<div class="fatura-topo"><span>Fatura de ${nomeMes(prox)} · vence ${pad(c.vence)}/${prox.slice(5)}</span><strong class="num">${brl(f.total)}</strong></div>
+          <ul class="lista compacta">${f.itens.map(p => `<li><span class="emoji">${iconeCat(CAT[p.compra.categoria] || CAT.outros, 18)}</span>
+            <span class="desc">${escapar(p.compra.descricao)}${p.fixa ? ' <small>' + icone('repetir', 12) + ' todo mês</small>' : p.n > 1 ? ` <small>parcela ${p.k}/${p.n} · ${p.n - p.k ? `faltam ${p.n - p.k}` : 'última'}</small>` : ''}</span>
             <span class="val num">${brl(p.valor)}</span>
             <button type="button" class="del" data-apagar-compra="${p.compra.id}" aria-label="Apagar compra">✕</button></li>`).join('')}</ul>
           <button type="button" class="btn-pagar largo" data-pagar-fatura="${c.id}" data-mes="${prox}">✓ Paguei esta fatura</button>`;
       }
       const seguintes = u.meses.slice(1, 5);
       return `<div class="card cartao">
-        <div class="conta-topo"><span>💳 ${escapar(c.nome)}</span><button type="button" class="btn-link" data-apagar-cartao="${c.id}">Apagar</button></div>
+        <div class="conta-topo"><span class="cat-nome"><span class="cat-ico">${icone('cartao', 16)}</span>${escapar(c.nome)}</span><button type="button" class="btn-link" data-apagar-cartao="${c.id}">Apagar</button></div>
         <div class="linha-valor"><span class="rotulo-suave">Disponível</span><strong class="valor-medio num ${cor}">${brl(u.disponivel)}</strong></div>
         <div class="barra"><div class="barra-cheia" style="width:${pct}%;background:var(--${cor})"></div></div>
         <p class="sub">Usado ${brl(u.usado)} de ${brl(c.limite)} · fecha dia ${c.fecha} · vence dia ${c.vence}</p>
@@ -484,7 +484,7 @@
     const desc = r.descricao || 'compra';
     if (tipoCompra === 'fixa') {
       return { compra: { descricao: desc, valor: r.valor, parcelas: 1, fixa: true, data: isoDia(new Date()), categoria: r.categoria, primeiraFatura: faturaAberta(c) },
-        resumo: `<strong>${brl(r.valor)}</strong> todo mês · 🔁 ${escapar(desc)} · a partir da fatura de ${nomeMes(faturaAberta(c), true)}` };
+        resumo: `<strong>${brl(r.valor)}</strong> todo mês · ${icone('repetir', 13)} ${escapar(desc)} · a partir da fatura de ${nomeMes(faturaAberta(c), true)}` };
     }
     const k = +$('compra-k').value, n = +$('compra-n').value;
     if (!(n >= 2) || !(k >= 1) || k > n) return { erro: 'Preencha: estou na parcela __ de __.' };

@@ -124,3 +124,20 @@ h2 { font-size: 12px; letter-spacing: .08em; font-weight: 650; }
 /* Contas e cartões */
 .conta { border: 0; border-left: 4px solid var(--line); border-radius: 16px; box-shadow: var(--sombra); background: var(--card); }
 .tag { background: var(--soft); }
+
+/* Legibilidade dentro do cartão verde */
+.a-receber .desc small { color: rgba(255,255,255,.7); }
+.a-receber .del { color: #fff !important; opacity: .75; }
+.saldo-linhas span .ico, .hoje-conta span .ico { opacity: .85; }
+
+/* Ícones nos textos e botões */
+.rotulo .ico, .rotulo-suave .ico, label .ico, .segmento .ico, .btn-sec .ico, .btn-primary .ico, .pergunta .ico { vertical-align: -0.22em; margin-right: 2px; }
+.pergunta { display: flex; align-items: center; gap: 8px; border: 0; background: var(--soft); border-radius: 14px; font-weight: 550; }
+.pergunta .ico { color: var(--accent); }
+.tag .ico { vertical-align: -0.15em; }
+.emp-cabecalho h1 { display: flex; align-items: center; gap: 10px; }
+.emp-cabecalho h1 .ico { color: var(--accent); }
+.gargalos li { border: 0; border-left: 4px solid var(--line); box-shadow: var(--sombra); border-radius: 16px; }
+.resumo-ia { background: var(--accent-soft); }
+.chips .chip { white-space: nowrap; }
+.selo-serasa { white-space: nowrap; }

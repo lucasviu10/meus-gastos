@@ -7,6 +7,7 @@
     const span = b.querySelector('span');
     if (span && ABAS[b.dataset.tab]) span.innerHTML = icone(ABAS[b.dataset.tab], 22);
   });
+  document.querySelectorAll('i[data-i]').forEach(el => { el.outerHTML = icone(el.dataset.i, 16); });
   if ($('btn-ajustes')) $('btn-ajustes').innerHTML = icone('ajustes', 20);
   if ($('btn-voz')) $('btn-voz').innerHTML = icone('mic', 24);
   if ($('btn-nota-camera')) $('btn-nota-camera').innerHTML = `${icone('camera', 18)} Tirar foto da nota`;

@@ -9,7 +9,7 @@
     if (!(r.valor > 0)) { $('agora-preview').textContent = 'Falta o valor. Ex: 70 maconha'; $('agora-salvar').disabled = true; return; }
     const c = CAT[r.categoria] || CAT.outros;
     const desc = r.categoria === 'mc' ? 'MC' : (r.descricao || c.nome);
-    $('agora-preview').innerHTML = `<strong>${brl(r.valor)}</strong> · ${escapar(desc)} · ${c.emoji} ${c.nome} · ${dataLegivel(r.data)} · ✅ pago`;
+    $('agora-preview').innerHTML = `<strong>${brl(r.valor)}</strong> · ${escapar(desc)} · ${iconeCat(c, 14)} ${c.nome} · ${dataLegivel(r.data)} · ${icone('check', 14)} pago`;
     $('agora-salvar').disabled = false;
   }
   campo.addEventListener('input', preview);
@@ -21,7 +21,7 @@
     ultimoId = g.id; // "Desfazer" do aviso apaga este gasto
     campo.value = ''; preview();
     desenharTudo();
-    $('toast-text').textContent = `✅ ${brl(g.valor)} pago · ${(CAT[g.categoria] || CAT.outros).nome}`;
+    $('toast-text').textContent = `✓ ${brl(g.valor)} pago · ${(CAT[g.categoria] || CAT.outros).nome}`;
     $('toast-undo').hidden = false; $('toast').hidden = false;
     setTimeout(() => { $('toast').hidden = true; }, 6000);
   });

@@ -32,37 +32,37 @@
   // ---------- Desenhar ----------
   function desenhar() {
     const e = emp();
-    $('emp-cabecalho').innerHTML = `<h1>🏢 ${escapar(e.nome)}</h1>
+    $('emp-cabecalho').innerHTML = `<h1>${icone('empresa', 24)} ${escapar(e.nome)}</h1>
       <p class="sub sub-topo">CNPJ: ${e.cnpj ? formatarCnpj(e.cnpj) : '<i>não informado</i>'}
-      · <button type="button" class="btn-link inline" id="emp-editar">✏️ Editar</button></p>`;
+      · <button type="button" class="btn-link inline" id="emp-editar">${icone('lapis', 13)} Editar</button></p>`;
 
     const s = saldoEmpresa();
-    let html = `<span class="rotulo-suave">Saldo da empresa <small>(já somado no 📊 Painel)</small></span>
+    let html = `<span class="rotulo-suave">Saldo da empresa <small>(já somado no Painel)</small></span>
       <strong class="valor-grande num ${s.saldo < 0 ? 'bad' : 'ok'}">${brl(s.saldo)}</strong>
       <div class="saldo-linhas num">
-        <span>➕ Entrou</span><b class="ok">${brl(s.entrou)}</b>
-        <span>🧾 Despesas</span><b>${brl(s.despesas)}</b>
-        <span>💸 Liberado para mim</span><b>${brl(s.liberado)}</b>
+        <span>${icone('mais', 13)} Entrou</span><b class="ok">${brl(s.entrou)}</b>
+        <span>${icone('recibo', 13)} Despesas</span><b>${brl(s.despesas)}</b>
+        <span>${icone('liberar', 13)} Liberado para mim</span><b>${brl(s.liberado)}</b>
       </div>`;
     if (e.aReceber.length) {
-      html += `<div class="a-receber"><span class="rotulo-suave">⏳ Ainda vai entrar · ${brl(s.aReceber)}</span>
+      html += `<div class="a-receber"><span class="rotulo-suave">${icone('ampulheta', 14)} Ainda vai entrar · ${brl(s.aReceber)}</span>
         <ul class="lista compacta">${e.aReceber.map(x => `<li><span class="desc">${escapar(x.descricao)}</span>
           <span class="val num">${brl(x.valor)}</span>
           <button type="button" class="btn-pagar" data-emp-recebi="${x.id}">✓ Recebi</button>
           <button type="button" class="del" data-emp-del-receber="${x.id}" aria-label="Apagar">✕</button></li>`).join('')}</ul></div>`;
     }
-    if (s.saldo > 0) html += `<button type="button" class="btn-primary" id="emp-liberar-tudo">💸 Liberar ${brl(s.saldo)} para mim</button>`;
+    if (s.saldo > 0) html += `<button type="button" class="btn-primary" id="emp-liberar-tudo">${icone('liberar', 18)} Liberar ${brl(s.saldo)} para mim</button>`;
     $('emp-saldo').innerHTML = html;
 
     const km = chaveMes(new Date());
     const doMes = e.movs.filter(m => m.data.startsWith(km)).sort((a, b) => b.data.localeCompare(a.data));
-    const ICONE = { entrada: '💰', despesa: '🧾', retirada: '💸' };
+    const ICONE = { entrada: icone('entrada', 18), despesa: icone('recibo', 18), retirada: icone('liberar', 18) };
     $('emp-lista').innerHTML = doMes.length ? doMes.map(m => `<li>
       <span class="emoji">${ICONE[m.tipo]}</span>
       <span class="desc">${escapar(m.descricao)}<small>${dataLegivel(m.data)}${m.tipo === 'retirada' ? ' · foi para o seu saldo' : ''}</small></span>
       <span class="val num ${m.tipo === 'entrada' ? 'ok' : ''}">${m.tipo === 'entrada' ? '+' : '−'}${brl(m.valor)}</span>
       <button class="del" data-emp-del="${m.id}" aria-label="Apagar">✕</button></li>`).join('')
-      : '<li class="vazio">Nada este mês. Ex: "540 Ademicon" em 💰 Entrou.</li>';
+      : '<li class="vazio">Nada este mês. Ex: "540 Ademicon" em Entrou.</li>';
   }
 
   // ---------- Dados da empresa ----------
@@ -106,10 +106,10 @@
     if (!$('emp-texto').value.trim()) { $('emp-preview').textContent = 'Valor e o que foi.'; $('emp-salvar').disabled = true; return; }
     const r = ler();
     if (!(r.valor > 0)) { $('emp-preview').textContent = 'Falta o valor.'; $('emp-salvar').disabled = true; return; }
-    const txt = tipo === 'retirada' ? `💸 ${brl(r.valor)} sai da empresa e entra no seu saldo pessoal`
-      : tipo === 'despesa' ? `🧾 Despesa da empresa: ${brl(r.valor)} · ${escapar(r.descricao)}`
-      : $('emp-previsto').checked ? `⏳ Ainda vai entrar: ${brl(r.valor)} · ${escapar(r.descricao)}`
-      : `💰 Entrou na empresa: ${brl(r.valor)} · ${escapar(r.descricao)}`;
+    const txt = tipo === 'retirada' ? `${icone('liberar', 13)} ${brl(r.valor)} sai da empresa e entra no seu saldo pessoal`
+      : tipo === 'despesa' ? `${icone('recibo', 13)} Despesa da empresa: ${brl(r.valor)} · ${escapar(r.descricao)}`
+      : $('emp-previsto').checked ? `${icone('ampulheta', 13)} Ainda vai entrar: ${brl(r.valor)} · ${escapar(r.descricao)}`
+      : `${icone('entrada', 13)} Entrou na empresa: ${brl(r.valor)} · ${escapar(r.descricao)}`;
     $('emp-preview').innerHTML = txt;
     $('emp-salvar').disabled = false;
   }
@@ -129,8 +129,8 @@
     const r = ler(); if (!(r.valor > 0)) return;
     const e = emp();
     let msg;
-    if (tipo === 'retirada') { liberar(r.valor, r.descricao, r.data); msg = `💸 ${brl(r.valor)} liberado para você`; }
-    else if (tipo === 'entrada' && $('emp-previsto').checked) { e.aReceber.push({ id: novoId('r'), valor: r.valor, descricao: r.descricao }); msg = `⏳ ${brl(r.valor)} anotado em "ainda vai entrar"`; }
+    if (tipo === 'retirada') { liberar(r.valor, r.descricao, r.data); msg = `${brl(r.valor)} liberado para você`; }
+    else if (tipo === 'entrada' && $('emp-previsto').checked) { e.aReceber.push({ id: novoId('r'), valor: r.valor, descricao: r.descricao }); msg = `${brl(r.valor)} anotado em "ainda vai entrar"`; }
     else { e.movs.push({ id: novoId('m'), tipo, valor: r.valor, descricao: r.descricao, data: r.data }); msg = `✓ ${tipo === 'entrada' ? 'Entrada' : 'Despesa'} de ${brl(r.valor)} na empresa`; }
     $('emp-texto').value = ''; $('emp-previsto').checked = false; preview();
     salvar(); desenharTudo(); avisar(msg);
@@ -143,7 +143,7 @@
       const x = e.aReceber.find(y => y.id === rc.dataset.empRecebi); if (!x) return;
       e.aReceber = e.aReceber.filter(y => y.id !== x.id);
       e.movs.push({ id: novoId('m'), tipo: 'entrada', valor: x.valor, descricao: x.descricao, data: isoDia(new Date()) });
-      salvar(); desenharTudo(); avisar(`💰 ${x.descricao}: ${brl(x.valor)} entrou na empresa`);
+      salvar(); desenharTudo(); avisar(`${x.descricao}: ${brl(x.valor)} entrou na empresa`);
       return;
     }
     const dr = ev.target.closest('[data-emp-del-receber]');
@@ -166,7 +166,7 @@
       const s = saldoEmpresa();
       if (s.saldo > 0 && confirm(`Liberar ${brl(s.saldo)} da empresa para você?`)) {
         liberar(s.saldo, 'retirada para mim', isoDia(new Date()));
-        salvar(); desenharTudo(); avisar(`💸 ${brl(s.saldo)} liberado para você`);
+        salvar(); desenharTudo(); avisar(`${brl(s.saldo)} liberado para você`);
       }
     }
   });

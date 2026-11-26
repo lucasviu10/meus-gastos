@@ -117,7 +117,7 @@
   function status(txt) { $('nota-status').textContent = txt; }
   function desenharCats() {
     $('nota-cats').innerHTML = CATEGORIAS.map(c =>
-      `<button type="button" class="chip${c.id === catNota ? ' sel' : ''}" data-cat-nota="${c.id}">${c.emoji} ${c.nome}</button>`).join('');
+      `<button type="button" class="chip${c.id === catNota ? ' sel' : ''}" data-cat-nota="${c.id}">${iconeCat(c, 16)} ${c.nome}</button>`).join('');
   }
   function mostrar(r) {
     lida = r;
@@ -173,7 +173,7 @@
     salvar();
     ultimoId = g.id;
     fechar(); desenharTudo();
-    $('toast-text').textContent = `🧾 ${brl(g.valor)} em ${CAT[g.categoria].nome} · ${g.descricao}`;
+    $('toast-text').textContent = `${brl(g.valor)} em ${CAT[g.categoria].nome} · ${g.descricao}`;
     $('toast-undo').hidden = false; $('toast').hidden = false;
     setTimeout(() => { $('toast').hidden = true; }, 6000);
   });
