@@ -79,7 +79,7 @@
   function parar() {
     ouvindo = false;
     botao.classList.remove('ouvindo');
-    botao.textContent = '🎤';
+    botao.innerHTML = icone('mic', 24);
   }
 
   botao.addEventListener('click', () => {
@@ -109,7 +109,7 @@
       rec.start();
       ouvindo = true;
       botao.classList.add('ouvindo');
-      botao.textContent = '⏹';
+      botao.innerHTML = icone('parar', 22);
       preview.textContent = 'Ouvindo… fale: "45 reais no mercado"';
     } catch (e) { parar(); }
   });

@@ -166,7 +166,7 @@ let catEscolhida = null;
 function desenharChips(sugerida) {
   const atual = catEscolhida || sugerida;
   $('chips').innerHTML = CATEGORIAS.map(c =>
-    `<button type="button" class="chip${c.id === atual ? ' sel' : ''}" data-cat="${c.id}">${c.emoji} ${c.nome}</button>`
+    `<button type="button" class="chip${c.id === atual ? ' sel' : ''}" data-cat="${c.id}">${iconeCat(c, 16)} ${c.nome}</button>`
   ).join('');
 }
 function atualizarPreview() {
@@ -238,7 +238,7 @@ function itemLista(g, mostrarData) {
           <button type="button" class="btn-link" data-editar-nota="${g.id}">✏️ ${g.nota ? 'Editar' : 'Adicionar'} detalhe</button></div>`;
   }
   return `<li class="item${aberto ? ' aberto' : ''}" data-gid="${g.id}">
-    <span class="emoji">${c.emoji}</span>
+    <span class="emoji">${iconeCat(c, 18)}</span>
     <span class="desc">${escapar(g.descricao)}${(g.nota || g.itens) && !aberto ? ' <span class="tem-nota" aria-label="tem detalhe">•</span>' : ''}${mostrarData ? `<small>${dataLegivel(g.data)}</small>` : ''}</span>
     <span class="val">${brl(g.valor)}</span>
     <button class="del" data-del="${g.id}" aria-label="Apagar">✕</button>
@@ -341,7 +341,7 @@ function desenharPainel() {
     const aberta = catAberta === id;
     const itens = aberta ? doMes.filter(g => g.categoria === id).sort((a, b) => (b.data + b.criado).localeCompare(a.data + a.criado)) : [];
     return `<li class="cat${aberta ? ' aberta' : ''}"><button type="button" class="cat-botao" data-cat-abrir="${id}" aria-expanded="${aberta}">
-      <div class="topo"><span>${c.emoji} ${c.nome} <span class="seta">${aberta ? '▾' : '›'}</span></span><span><strong>${brl(v)}</strong> <small class="sub">${pct}%</small></span></div>
+      <div class="topo"><span class="cat-nome"><span class="cat-ico">${iconeCat(c, 16)}</span>${c.nome} <span class="seta">${aberta ? '▾' : '›'}</span></span><span><strong>${brl(v)}</strong> <small class="sub">${pct}%</small></span></div>
       <div class="barra"><div class="barra-cheia" style="width:${(v / maior) * 100}%"></div></div></button>
       ${aberta ? `<ul class="lista dentro">${itens.map(g => itemLista(g, true)).join('')}</ul>` : ''}</li>`;
   }).join('') : '<li class="vazio">Sem gastos neste mês.</li>';
@@ -412,7 +412,7 @@ desenharChips(null);
 desenharTudo();
 
 // ---------- Funcionar como app / offline ----------
-const VERSAO_APP = '30';
+const VERSAO_APP = '31';
 if ('serviceWorker' in navigator) {
   const jaTinha = !!navigator.serviceWorker.controller;
   let recarregou = false;

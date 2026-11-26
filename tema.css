@@ -1,0 +1,126 @@
+/* Tema moderno (estilo app de banco): fundo branco, cartões sem borda, verde-escuro, Inter.
+   Só aparência: carrega depois do style.css e sobrescreve. */
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/inter.woff2') format('woff2');
+  font-weight: 100 900; font-style: normal; font-display: swap;
+}
+:root {
+  --bg: #ffffff;
+  --card: #ffffff;
+  --soft: #f3f5f4;
+  --text: #0f1713;
+  --muted: #66706b;
+  --line: #e8ebe9;
+  --accent: #0e5a47;
+  --accent-2: #12785e;
+  --accent-soft: #e5f2ed;
+  --ok: #138a5a;
+  --warn: #c27c0e;
+  --bad: #d23c3c;
+  --bar-bg: #e9edeb;
+  --hero-1: #0b3b30;
+  --hero-2: #12785e;
+  --sombra: 0 1px 2px rgba(16, 24, 20, .05), 0 6px 20px rgba(16, 24, 20, .06);
+}
+[data-theme="dark"] {
+  --bg: #0d1110; --card: #161b19; --soft: #1d2421; --text: #eef3f0; --muted: #98a39e;
+  --line: #262e2b; --accent: #3fcf9a; --accent-2: #2bb383; --accent-soft: #173229;
+  --ok: #4fd69f; --warn: #f2bd4b; --bad: #ff7b7b; --bar-bg: #26302c;
+  --hero-1: #0f2e26; --hero-2: #145c49; --sombra: 0 1px 2px rgba(0,0,0,.3);
+}
+
+body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; letter-spacing: -0.01em; -webkit-font-smoothing: antialiased; }
+h1 { font-size: 26px; font-weight: 750; letter-spacing: -0.03em; }
+h2 { font-size: 12px; letter-spacing: .08em; font-weight: 650; }
+.num, .valor-grande, .valor-medio, .val, .hoje-total { font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.ico { display: inline-block; vertical-align: -0.2em; flex-shrink: 0; }
+
+/* Cartões: sem borda, sombra leve, cantos maiores */
+.card { border: 0; border-radius: 20px; box-shadow: var(--sombra); }
+.resumo-contas, .resumo-ia, .neg-resumo, .agora, .fatura, .a-receber, .compras-ativas, .nuvem-ajuda, #nota-detalhes { box-shadow: none; }
+
+/* Botões do topo */
+.btn-tema { border: 0; background: var(--soft); color: var(--text); width: 42px; height: 42px; display: grid; place-items: center; transition: transform .12s; }
+.btn-tema:active { transform: scale(.92); }
+
+/* Cartão herói: "Posso gastar hoje" e "Tenho agora" */
+.hoje-card, .saldo {
+  background: linear-gradient(135deg, var(--hero-1), var(--hero-2)) !important;
+  color: #fff !important; border: 0; border-radius: 24px; box-shadow: 0 10px 30px rgba(11, 59, 48, .25);
+}
+.hoje-card .rotulo-suave, .saldo .rotulo-suave { color: rgba(255,255,255,.75); font-weight: 550; }
+.hoje-card .sub, .saldo .sub, .saldo-linhas, .saldo-depois { color: rgba(255,255,255,.75) !important; }
+.saldo-linhas b, .saldo-depois b { color: #fff !important; }
+.hoje-card .valor-grande, .saldo .valor-grande { color: #fff; font-size: 44px; font-weight: 800; }
+.hoje-card .ok, .saldo .ok { color: #8ff0c6 !important; }
+.hoje-card .warn, .saldo .warn { color: #ffd479 !important; }
+.hoje-card .bad, .saldo .bad { color: #ffb0b0 !important; }
+.hoje-card .ver-conta { color: rgba(255,255,255,.85) !important; }
+.hoje-conta { border-top-color: rgba(255,255,255,.18); color: rgba(255,255,255,.75); }
+.hoje-conta b { color: #fff; }
+.saldo-depois { border-top-color: rgba(255,255,255,.18); }
+.a-receber { background: rgba(255,255,255,.1); }
+.a-receber .rotulo-suave, .a-receber .desc, .a-receber .val { color: #fff; }
+.a-receber .del { color: rgba(255,255,255,.7); }
+.saldo .linha-entrada input { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.25); color: #fff; }
+.saldo .linha-entrada input::placeholder { color: rgba(255,255,255,.6); }
+.saldo .btn-pagar, .hoje-card .btn-pagar { background: #fff; color: var(--hero-1); }
+
+/* Cartão "Gastei este mês" mais discreto */
+.destaque { background: var(--soft); box-shadow: none; }
+.destaque .valor-grande { font-size: 36px; }
+
+/* Campo de lançar */
+#entrada { border: 0; background: var(--soft); border-radius: 18px; font-weight: 600; }
+#entrada:focus { box-shadow: 0 0 0 2px var(--accent); }
+.btn-voz { border: 0; background: var(--accent); color: #fff; border-radius: 18px; display: grid; place-items: center; }
+.btn-voz.ouvindo { background: var(--bad); }
+.btn-nota { border: 0; background: var(--accent-soft); color: var(--accent); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 14px; }
+
+/* Chips de categoria */
+.chip { border: 0; background: var(--soft); display: inline-flex; align-items: center; gap: 6px; padding: 9px 13px; font-weight: 550; }
+.chip .ico { color: var(--accent); }
+.chip.sel { background: var(--accent); color: #fff; }
+.chip.sel .ico { color: #fff; }
+
+/* Segmentos (Só agora / Fixo / Parcelado, abas internas) */
+.segmento { background: var(--soft); border-radius: 14px; }
+.segmento button { border-radius: 11px; }
+.segmento.tres button.sel { background: var(--accent); color: #fff; }
+
+/* Botões */
+.btn-primary { background: var(--accent); border-radius: 16px; font-weight: 650; transition: transform .12s, opacity .12s; }
+.btn-primary:active, .btn-pagar:active, .chip:active { transform: scale(.97); }
+.btn-primary:disabled { opacity: .3; }
+.btn-sec { border-color: var(--line); color: var(--accent); border-radius: 14px; }
+.btn-pagar { background: var(--accent); border-radius: 12px; }
+
+/* Listas de gastos: ícone num quadradinho */
+.lista li { border-bottom-color: var(--line); }
+.lista .emoji { width: 38px; height: 38px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 18px; flex-shrink: 0; }
+.lista .val { font-weight: 650; }
+.lista .del { color: var(--muted); opacity: .6; }
+
+/* Por categoria */
+.cat-nome { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.cat-ico { width: 28px; height: 28px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; }
+.barra { background: var(--bar-bg); }
+.lista-cat .barra-cheia { background: var(--accent); }
+
+/* Barra de baixo */
+.abas { background: rgba(255,255,255,.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--line); }
+[data-theme="dark"] .abas { background: rgba(22,27,25,.92); }
+.abas button { font-weight: 550; gap: 4px; }
+.abas button span { filter: none; opacity: 1; width: 52px; height: 30px; border-radius: 999px; display: grid; place-items: center; color: var(--muted); transition: background .15s; }
+.abas button.ativa { color: var(--accent); }
+.abas button.ativa span { background: var(--accent-soft); color: var(--accent); }
+
+/* Aviso que desliza de baixo */
+.toast { border-radius: 16px; animation: subir .22s ease-out; }
+@keyframes subir { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+
+/* Contas e cartões */
+.conta { border: 0; border-left: 4px solid var(--line); border-radius: 16px; box-shadow: var(--sombra); background: var(--card); }
+.tag { background: var(--soft); }

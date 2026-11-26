@@ -6,7 +6,7 @@ function aplicarTema(t) {
   document.documentElement.dataset.theme = t;
   try { localStorage.setItem('meus-gastos-tema', t); } catch (e) {}
   document.querySelector('meta[name=theme-color]').content = t === 'dark' ? '#121212' : '#ffffff';
-  document.getElementById('btn-tema').textContent = t === 'dark' ? '☀️' : '🌙';
+  document.getElementById('btn-tema').innerHTML = icone(t === 'dark' ? 'sol' : 'lua', 20);
   document.querySelectorAll('[data-tema]').forEach(b => b.classList.toggle('sel', b.dataset.tema === t));
 }
 document.getElementById('btn-tema').addEventListener('click', () =>
