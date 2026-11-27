@@ -1,5 +1,5 @@
 // Guarda o app no celular para abrir mesmo sem internet.
-const CACHE = 'meus-gastos-v33';
+const CACHE = 'meus-gastos-v34';
 const ARQUIVOS = ['./', 'index.html', 'style.css', 'tema.css', 'fonts/inter.woff2', 'icones.js', 'app.js', 'contas.js', 'saldo.js', 'assistente.js', 'voz.js', 'sync.js', 'tipo-gasto.js', 'empresa.js', 'dividas.js', 'hoje.js', 'pago-agora.js', 'nota.js', 'nuvem.js', 'visual.js', 'manifest.webmanifest', 'icons/cifrao-192.png', 'icons/cifrao-512.png'];
 
 self.addEventListener('install', e => {

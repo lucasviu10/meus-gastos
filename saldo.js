@@ -146,9 +146,35 @@
   // ---------- Lançar entrada: "+500 comissão" ou "recebi 500" ----------
   // "vai entrar 540 ademicon" / "a receber 940 nestlé" = dinheiro que ainda não caiu
   const PALAVRAS_PREVISTO = /(^|\s)(vai entrar|vai cair|a receber|vou receber|falta entrar|falta receber)(\s|$)/;
-  const ehPrevisto = t => PALAVRAS_PREVISTO.test(' ' + semAcento(t) + ' ');
-  const PALAVRAS_ENTRADA = /(^|\s)(recebi|entrou|salario|comissao|comissoes|ganhei|renda|reembolso|pix recebido|caiu)(\s|$)/;
+  const ehPrevisto = t => (modoEntrada() && $('entrada-prevista').checked) || PALAVRAS_PREVISTO.test(' ' + semAcento(t) + ' ');
+  const PALAVRAS_ENTRADA = /(^|\s)(recebi|entrou|salario|comissao|comissoes|ganhei|renda|reembolso|pix recebido|caiu|decimo|13o|ferias|bonus|premio|adiantamento)(\s|$)/;
+  // seletor Saída | Entrada no topo da tela de lançar
+  let modo = 'saida';
+  const modoEntrada = () => modo === 'entrada';
+  function mostrarModo() {
+    const ent = modoEntrada();
+    document.querySelectorAll('#modo-lancar [data-modo]').forEach(b => b.classList.toggle('sel', b.dataset.modo === modo));
+    document.getElementById('modo-lancar').classList.toggle('entrada', ent);
+    $('titulo-lancar').textContent = ent ? 'Nova entrada' : 'Novo gasto';
+    $('entrada').placeholder = ent ? 'ex: 745 13º salário' : 'ex: 45 mercado';
+    $('linha-previsto').hidden = !ent;
+    ['chips', 'tipo-gasto'].forEach(id => { $(id).hidden = ent; });
+    document.querySelector('.linha-nota').hidden = ent;
+    if (ent) { $('grupo-tg-fixo').hidden = true; $('grupo-tg-parc').hidden = true; }
+    else { const tg = document.querySelector('#tipo-gasto .sel'); if (tg) tg.click(); }
+    $('btn-salvar').textContent = ent ? 'Salvar entrada' : 'Salvar';
+    $('entrada').dispatchEvent(new Event('input'));
+  }
+  $('modo-lancar').addEventListener('click', e => {
+    const b = e.target.closest('[data-modo]'); if (!b) return;
+    modo = b.dataset.modo; mostrarModo(); $('entrada').focus();
+  });
+  $('entrada-prevista').addEventListener('change', () => $('entrada').dispatchEvent(new Event('input')));
+
+  function voltarSaida() { if (modoEntrada()) { modo = 'saida'; $('entrada-prevista').checked = false; mostrarModo(); } }
+
   function ehEntrada(texto) {
+    if (modoEntrada()) return true;
     const tg = document.querySelector('#tipo-gasto .sel');
     if (tg && tg.dataset.tg !== 'agora') return false; // fixo/parcelado é sempre gasto
     return /^\s*\+/.test(texto) || ehPrevisto(texto) || PALAVRAS_ENTRADA.test(' ' + semAcento(texto) + ' ');
@@ -181,7 +207,7 @@
     if (ehPrevisto(entrada.value)) {
       dados.aReceber.push({ id: novoIdE('r'), valor: r.valor, descricao: r.descricao });
       salvar(); entrada.value = ''; entrada.dispatchEvent(new Event('input'));
-      avisarSaldo(`${brl(r.valor)} anotado em "ainda vai entrar"`);
+      avisarSaldo(`${brl(r.valor)} anotado em "ainda vai entrar"`); voltarSaida();
       desenharTudo();
       return;
     }
@@ -190,7 +216,7 @@
     salvar();
     entrada.value = ''; entrada.dispatchEvent(new Event('input'));
     ultimoId = null;
-    $('toast-text').textContent = `Entrada de ${brl(en.valor)} anotada`;
+    $('toast-text').textContent = `Entrada de ${brl(en.valor)} anotada`; voltarSaida();
     $('toast-undo').hidden = true;
     $('toast').hidden = false;
     setTimeout(() => { $('toast').hidden = true; $('toast-undo').hidden = false; }, 5000);

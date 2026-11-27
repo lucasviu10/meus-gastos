@@ -141,3 +141,7 @@ h2 { font-size: 12px; letter-spacing: .08em; font-weight: 650; }
 .resumo-ia { background: var(--accent-soft); }
 .chips .chip { white-space: nowrap; }
 .selo-serasa { white-space: nowrap; }
+.modo-lancar { margin: 0 0 12px; }
+.modo-lancar button.sel { background: var(--card); color: var(--bad); box-shadow: 0 1px 3px rgba(0,0,0,.1); }
+.modo-lancar.entrada button.sel { color: var(--ok); }
+#linha-previsto { margin: 0 0 12px !important; }

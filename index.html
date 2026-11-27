@@ -26,7 +26,11 @@
     <!-- ABA LANÇAR -->
     <section id="tab-lancar" class="tab active">
       <button id="card-hoje" type="button" class="card hoje-card" aria-expanded="false"></button>
-      <h1>Novo gasto</h1>
+      <h1 id="titulo-lancar">Novo gasto</h1>
+      <div class="segmento modo-lancar" id="modo-lancar" role="radiogroup" aria-label="Saída ou entrada">
+        <button type="button" data-modo="saida" class="sel"><i data-i="sobe"></i> Saída</button>
+        <button type="button" data-modo="entrada"><i data-i="desce"></i> Entrada</button>
+      </div>
       <form id="form-gasto" autocomplete="off">
         <div class="linha-entrada">
           <input id="entrada" type="text" inputmode="text" placeholder="ex: 45 mercado" aria-label="Digite valor e descrição">
@@ -39,6 +43,7 @@
         <input id="arquivo-nota-camera" type="file" accept="image/*" capture="environment" hidden>
         <input id="arquivo-nota" type="file" accept="image/*" hidden>
         <div id="preview" class="preview">Digite o valor e o que foi.</div>
+        <label class="check" id="linha-previsto" hidden><input id="entrada-prevista" type="checkbox"> Ainda vai entrar (não caiu)</label>
         <div id="chips" class="chips"></div>
         <div class="segmento tres" id="tipo-gasto" role="radiogroup" aria-label="Esse gasto se repete?">
           <button type="button" data-tg="agora" class="sel">Só agora</button>
