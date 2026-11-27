@@ -228,6 +228,12 @@
       "valor": 60,
       "descricao": "empréstimo da mãe",
       "data": "2026-11-15"
+    },
+    {
+      "id": "e-20261127-13-salario-745",
+      "valor": 745,
+      "descricao": "13º salário (1ª parcela)",
+      "data": "2026-11-27"
     }
   ],
   "saldoInicial": {
